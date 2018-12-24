@@ -1,13 +1,24 @@
 package com.triplebro.domineer.graduationdesignproject.beans;
 
-public class AddressInfo {
+import java.io.Serializable;
 
+public class AddressInfo implements Serializable {
+
+    private int _id;
     private String phone_number;
     private String name;
     private String city;
     private String location;
     private int zip_code;
     private String mobile;
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 
     public String getPhone_number() {
         return phone_number;

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.triplebro.domineer.graduationdesignproject.R;
+import com.triplebro.domineer.graduationdesignproject.activities.UpdateAddressActivity;
 import com.triplebro.domineer.graduationdesignproject.beans.AddressInfo;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public class AddressAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         ViewHolder viewHolder;
 
@@ -65,7 +66,9 @@ public class AddressAdapter extends BaseAdapter {
         viewHolder.bt_change_address_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, UpdateAddressActivity.class);
+                intent.putExtra("AddressInfo",addressInfoList.get(position));
+                context.startActivity(intent);
             }
         });
         return convertView;

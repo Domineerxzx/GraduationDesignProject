@@ -28,6 +28,8 @@ public class LocationManager {
         if (locationInfoCursor != null && locationInfoCursor.getCount() > 0) {
             while (locationInfoCursor.moveToNext()) {
                 AddressInfo addressInfo = new AddressInfo();
+                addressInfo.set_id(locationInfoCursor.getInt(0));
+                addressInfo.setPhone_number(locationInfoCursor.getString(1));
                 addressInfo.setName(locationInfoCursor.getString(2));
                 addressInfo.setCity(locationInfoCursor.getString(3));
                 addressInfo.setLocation(locationInfoCursor.getString(4));
@@ -58,6 +60,25 @@ public class LocationManager {
             Toast.makeText(context, "添加地址成功", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(context, "添加地址失败", Toast.LENGTH_SHORT).show();
+        }
+        db.close();
+    }
+
+    public void updateAddressInfo(AddressInfo addressInfo) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("phone_number", addressInfo.getPhone_number());
+        contentValues.put("name", addressInfo.getName());
+        contentValues.put("city", addressInfo.getCity());
+        contentValues.put("location", addressInfo.getLocation());
+        contentValues.put("zip_code", addressInfo.getZip_code());
+        contentValues.put("mobile", addressInfo.getMobile());
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        long locationInsertResult = db.update("locationInfo",contentValues,"_id = ?",new String[]{String.valueOf(addressInfo.get_id())});
+        if (locationInsertResult >= 0) {
+            Toast.makeText(context, "修改地址成功", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "修改地址失败", Toast.LENGTH_SHORT).show();
         }
         db.close();
     }

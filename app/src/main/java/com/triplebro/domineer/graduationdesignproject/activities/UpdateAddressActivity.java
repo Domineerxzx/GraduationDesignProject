@@ -1,6 +1,8 @@
 package com.triplebro.domineer.graduationdesignproject.activities;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,61 +13,69 @@ import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.AddressInfo;
 import com.triplebro.domineer.graduationdesignproject.managers.LocationManager;
 
-public class AddAddressActivity extends Activity implements View.OnClickListener {
+import java.io.Serializable;
 
-    private ImageView iv_close_add_address;
-    private LocationManager locationManager;
+public class UpdateAddressActivity extends Activity implements View.OnClickListener{
+
+    private ImageView iv_close_update_address;
     private EditText et_address_name;
     private EditText et_address_area_city;
     private EditText et_address_detailed;
     private EditText et_address_postcode;
     private EditText et_address_telephone;
-    private Button bt_add_address;
+    private Button bt_save_address;
+    private AddressInfo addressInfo;
+    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_address);
+        setContentView(R.layout.activity_update_address);
         initView();
         initData();
         setOnClickListener();
     }
 
     private void setOnClickListener() {
-        iv_close_add_address.setOnClickListener(this);
-        bt_add_address.setOnClickListener(this);
+        iv_close_update_address.setOnClickListener(this);
+        bt_save_address.setOnClickListener(this);
     }
 
     private void initData() {
+        Intent intent = getIntent();
+        addressInfo = (AddressInfo)intent.getSerializableExtra("AddressInfo");
+        et_address_name.setText(addressInfo.getName());
+        et_address_area_city.setText(addressInfo.getCity());
+        et_address_detailed.setText(addressInfo.getLocation());
+        et_address_postcode.setText(String.valueOf(addressInfo.getZip_code()));
+        et_address_telephone.setText(addressInfo.getMobile());
         locationManager = new LocationManager(this);
-        /*locationManager.uploadAddressInfo();*/
     }
 
     private void initView() {
-        iv_close_add_address = (ImageView) findViewById(R.id.iv_close_add_address);
+        iv_close_update_address = (ImageView) findViewById(R.id.iv_close_update_address);
         et_address_name = (EditText) findViewById(R.id.et_address_name);
         et_address_area_city = (EditText) findViewById(R.id.et_address_area_city);
         et_address_detailed = (EditText) findViewById(R.id.et_address_detailed);
         et_address_postcode = (EditText) findViewById(R.id.et_address_postcode);
         et_address_telephone = (EditText) findViewById(R.id.et_address_telephone);
-        bt_add_address = (Button) findViewById(R.id.bt_add_address);
+        bt_save_address = (Button) findViewById(R.id.bt_save_address);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.iv_close_add_address:
+            case R.id.iv_close_update_address:
                 finish();
                 break;
-            case R.id.bt_add_address:
-                AddressInfo addressInfo = new AddressInfo();
+            case R.id.bt_save_address:
                 addressInfo.setPhone_number(getSharedPreferences("userInfo",MODE_PRIVATE).getString("phone_number",""));
                 addressInfo.setName(et_address_name.getText().toString().trim());
                 addressInfo.setCity(et_address_area_city.getText().toString().trim());
                 addressInfo.setLocation(et_address_detailed.getText().toString().trim());
                 addressInfo.setZip_code(Integer.parseInt(et_address_postcode.getText().toString()));
                 addressInfo.setMobile(et_address_telephone.getText().toString().trim());
-                locationManager.uploadAddressInfo(addressInfo);
+                locationManager.updateAddressInfo(addressInfo);
                 finish();
                 break;
         }
