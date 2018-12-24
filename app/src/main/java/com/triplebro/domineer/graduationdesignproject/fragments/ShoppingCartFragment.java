@@ -50,10 +50,6 @@ public class ShoppingCartFragment extends Fragment {
             tv_tip.setText("还没登录呢，查不到信息哦！！！");
             lv_shopping_cart.setVisibility(View.GONE);
             rl_pay.setVisibility(View.GONE);
-        }else if(phone_number.length() != 0){
-            lv_shopping_cart.setVisibility(View.VISIBLE);
-            rl_pay.setVisibility(View.VISIBLE);
-            tv_tip.setVisibility(View.GONE);
         }else if(shoppingCartInfoList.size() == 0){
             tv_tip.setVisibility(View.VISIBLE);
             tv_tip.setText("购物车空空如也，快去买点东西装满它吧！！！");

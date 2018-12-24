@@ -33,8 +33,9 @@ import java.util.List;
 public class AddShoppingCartDialog {
 
     private static CommoditySizeInfo commoditySizeInfo;
+    private static int size_count;
 
-    public static void showDialog(final Context context, final CommodityInfo commodityInfo, final List<CommoditySizeInfo> commoditySizeInfoList){
+    public static void showDialog(final Context context, final CommodityInfo commodityInfo, final List<CommoditySizeInfo> commoditySizeInfoList) {
         final Dialog mShareDialog = new Dialog(context, R.style.dialog_shopping_cart);
         mShareDialog.setCanceledOnTouchOutside(true);
         mShareDialog.setCancelable(true);
@@ -49,7 +50,7 @@ public class AddShoppingCartDialog {
         final TextView tv_count = view.findViewById(R.id.tv_count);
         Button bt_count_down = view.findViewById(R.id.bt_count_down);
         Button bt_count_up = view.findViewById(R.id.bt_count_up);
-        rv_size_bt.setLayoutManager(new GridLayoutManager(context,5));
+        rv_size_bt.setLayoutManager(new GridLayoutManager(context, 5));
         SizeChooseAdapter sizeChooseAdapter = new SizeChooseAdapter(context, commoditySizeInfoList);
         rv_size_bt.setAdapter(sizeChooseAdapter);
         sizeChooseAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -57,7 +58,7 @@ public class AddShoppingCartDialog {
             public void onItemClick(View view, int position) {
                 commoditySizeInfo = commoditySizeInfoList.get(position);
                 tv_commodity_count.setText(String.valueOf(commoditySizeInfoList.get(position).getSize_count()));
-                tv_size.setText(commoditySizeInfoList.get(position).getSize_name()+"号");
+                tv_size.setText(commoditySizeInfoList.get(position).getSize_name() + "号");
             }
 
             @Override
@@ -84,7 +85,7 @@ public class AddShoppingCartDialog {
                     shoppingCartInfo.setCommodity_name(commodityInfo.getCommodity_name());
                     shoppingCartInfo.setCommodity_image(commodityInfo.getCommodity_image());
                     String phone_number = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("phone_number", "");
-                    if(phone_number.length() == 0){
+                    if (phone_number.length() == 0) {
                         Toast.makeText(context, "东西跑不了，登录回来再买吧！！！", Toast.LENGTH_SHORT).show();
                         mShareDialog.dismiss();
                     }
@@ -92,11 +93,12 @@ public class AddShoppingCartDialog {
                     shoppingCartInfo.setCount(Integer.parseInt(tv_count.getText().toString()));
                     shoppingCartInfo.setPhone_number(phone_number);
                     shoppingCartInfo.setPrice(commodityInfo.getPrice());
-                    AddShoppingCartDialog.uploadShoppingCartInfo(context,shoppingCartInfo);
+                    AddShoppingCartDialog.uploadShoppingCartInfo(context, shoppingCartInfo, tv_commodity_count);
+                    /*mShareDialog.dismiss();*/
                 }
             }
         });
-        bt_count_down.setOnClickListener(new View.OnClickListener(){
+        bt_count_down.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -115,10 +117,10 @@ public class AddShoppingCartDialog {
             public void onClick(View v) {
                 Integer integer = new Integer(tv_count.getText().toString());
                 int i = integer.intValue();
-                if(i < Integer.parseInt(tv_commodity_count.getText().toString())){
+                if (i < Integer.parseInt(tv_commodity_count.getText().toString())) {
                     i = i + 1;
                     tv_count.setText(String.valueOf(i));
-                }else{
+                } else {
                     Toast.makeText(context, "不能再多了，都被你买走了！！！", Toast.LENGTH_SHORT).show();
                 }
 
@@ -129,43 +131,70 @@ public class AddShoppingCartDialog {
         mShareDialog.show();
     }
 
-    public static void uploadShoppingCartInfo(Context context,ShoppingCartInfo shoppingCartInfo){
+    private static void uploadShoppingCartInfo(Context context, ShoppingCartInfo shoppingCartInfo, TextView tv_commodity_count) {
 
         int count_old = 0;
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        Cursor commoditySizeInfoCursor = db.query("commoditySizeInfo", new String[]{"size_count"}, "commodity_id = ? and size_name = ?", new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()},
+                null, null, null);
+        if (commoditySizeInfoCursor != null && commoditySizeInfoCursor.getCount() > 0) {
+            while (commoditySizeInfoCursor.moveToNext()) {
+                size_count = commoditySizeInfoCursor.getInt(0);
+            }
+        }
+        if (commoditySizeInfoCursor != null) {
+            commoditySizeInfoCursor.close();
+        }
         Cursor shoppingCartInfoCursor = db.query("shoppingCartInfo", null,
                 "commodity_id = ? and size_name = ?",
                 new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()},
                 null, null, null);
-        if(shoppingCartInfoCursor != null && shoppingCartInfoCursor.getCount() > 0){
+        if (shoppingCartInfoCursor != null && shoppingCartInfoCursor.getCount() > 0) {
             while (shoppingCartInfoCursor.moveToNext()) {
                 count_old = shoppingCartInfoCursor.getInt(3);
             }
-            contentValues.put("count",shoppingCartInfo.getCount()+count_old);
-            int shoppingCartUpdateResult = db.update("shoppingCartInfo", contentValues, "commodity_id = ? and size_name = ?", new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()});
-            if(shoppingCartUpdateResult >= 0){
-                Toast.makeText(context, "加入购物车成功，去付款吧！！！", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(context, "出错了，加入购物车失败", Toast.LENGTH_SHORT).show();
+            contentValues.put("count", shoppingCartInfo.getCount() + count_old);
+            if (size_count < shoppingCartInfo.getCount()) {
+                Toast.makeText(context, "不能再买了，都被你买走了！！！", Toast.LENGTH_SHORT).show();
+            } else {
+                int shoppingCartUpdateResult = db.update("shoppingCartInfo", contentValues, "commodity_id = ? and size_name = ?", new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()});
+                if (shoppingCartUpdateResult >= 0) {
+                    Toast.makeText(context, "加入购物车成功，去付款吧！！！", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "出错了，加入购物车失败", Toast.LENGTH_SHORT).show();
+                }
+                contentValues = new ContentValues();
+                size_count = size_count - shoppingCartInfo.getCount();
+                contentValues.put("size_count", size_count);
+                db.update("commoditySizeInfo", contentValues, "commodity_id = ? and size_name = ?", new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()});
+                tv_commodity_count.setText(String.valueOf(size_count));
             }
-        }else{
-            contentValues.put("commodity_id",shoppingCartInfo.getCommodity_id());
-            contentValues.put("size_name",shoppingCartInfo.getSize_name());
-            contentValues.put("count",shoppingCartInfo.getCount());
-            contentValues.put("commodity_name",shoppingCartInfo.getCommodity_name());
-            contentValues.put("phone_number",shoppingCartInfo.getPhone_number());
-            contentValues.put("commodity_image",shoppingCartInfo.getCommodity_image());
-            contentValues.put("price",shoppingCartInfo.getPrice());
+
+        } else {
+            contentValues.put("commodity_id", shoppingCartInfo.getCommodity_id());
+            contentValues.put("size_name", shoppingCartInfo.getSize_name());
+            contentValues.put("count", shoppingCartInfo.getCount());
+            contentValues.put("commodity_name", shoppingCartInfo.getCommodity_name());
+            contentValues.put("phone_number", shoppingCartInfo.getPhone_number());
+            contentValues.put("commodity_image", shoppingCartInfo.getCommodity_image());
+            contentValues.put("price", shoppingCartInfo.getPrice());
             long shoppingCartInsetResult = db.insert("shoppingCartInfo", null, contentValues);
-            if(shoppingCartInsetResult >= 0){
+            if (shoppingCartInsetResult >= 0) {
                 Toast.makeText(context, "加入购物车成功，去付款吧！！！", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(context, "出错了，加入购物车失败", Toast.LENGTH_SHORT).show();
             }
+            contentValues = new ContentValues();
+            size_count = size_count - shoppingCartInfo.getCount();
+            contentValues.put("size_count", size_count);
+            db.update("commoditySizeInfo", contentValues, "commodity_id = ? and size_name = ?", new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()});
+            tv_commodity_count.setText(String.valueOf(size_count));
         }
-        shoppingCartInfoCursor.close();
+        if (shoppingCartInfoCursor != null) {
+            shoppingCartInfoCursor.close();
+        }
         db.close();
     }
 }
