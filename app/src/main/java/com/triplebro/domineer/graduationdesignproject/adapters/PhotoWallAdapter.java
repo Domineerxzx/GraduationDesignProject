@@ -61,7 +61,6 @@ public class PhotoWallAdapter extends RecyclerView.Adapter<PhotoWallAdapter.View
         public ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
             this.onItemClickListener = onItemClickListener;
-            itemView.setOnClickListener(this);
             initView(itemView);
         }
 
@@ -71,7 +70,6 @@ public class PhotoWallAdapter extends RecyclerView.Adapter<PhotoWallAdapter.View
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.onItemClick(v,getPosition());
         }
     }
 }

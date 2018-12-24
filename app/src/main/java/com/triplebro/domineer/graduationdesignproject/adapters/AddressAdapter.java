@@ -1,6 +1,7 @@
 package com.triplebro.domineer.graduationdesignproject.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -8,22 +9,28 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.triplebro.domineer.graduationdesignproject.R;
+import com.triplebro.domineer.graduationdesignproject.beans.AddressInfo;
 
 import java.util.List;
 
 public class AddressAdapter extends BaseAdapter {
 
     private Context context;
-    private List<String> strings;
+    private List<AddressInfo> addressInfoList;
 
-    public AddressAdapter(Context context, List<String> strings) {
+    public AddressAdapter(Context context, List<AddressInfo> addressInfoList) {
         this.context = context;
-        this.strings = strings;
+        this.addressInfoList = addressInfoList;
+    }
+
+    public void setAddressInfoList(List<AddressInfo> addressInfoList) {
+        this.addressInfoList = addressInfoList;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return addressInfoList.size();
     }
 
     @Override
@@ -52,7 +59,15 @@ public class AddressAdapter extends BaseAdapter {
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        viewHolder.tv_address_name.setText(addressInfoList.get(position).getName());
+        viewHolder.tv_address.setText(addressInfoList.get(position).getLocation());
+        viewHolder.tv_address_postcode.setText(String.valueOf(addressInfoList.get(position).getZip_code()));
+        viewHolder.bt_change_address_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
         return convertView;
     }
 

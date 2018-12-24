@@ -54,7 +54,7 @@ public class MyOpenHelper extends SQLiteOpenHelper {
 
         //地址管理表
         db.execSQL("create table locationInfo(_id Integer primary key autoincrement,phone_number varchar(20),name varchar(20),city varchar(20)," +
-                "location varcahr(100),zip_code number,mobile varchar(20),is_frist boolear," +
+                "location varcahr(100),zip_code number,mobile varchar(20)," +
                 "FOREIGN KEY (phone_number) REFERENCES userInfo(phone_number))");
 
         //收藏商品表

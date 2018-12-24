@@ -181,33 +181,13 @@
                     android:hint="   电话"
                     android:textSize="12dp" />
 
-                <CheckBox
-                    android:id="@+id/cb_first_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/et_address_telephone"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp" />
-
-                <TextView
-                    android:id="@+id/tv_first_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/et_address_telephone"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_toRightOf="@id/cb_first_address"
-                    android:text="设置为我的首选地址"
-                    android:textColor="#89ff0000"
-                    android:textSize="10dp" />
-
                 <Button
                     android:id="@+id/bt_add_address"
                     android:layout_width="300dp"
                     android:layout_height="40dp"
-                    android:layout_below="@id/cb_first_address"
+                    android:layout_below="@id/et_address_telephone"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/shape_pay"
                     android:text="保存地址"
