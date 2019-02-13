@@ -106,8 +106,8 @@
                     android:layout_below="@id/v_commodity_name"
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
-                    android:text="已选尺寸：S * 3"
-                    android:textColor="#000"
+                    android:text="请选择尺寸及数量"
+                    android:textColor="@color/AppColor"
                     android:textSize="12dp" />
 
                 <View

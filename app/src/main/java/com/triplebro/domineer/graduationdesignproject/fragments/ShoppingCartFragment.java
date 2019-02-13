@@ -29,6 +29,7 @@ public class ShoppingCartFragment extends Fragment {
     private TextView tv_tip;
     private RelativeLayout rl_pay;
     private String phone_number;
+    private TextView tv_count_price;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +44,7 @@ public class ShoppingCartFragment extends Fragment {
     public void onStart() {
         super.onStart();
         shoppingCartInfoList = shoppingCartManager.getShoppingCartInfoList();
+        long sumShoppingCart = shoppingCartManager.sumShoppingCart();
         SharedPreferences userInfo = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         phone_number = userInfo.getString("phone_number", "");
         if(phone_number.length() == 0){
@@ -61,6 +63,7 @@ public class ShoppingCartFragment extends Fragment {
             tv_tip.setVisibility(View.GONE);
         }
         lv_shopping_cart.setAdapter(new ShoppingCartAdapter(getActivity(),shoppingCartInfoList));
+        tv_count_price.setText(String.valueOf(sumShoppingCart));
     }
 
     private void initData() {
@@ -71,6 +74,7 @@ public class ShoppingCartFragment extends Fragment {
         lv_shopping_cart = fragment_ShoppingCart.findViewById(R.id.lv_shopping_cart);
         tv_tip = fragment_ShoppingCart.findViewById(R.id.tv_tip);
         rl_pay = fragment_ShoppingCart.findViewById(R.id.rl_pay);
+        tv_count_price = fragment_ShoppingCart.findViewById(R.id.tv_count_price);
     }
 
 }

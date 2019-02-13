@@ -40,4 +40,5 @@ dependencies {
     implementation 'org.xutils:xutils:3.3.36'
     implementation 'com.zhy:okhttputils:2.6.2'
     implementation 'com.alibaba:fastjson:1.1.56.android'
+    implementation 'jp.wasabeef:glide-transformations:2.0.1'
 }

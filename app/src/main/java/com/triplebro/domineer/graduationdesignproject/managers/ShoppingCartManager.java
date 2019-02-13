@@ -20,14 +20,14 @@ public class ShoppingCartManager {
         this.context = context;
     }
 
-    public List<ShoppingCartInfo> getShoppingCartInfoList(){
+    public List<ShoppingCartInfo> getShoppingCartInfoList() {
         String phone_number = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("phone_number", "");
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         List<ShoppingCartInfo> shoppingCartInfoList = new ArrayList<>();
         Cursor shoppingCartInfoCursor = db.query("shoppingCartInfo", null,
                 "phone_number = ?", new String[]{phone_number}, null, null, null);
-        if(shoppingCartInfoCursor != null && shoppingCartInfoCursor.getCount() > 0){
+        if (shoppingCartInfoCursor != null && shoppingCartInfoCursor.getCount() > 0) {
             while (shoppingCartInfoCursor.moveToNext()) {
                 ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
                 shoppingCartInfo.setCommodity_id(shoppingCartInfoCursor.getInt(1));
@@ -44,5 +44,25 @@ public class ShoppingCartManager {
         }
         db.close();
         return shoppingCartInfoList;
+    }
+
+    public long sumShoppingCart() {
+        String phone_number = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("phone_number", "");
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        long sum = 0;
+        List<ShoppingCartInfo> shoppingCartInfoList = new ArrayList<>();
+        Cursor shoppingCartInfoCursor = db.query("shoppingCartInfo", new String[]{"count", "price"},
+                "phone_number = ?", new String[]{phone_number}, null, null, null);
+        if (shoppingCartInfoCursor != null && shoppingCartInfoCursor.getCount() > 0) {
+            while (shoppingCartInfoCursor.moveToNext()) {
+                sum += shoppingCartInfoCursor.getInt(0) * shoppingCartInfoCursor.getInt(1);
+            }
+        }
+        if (shoppingCartInfoCursor != null) {
+            shoppingCartInfoCursor.close();
+        }
+        db.close();
+        return sum;
     }
 }

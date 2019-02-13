@@ -23,13 +23,16 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.adapters.MyselfSubmitAdapter;
+import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
+import com.triplebro.domineer.graduationdesignproject.managers.UserManager;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.ChooseUserHeadDialogUtil;
 import com.triplebro.domineer.graduationdesignproject.views.MyListView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserInfoActivity extends Activity implements View.OnClickListener {
 
@@ -44,6 +47,8 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
     private String userHead;
     private File userHeadFile;
     private SharedPreferences userInfo;
+    private UserManager userManager;
+    private List<SubmitInfo> submitInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
+        userManager = new UserManager(this);
         userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
         phone_number = userInfo.getString("phone_number", "获取信息失败");
         nickname = userInfo.getString("nickname", "获取信息失败");
@@ -72,12 +78,13 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
         }
         tv_nickname.setText(nickname);
         tv_username.setText("ID:" + phone_number);
+        submitInfoList = userManager.getSubmitInfoList(phone_number);
+        mlv_user_submit.setAdapter(new MyselfSubmitAdapter(this, submitInfoList));
     }
 
     private void initView() {
         iv_close_user_info = (ImageView) findViewById(R.id.iv_close_user_info);
         mlv_user_submit = (MyListView) findViewById(R.id.mlv_user_submit);
-        mlv_user_submit.setAdapter(new MyselfSubmitAdapter(this, new ArrayList<String>()));
         tv_nickname = (TextView) findViewById(R.id.tv_nickname);
         tv_username = (TextView) findViewById(R.id.tv_username);
         iv_user_head = (ImageView) findViewById(R.id.iv_user_head);

@@ -118,9 +118,6 @@ public class SubmitActivity extends Activity implements View.OnClickListener, On
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         boolean isCheck = true;
-        MyOpenHelper myOpenHelper = new MyOpenHelper(this);
-        SQLiteDatabase writableDatabase = myOpenHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
         String s = "";
         switch (requestCode) {
             case ProjectProperties.FROM_GALLERY:

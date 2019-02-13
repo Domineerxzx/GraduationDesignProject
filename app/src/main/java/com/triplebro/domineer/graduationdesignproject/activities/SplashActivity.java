@@ -16,8 +16,6 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-
         RelativeLayout rv_splash = (RelativeLayout) findViewById(R.id.rv_splash);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f,1.0f);
         alphaAnimation.setDuration(2500);

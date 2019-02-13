@@ -38,7 +38,7 @@ import cc.ibooker.zcountdownviewlib.CountDownView;
 
 public class FirstPageFragment extends Fragment implements OnScrollChangedListener, View.OnClickListener, OnItemClickListener {
 
-    private View fragment_firstpage;
+    private View fragment_firstPage;
     private FrameLayout fl_search;
     private Banner bn_banner;
     private RecyclerView rv_recommend;
@@ -71,16 +71,17 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     private ImageView iv_beauty_make_up;
     private ImageView iv_tide_card;
     private FirstPageManager firstPageManager;
-    private List<CommodityInfo> commodityInfoList;
+    private List<CommodityInfo> commodityInfoList = new ArrayList<>();
+    private RecommendAdapter recommendAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        fragment_firstpage = inflater.inflate(R.layout.fragment_first_page, null);
+        fragment_firstPage = inflater.inflate(R.layout.fragment_first_page, null);
         initView();
         initData();
         setOnClickListener();
-        return fragment_firstpage;
+        return fragment_firstPage;
     }
 
     private void setOnClickListener() {
@@ -119,7 +120,7 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     private void initData() {
         firstPageManager = new FirstPageManager(getActivity());
         commodityInfoList = firstPageManager.getCommodityInfoList();
-        RecommendAdapter recommendAdapter = new RecommendAdapter(getActivity(), commodityInfoList);
+        recommendAdapter = new RecommendAdapter(getActivity(), commodityInfoList);
         rv_recommend.setAdapter(recommendAdapter);
         recommendAdapter.setOnItemClickListener(this);
         List<String> bannerImageList = firstPageManager.getBannerImageList();
@@ -128,10 +129,10 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     }
 
     private void initView() {
-        fl_search = fragment_firstpage.findViewById(R.id.fl_search);
+        fl_search = fragment_firstPage.findViewById(R.id.fl_search);
         fl_search.bringToFront();
-        bn_banner = fragment_firstpage.findViewById(R.id.bn_banner);
-        rv_recommend = fragment_firstpage.findViewById(R.id.rv_recommend);
+        bn_banner = fragment_firstPage.findViewById(R.id.bn_banner);
+        rv_recommend = fragment_firstPage.findViewById(R.id.rv_recommend);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2) {
             @Override
             public boolean canScrollVertically() {
@@ -140,10 +141,10 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
         };
         rv_recommend.setLayoutManager(gridLayoutManager);
 
-        msv_first_page = fragment_firstpage.findViewById(R.id.msv_first_page);
+        msv_first_page = fragment_firstPage.findViewById(R.id.msv_first_page);
         msv_first_page.setOnScrollChangedListener(this);
 
-        countdownView = fragment_firstpage.findViewById(R.id.countdownView);
+        countdownView = fragment_firstPage.findViewById(R.id.countdownView);
         countdownView.setCountTime(300)
                 .setHourTvBackgroundRes(R.drawable.shape_white_card)
                 .setHourTvTextColorHex("#FF0000")
@@ -176,32 +177,32 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
                         countdownView.startCountDown();
                     }
                 });
-        tv_search = fragment_firstpage.findViewById(R.id.tv_search);
-        rl_search = fragment_firstpage.findViewById(R.id.rl_search);
-        ll_clothes = fragment_firstpage.findViewById(R.id.ll_clothes);
-        ll_bags = fragment_firstpage.findViewById(R.id.ll_bags);
-        ll_household = fragment_firstpage.findViewById(R.id.ll_household);
-        ll_technology = fragment_firstpage.findViewById(R.id.ll_technology);
-        ll_life = fragment_firstpage.findViewById(R.id.ll_life);
-        ll_mother_and_baby = fragment_firstpage.findViewById(R.id.ll_mother_and_baby);
-        ll_beauty_make_up = fragment_firstpage.findViewById(R.id.ll_beauty_make_up);
-        ll_tide_card = fragment_firstpage.findViewById(R.id.ll_tide_card);
-        tv_clothes = fragment_firstpage.findViewById(R.id.tv_clothes);
-        tv_bags = fragment_firstpage.findViewById(R.id.tv_bags);
-        tv_household = fragment_firstpage.findViewById(R.id.tv_household);
-        tv_technology = fragment_firstpage.findViewById(R.id.tv_technology);
-        tv_life = fragment_firstpage.findViewById(R.id.tv_life);
-        tv_mother_and_baby = fragment_firstpage.findViewById(R.id.tv_mother_and_baby);
-        tv_beauty_make_up = fragment_firstpage.findViewById(R.id.tv_beauty_make_up);
-        tv_tide_card = fragment_firstpage.findViewById(R.id.tv_tide_card);
-        iv_clothes = fragment_firstpage.findViewById(R.id.iv_clothes);
-        iv_bags = fragment_firstpage.findViewById(R.id.iv_bags);
-        iv_household = fragment_firstpage.findViewById(R.id.iv_household);
-        iv_technology = fragment_firstpage.findViewById(R.id.iv_technology);
-        iv_life = fragment_firstpage.findViewById(R.id.iv_life);
-        iv_mother_and_baby = fragment_firstpage.findViewById(R.id.iv_mother_and_baby);
-        iv_beauty_make_up = fragment_firstpage.findViewById(R.id.iv_beauty_make_up);
-        iv_tide_card = fragment_firstpage.findViewById(R.id.iv_tide_card);
+        tv_search = fragment_firstPage.findViewById(R.id.tv_search);
+        rl_search = fragment_firstPage.findViewById(R.id.rl_search);
+        ll_clothes = fragment_firstPage.findViewById(R.id.ll_clothes);
+        ll_bags = fragment_firstPage.findViewById(R.id.ll_bags);
+        ll_household = fragment_firstPage.findViewById(R.id.ll_household);
+        ll_technology = fragment_firstPage.findViewById(R.id.ll_technology);
+        ll_life = fragment_firstPage.findViewById(R.id.ll_life);
+        ll_mother_and_baby = fragment_firstPage.findViewById(R.id.ll_mother_and_baby);
+        ll_beauty_make_up = fragment_firstPage.findViewById(R.id.ll_beauty_make_up);
+        ll_tide_card = fragment_firstPage.findViewById(R.id.ll_tide_card);
+        tv_clothes = fragment_firstPage.findViewById(R.id.tv_clothes);
+        tv_bags = fragment_firstPage.findViewById(R.id.tv_bags);
+        tv_household = fragment_firstPage.findViewById(R.id.tv_household);
+        tv_technology = fragment_firstPage.findViewById(R.id.tv_technology);
+        tv_life = fragment_firstPage.findViewById(R.id.tv_life);
+        tv_mother_and_baby = fragment_firstPage.findViewById(R.id.tv_mother_and_baby);
+        tv_beauty_make_up = fragment_firstPage.findViewById(R.id.tv_beauty_make_up);
+        tv_tide_card = fragment_firstPage.findViewById(R.id.tv_tide_card);
+        iv_clothes = fragment_firstPage.findViewById(R.id.iv_clothes);
+        iv_bags = fragment_firstPage.findViewById(R.id.iv_bags);
+        iv_household = fragment_firstPage.findViewById(R.id.iv_household);
+        iv_technology = fragment_firstPage.findViewById(R.id.iv_technology);
+        iv_life = fragment_firstPage.findViewById(R.id.iv_life);
+        iv_mother_and_baby = fragment_firstPage.findViewById(R.id.iv_mother_and_baby);
+        iv_beauty_make_up = fragment_firstPage.findViewById(R.id.iv_beauty_make_up);
+        iv_tide_card = fragment_firstPage.findViewById(R.id.iv_tide_card);
         bn_banner.setImageLoader(new GlideImageLoader());
         bn_banner.isAutoPlay(true);
         bn_banner.setDelayTime(5000);

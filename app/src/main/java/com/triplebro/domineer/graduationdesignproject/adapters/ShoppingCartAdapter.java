@@ -52,8 +52,6 @@ public class ShoppingCartAdapter extends BaseAdapter {
             viewHolder.tv_price = convertView.findViewById(R.id.tv_price);
             viewHolder.tv_size = convertView.findViewById(R.id.tv_size);
             viewHolder.tv_count = convertView.findViewById(R.id.tv_count);
-            viewHolder.bt_count_up = convertView.findViewById(R.id.bt_count_up);
-            viewHolder.bt_count_down = convertView.findViewById(R.id.bt_count_down);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -64,31 +62,6 @@ public class ShoppingCartAdapter extends BaseAdapter {
         viewHolder.tv_count.setText(String.valueOf(shoppingCartInfoList.get(position).getCount()));
         viewHolder.tv_price.setText(String.valueOf(shoppingCartInfoList.get(position).getPrice()));
         viewHolder.tv_size.setText(shoppingCartInfoList.get(position).getSize_name());
-
-
-        viewHolder.bt_count_up.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Integer integer = new Integer(viewHolder.tv_count.getText().toString());
-                int i = integer.intValue();
-                i = i + 1;
-                viewHolder.tv_count.setText(String.valueOf(i));
-            }
-        });
-        viewHolder.bt_count_down.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int count = Integer.valueOf(viewHolder.tv_count.getText().toString());
-                if (count == 1) {
-                    //Toast.makeText(context, "不能再少了！！！", Toast.LENGTH_SHORT).show();
-                    shoppingCartInfoList.remove(position);
-                    notifyDataSetChanged();
-                } else {
-                    count = count - 1;
-                    viewHolder.tv_count.setText(String.valueOf(count));
-                }
-            }
-        });
         return convertView;
     }
 
@@ -98,7 +71,5 @@ public class ShoppingCartAdapter extends BaseAdapter {
         private TextView tv_price;
         private TextView tv_count;
         private TextView tv_size;
-        private Button bt_count_down;
-        private Button bt_count_up;
     }
 }

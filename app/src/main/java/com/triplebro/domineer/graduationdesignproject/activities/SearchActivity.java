@@ -13,6 +13,7 @@ import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.adapters.RecommendAdapter;
 import com.triplebro.domineer.graduationdesignproject.adapters.SearchHistoryAdapter;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
+import com.triplebro.domineer.graduationdesignproject.managers.SearchManager;
 import com.triplebro.domineer.graduationdesignproject.views.MyListView;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class SearchActivity extends Activity implements View.OnClickListener {
     }
 
     private void initData() {
-
+        SearchManager searchManager = new SearchManager(this);
     }
 
     private void initView() {

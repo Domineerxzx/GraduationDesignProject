@@ -37,7 +37,6 @@ public class TypeFragment extends Fragment implements AdapterView.OnItemClickLis
     private RecyclerView rv_type_content;
     private TypeManager typeManager;
     private List<TypeGeneralizeInfo> generalizeTypeList;
-    private TextView lastView;
     private List<TypeConcreteInfo> concreteTypeList;
 
     @Nullable
