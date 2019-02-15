@@ -1,10 +1,12 @@
 package com.triplebro.domineer.graduationdesignproject.handlers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.Message;
 
+import com.triplebro.domineer.graduationdesignproject.activities.AdminManagerActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.RegisterActivity;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 
@@ -20,7 +22,7 @@ public class RegisterHandler extends Handler {
 
     @Override
     public void handleMessage(Message msg) {
-        switch (msg.what){
+        switch (msg.what) {
             case ProjectProperties.GET_REQUEST_CODE_SUCCESS:
                 context.unbindService(serviceConnection);
                 break;
@@ -29,9 +31,14 @@ public class RegisterHandler extends Handler {
                 break;
             case ProjectProperties.REGISTER_SUCCESS:
                 context.unbindService(serviceConnection);
-                ((RegisterActivity)context).finish();
+                ((RegisterActivity) context).finish();
                 break;
             case ProjectProperties.REGISTER_FAILED:
+                context.unbindService(serviceConnection);
+                break;
+            case ProjectProperties.REGISTER_ADMIN_SUCCESS:
+                Intent adminManagerActivity = new Intent(context, AdminManagerActivity.class);
+                context.startActivity(adminManagerActivity);
                 context.unbindService(serviceConnection);
                 break;
         }

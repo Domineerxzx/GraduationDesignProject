@@ -12,6 +12,10 @@ public class ProjectProperties {
 
     public static final int LOGIN_SUCCESS = 0;
 
+    public static final int LOGIN_ADMIN_SUCCESS = 2;
+
+    public static final int LOGIN_ADMIN_FAILED = 3;
+
     public static final int LOGIN_FAILED = 1;
 
     public static final int REGISTER_SUCCESS = 0;
@@ -23,5 +27,12 @@ public class ProjectProperties {
     public static final int GET_REQUEST_CODE_FAILED = 3;
 
     public static final int FROM_GALLERY = 1;
+
     public static final int FROM_CAMERA = 2;
+
+    public static final int ADMIN = 1;
+
+    public static final int USER = 2;
+
+    public static final int REGISTER_ADMIN_SUCCESS = 4;
 }

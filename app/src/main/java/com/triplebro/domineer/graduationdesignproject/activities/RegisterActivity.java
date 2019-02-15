@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.managers.RegisterManager;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
 
@@ -29,6 +30,9 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private String username;
     private String request_code;
     private CheckBox cb_agree;
+    private Button bt_admin_register;
+    private Button bt_user_register;
+    private int userType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         iv_close_create.setOnClickListener(this);
         bt_create.setOnClickListener(this);
         bt_request_code.setOnClickListener(this);
+        bt_admin_register.setOnClickListener(this);
+        bt_user_register.setOnClickListener(this);
     }
 
     private void initView() {
@@ -60,6 +66,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         bt_request_code = findViewById(R.id.bt_request_code);
         bt_create = findViewById(R.id.bt_create);
         cb_agree = findViewById(R.id.cb_agree);
+        bt_admin_register = (Button) findViewById(R.id.bt_admin_register);
+        bt_user_register = (Button) findViewById(R.id.bt_user_register);
     }
 
     @Override
@@ -76,6 +84,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             case R.id.bt_request_code:
                 phone_number = et_phone_number.getText().toString();
                 if (phone_number.length() == 11) {
+                    bt_request_code.setBackgroundResource(R.drawable.shape_alpha_card);
+                    bt_request_code.setText("已获取验证码");
                     registerManager.getRequestCode(phone_number);
                 } else {
                     Toast.makeText(this, "手机号有误", Toast.LENGTH_SHORT).show();
@@ -98,8 +108,18 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 } else if (!cb_agree.isChecked()) {
                     Toast.makeText(this, "请查看并同意条款与条件", Toast.LENGTH_SHORT).show();
                 } else {
-                    registerManager.register(phone_number, request_code, password, username);
+                    registerManager.register(phone_number, request_code, password, username,userType);
                 }
+                break;
+            case R.id.bt_admin_register:
+                bt_admin_register.setBackgroundResource(R.drawable.shape_pay);
+                bt_user_register.setBackgroundResource(R.drawable.shape_alpha_card);
+                userType = ProjectProperties.ADMIN;
+                break;
+            case R.id.bt_user_login:
+                bt_admin_register.setBackgroundResource(R.drawable.shape_alpha_card);
+                bt_user_register.setBackgroundResource(R.drawable.shape_pay);
+                userType = ProjectProperties.USER;
                 break;
         }
     }

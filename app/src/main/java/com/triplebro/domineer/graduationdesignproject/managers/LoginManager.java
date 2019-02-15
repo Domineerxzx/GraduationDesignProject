@@ -13,14 +13,16 @@ public class LoginManager implements ServiceConnection {
     private Context context;
     private String phone_number;
     private String password;
+    private int userType;
 
     public LoginManager(Context context) {
         this.context = context;
     }
 
-    public void login(String phone_number, String password) {
+    public void login(String phone_number, String password, int userType) {
         this.phone_number = phone_number;
         this.password = password;
+        this.userType = userType;
         Intent service = new Intent(context, NetworkConnectionService.class);
         context.bindService(service,this,Context.BIND_AUTO_CREATE);
         System.out.println("-----------------------------------------------");
@@ -29,7 +31,7 @@ public class LoginManager implements ServiceConnection {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         NetworkConnectionService.MyBinder myBinder = (NetworkConnectionService.MyBinder) service;
-        myBinder.login(context, phone_number,password,this);
+        myBinder.login(context, phone_number,password,this,userType);
     }
 
     @Override

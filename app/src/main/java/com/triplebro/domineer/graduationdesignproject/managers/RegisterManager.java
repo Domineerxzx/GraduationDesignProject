@@ -15,6 +15,7 @@ public class RegisterManager implements ServiceConnection {
     private String request_code;
     private String password;
     private String nickname;
+    private int userType;
 
     private int registerState;
 
@@ -32,11 +33,12 @@ public class RegisterManager implements ServiceConnection {
         registerState = STATE_GET_REQUEST;
     }
 
-    public void register(String phone_number, String request_code, String password, String nickname){
+    public void register(String phone_number, String request_code, String password, String nickname, int userType){
         this.phone_number = phone_number;
         this.request_code = request_code;
         this.password = password;
         this.nickname = nickname;
+        this.userType = userType;
         Intent intent = new Intent(context, NetworkConnectionService.class);
         context.bindService(intent,this,Context.BIND_AUTO_CREATE);
         registerState = STATE_REGISTER;
@@ -50,7 +52,7 @@ public class RegisterManager implements ServiceConnection {
                 myBinder.getRequestCode(context,phone_number,this);
                 break;
             case STATE_REGISTER:
-                myBinder.register(context,phone_number,request_code,password,nickname,this);
+                myBinder.register(context,phone_number,request_code,password,nickname,this,userType);
                 break;
         }
     }

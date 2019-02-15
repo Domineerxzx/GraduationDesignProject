@@ -76,10 +76,6 @@
             android:textColor="#fff"/>
     </RelativeLayout>
 
-
-
-
-
     <TextView
         android:id="@+id/tv_phone_number"
         android:layout_width="match_parent"
