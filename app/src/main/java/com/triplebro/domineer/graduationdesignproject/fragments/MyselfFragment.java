@@ -1,12 +1,16 @@
 package com.triplebro.domineer.graduationdesignproject.fragments;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -24,6 +29,8 @@ import com.triplebro.domineer.graduationdesignproject.activities.LocationActivit
 import com.triplebro.domineer.graduationdesignproject.activities.LoginActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.SettingActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.UserInfoActivity;
+import com.triplebro.domineer.graduationdesignproject.utils.PermissionUtil;
+import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.TwoButtonDialog;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -42,6 +49,10 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
     private ImageView iv_setting;
     private TextView tv_setting;
     private ImageView iv_setting_more;
+    private RelativeLayout rl_contact_us;
+    private ImageView iv_contact_us;
+    private TextView tv_contact_us;
+    private ImageView iv_contact_us_more;
 
     @Nullable
     @Override
@@ -86,6 +97,10 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
         iv_setting.setOnClickListener(this);
         tv_setting.setOnClickListener(this);
         iv_setting_more.setOnClickListener(this);
+        rl_contact_us.setOnClickListener(this);
+        iv_contact_us.setOnClickListener(this);
+        tv_contact_us.setOnClickListener(this);
+        iv_contact_us_more.setOnClickListener(this);
     }
 
     private void initView() {
@@ -101,6 +116,10 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
         iv_setting = fragment_myself.findViewById(R.id.iv_setting);
         tv_setting = fragment_myself.findViewById(R.id.tv_setting);
         iv_setting_more = fragment_myself.findViewById(R.id.iv_setting_more);
+        rl_contact_us = fragment_myself.findViewById(R.id.rl_contact_us);
+        iv_contact_us = fragment_myself.findViewById(R.id.iv_contact_us);
+        tv_contact_us = fragment_myself.findViewById(R.id.tv_contact_us);
+        iv_contact_us_more = fragment_myself.findViewById(R.id.iv_contact_us_more);
     }
 
     @Override
@@ -135,6 +154,37 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_setting_more:
                 Intent setting = new Intent(getActivity(), SettingActivity.class);
                 startActivity(setting);
+                break;
+
+            case R.id.rl_contact_us:
+            case R.id.iv_contact_us:
+            case R.id.tv_contact_us:
+            case R.id.iv_contact_us_more:
+                PermissionUtil.requestPower(getActivity(), getActivity(),Manifest.permission.CALL_PHONE);
+                TwoButtonDialog contact_us = new TwoButtonDialog();
+                String title = "联系我们";
+                String message = "拨打电话：18840919546";
+                final String telephone = "18840919546";
+                contact_us.show(title, message, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (ContextCompat.checkSelfPermission(getActivity(),
+                                Manifest.permission.CALL_PHONE)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            Toast.makeText(getActivity(), "未获得权限,请设置开启此权限", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_CALL);
+                            intent.setData(Uri.parse("tel:" + telephone));
+                            getActivity().startActivity(intent);
+                        }
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getActivity(), "取消呼叫", Toast.LENGTH_SHORT).show();
+                    }
+                }, getActivity().getFragmentManager());
                 break;
         }
     }

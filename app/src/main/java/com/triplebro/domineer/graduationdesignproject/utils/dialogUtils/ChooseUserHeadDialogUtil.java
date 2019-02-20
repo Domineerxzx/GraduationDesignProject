@@ -14,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
@@ -24,8 +25,16 @@ import java.io.File;
 
 public class ChooseUserHeadDialogUtil {
     public static void showDialog(final Context context, final String phone_number, final long timeStamp) {
-        PermissionUtil.requestPower(context, ((Activity) context), "android.permission.CAMERA");
-        PermissionUtil.requestPower(context, ((Activity) context), "android.permission.WRITE_EXTERNAL_STORAGE");
+        boolean checkPermission = PermissionUtil.checkPermission(context, "android.permission.CAMERA");
+        if (!checkPermission) {
+            Toast.makeText(context, "未授权拍照权限，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        checkPermission = PermissionUtil.checkPermission(context, "android.permission.WRITE_EXTERNAL_STORAGE");
+        if (!checkPermission) {
+            Toast.makeText(context, "未授权文件读写，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
         View view = View.inflate(context, R.layout.dialog_select_photo, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog dialog = builder.setView(view).create();
@@ -48,7 +57,7 @@ public class ChooseUserHeadDialogUtil {
             @Override
             public void onClick(View v) {
                 String path = context.getFilesDir() + File.separator + "images" + File.separator;
-                File file = new File(path + phone_number + timeStamp +".jpg");
+                File file = new File(path + phone_number + timeStamp + ".jpg");
                 if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
@@ -71,8 +80,16 @@ public class ChooseUserHeadDialogUtil {
     }
 
     public static void showSelectSubmitDialog(final Context context, final String phone_number, final long timeStamp) {
-        PermissionUtil.requestPower(context, ((Activity) context), "android.permission.CAMERA");
-        PermissionUtil.requestPower(context, ((Activity) context), "android.permission.WRITE_EXTERNAL_STORAGE");
+        boolean checkPermission = PermissionUtil.checkPermission(context, "android.permission.CAMERA");
+        if (!checkPermission) {
+            Toast.makeText(context, "未授权拍照权限，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        checkPermission = PermissionUtil.checkPermission(context, "android.permission.WRITE_EXTERNAL_STORAGE");
+        if (!checkPermission) {
+            Toast.makeText(context, "未授权文件读写，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
         View view = View.inflate(context, R.layout.dialog_select_submit, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog dialog = builder.setView(view).create();
@@ -95,7 +112,7 @@ public class ChooseUserHeadDialogUtil {
             @Override
             public void onClick(View v) {
                 String path = context.getFilesDir() + File.separator + "images" + File.separator;
-                File file = new File(path + phone_number + timeStamp +".jpg");
+                File file = new File(path + phone_number + timeStamp + ".jpg");
                 if (!file.getParentFile().exists()) {
                     file.getParentFile().mkdirs();
                 }
