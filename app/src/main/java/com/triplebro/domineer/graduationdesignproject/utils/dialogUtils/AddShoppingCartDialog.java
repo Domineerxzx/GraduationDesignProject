@@ -32,10 +32,10 @@ import java.util.List;
 
 public class AddShoppingCartDialog {
 
-    private static CommoditySizeInfo commoditySizeInfo;
+    private CommoditySizeInfo commoditySizeInfo;
     private static int size_count;
 
-    public static void showDialog(final Context context, final CommodityInfo commodityInfo, final List<CommoditySizeInfo> commoditySizeInfoList) {
+    public void showDialog(final Context context, final CommodityInfo commodityInfo, final List<CommoditySizeInfo> commoditySizeInfoList) {
         final Dialog mShareDialog = new Dialog(context, R.style.dialog_shopping_cart);
         mShareDialog.setCanceledOnTouchOutside(true);
         mShareDialog.setCancelable(true);
@@ -66,7 +66,11 @@ public class AddShoppingCartDialog {
 
             }
         });
-
+        if(commoditySizeInfo == null){
+            commoditySizeInfo = commoditySizeInfoList.get(0);
+            tv_commodity_count.setText(String.valueOf(commoditySizeInfo.getSize_count()));
+            tv_size.setText(commoditySizeInfo.getSize_name() + "号");
+        }
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +92,7 @@ public class AddShoppingCartDialog {
                     if (phone_number.length() == 0) {
                         Toast.makeText(context, "东西跑不了，登录回来再买吧！！！", Toast.LENGTH_SHORT).show();
                         mShareDialog.dismiss();
+                        return;
                     }
                     shoppingCartInfo.setSize_name(commoditySizeInfo.getSize_name());
                     shoppingCartInfo.setCount(Integer.parseInt(tv_count.getText().toString()));

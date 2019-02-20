@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 public class SubmitInfo implements Serializable {
 
-    private long submit_id;
+    private int submit_id;
     private String phone_number;
     private String nickname;
     private String user_head;
     private String submit_content;
 
-    public long getSubmit_id() {
+    public int getSubmit_id() {
         return submit_id;
     }
 
-    public void setSubmit_id(long submit_id) {
+    public void setSubmit_id(int submit_id) {
         this.submit_id = submit_id;
     }
 

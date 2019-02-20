@@ -6,12 +6,10 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:id="@+id/tv_submit"
         android:textSize="18dp"
-        android:text="asjkdflasdjf;klajsdk;fjskdjf;sdjfk;asdfj;
-        ksdjf;kasdjf;lkajsdf;
-        klajsdf;klsdjaf;klajsdk;fljsad;flkjsadkfjs;kjf;skdjf"
+        android:text=""
         android:textColor="#000" />
 
     <android.support.v7.widget.RecyclerView

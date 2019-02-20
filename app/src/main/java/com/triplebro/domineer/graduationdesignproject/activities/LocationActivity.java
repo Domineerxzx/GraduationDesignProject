@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.adapters.AddressAdapter;
@@ -75,8 +76,12 @@ public class LocationActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.bt_add_address:
             case R.id.bt_add_address_new:
-                Intent add_address = new Intent(this, AddAddressActivity.class);
-                startActivity(add_address);
+                if(getSharedPreferences("userInfo",MODE_PRIVATE).getString("phone_number",null) == null){
+                    Toast.makeText(this, "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent add_address = new Intent(this, AddAddressActivity.class);
+                    startActivity(add_address);
+                }
                 break;
         }
     }

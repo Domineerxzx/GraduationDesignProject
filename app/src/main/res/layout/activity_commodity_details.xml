@@ -41,7 +41,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_toLeftOf="@id/iv_share_commodity_details"
-                android:background="@mipmap/collection_unclick" />
+                android:background="@mipmap/collection" />
 
             <com.youth.banner.Banner
                 android:id="@+id/bn_commodity"

@@ -20,7 +20,7 @@ import com.triplebro.domineer.graduationdesignproject.managers.ShoppingCartManag
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingCartFragment extends Fragment {
+public class ShoppingCartFragment extends Fragment implements View.OnClickListener {
 
     private View fragment_ShoppingCart;
     private ListView lv_shopping_cart;
@@ -30,6 +30,9 @@ public class ShoppingCartFragment extends Fragment {
     private RelativeLayout rl_pay;
     private String phone_number;
     private TextView tv_count_price;
+    private TextView tv_clear;
+    private ShoppingCartAdapter shoppingCartAdapter;
+    private long sumShoppingCart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,14 +40,17 @@ public class ShoppingCartFragment extends Fragment {
         fragment_ShoppingCart = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
         initView();
         initData();
+        setOnClickListener();
         return fragment_ShoppingCart;
+    }
+
+    private void setOnClickListener() {
+        tv_clear.setOnClickListener(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        shoppingCartInfoList = shoppingCartManager.getShoppingCartInfoList();
-        long sumShoppingCart = shoppingCartManager.sumShoppingCart();
         SharedPreferences userInfo = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         phone_number = userInfo.getString("phone_number", "");
         if(phone_number.length() == 0){
@@ -62,12 +68,14 @@ public class ShoppingCartFragment extends Fragment {
             rl_pay.setVisibility(View.VISIBLE);
             tv_tip.setVisibility(View.GONE);
         }
-        lv_shopping_cart.setAdapter(new ShoppingCartAdapter(getActivity(),shoppingCartInfoList));
-        tv_count_price.setText(String.valueOf(sumShoppingCart));
     }
 
     private void initData() {
         shoppingCartManager = new ShoppingCartManager(getActivity());
+        shoppingCartManager.sumShoppingCart(tv_count_price);
+        shoppingCartInfoList = shoppingCartManager.getShoppingCartInfoList();
+        shoppingCartAdapter = new ShoppingCartAdapter(getActivity(), shoppingCartInfoList,shoppingCartManager);
+        lv_shopping_cart.setAdapter(shoppingCartAdapter);
     }
 
     private void initView() {
@@ -75,6 +83,17 @@ public class ShoppingCartFragment extends Fragment {
         tv_tip = fragment_ShoppingCart.findViewById(R.id.tv_tip);
         rl_pay = fragment_ShoppingCart.findViewById(R.id.rl_pay);
         tv_count_price = fragment_ShoppingCart.findViewById(R.id.tv_count_price);
+        tv_clear = fragment_ShoppingCart.findViewById(R.id.tv_clear);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tv_clear:
+                shoppingCartManager.clearShoppingCart(shoppingCartInfoList);
+                shoppingCartInfoList = shoppingCartManager.getShoppingCartInfoList();
+                shoppingCartAdapter.setShoppingCartInfoList(shoppingCartInfoList);
+                break;
+        }
+    }
 }

@@ -17,7 +17,7 @@ public class SubmitManager {
         this.context = context;
     }
 
-    public void UploadSubmitInfo(SubmitInfo submitInfo){
+    public long UploadSubmitInfo(SubmitInfo submitInfo){
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -26,8 +26,9 @@ public class SubmitManager {
         contentValues.put("nickname",submitInfo.getNickname());
         contentValues.put("user_head",submitInfo.getUser_head());
         contentValues.put("submit_content",submitInfo.getSubmit_content());
-        db.insert("submitInfo",null,contentValues);
+        long submit_id = db.insert("submitInfo", null, contentValues);
         db.close();
+        return submit_id;
     }
 
 

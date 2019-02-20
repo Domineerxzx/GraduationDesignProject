@@ -26,19 +26,15 @@
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="6967b682-f842-4cd1-bb31-0b5c8666247c">
-      <console name="shopping" type="STANDARD" />
+    <connection id="19ed4f35-588a-4757-860d-1e46d0ddcb85">
+      <console name="HiShopping" type="STANDARD" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="6967b682-f842-4cd1-bb31-0b5c8666247c" />
+    <connection id="19ed4f35-588a-4757-860d-1e46d0ddcb85" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-list connection-id="6967b682-f842-4cd1-bb31-0b5c8666247c" dataset="main.userInfo" active-filter-id="">
-      <filter id="d23bfddb-646c-44c1-a425-97856d72b6e9" name="Filter" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="phone_number" operator="=" value="" active="true" />
-      </filter>
-    </filter-list>
+    <filter-list connection-id="19ed4f35-588a-4757-860d-1e46d0ddcb85" dataset="main.collectionCommodityInfo" active-filter-id="" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -63,9 +59,9 @@
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="6967b682-f842-4cd1-bb31-0b5c8666247c" active="true">
+      <connection id="19ed4f35-588a-4757-860d-1e46d0ddcb85" active="true">
         <database>
-          <name value="shopping" />
+          <name value="HiShopping" />
           <description value="" />
           <database-type value="SQLITE" />
           <config-type value="BASIC" />
@@ -78,7 +74,7 @@
           <port value="" />
           <database value="" />
           <files>
-            <file path="C:\Users\Domineer\Desktop\shopping" schema="main" />
+            <file path="C:\Users\Domineer\Desktop\HiShopping" schema="main" />
           </files>
           <os-authentication value="false" />
           <empty-password value="false" />

@@ -1,26 +1,23 @@
 package com.triplebro.domineer.graduationdesignproject.activities;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.adapters.RecommendAdapter;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
-import com.triplebro.domineer.graduationdesignproject.beans.CommodityRecommendInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.CommodityDetailsManager;
+import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.AddShoppingCartDialog;
 import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.GlideImageLoader;
 import com.youth.banner.Banner;
@@ -48,6 +45,9 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
     private TextView tv_add_shopping_cart;
     private TextView tv_select_size;
     private List<CommoditySizeInfo> commoditySizeInfoList;
+    private SharedPreferences userInfo;
+    private String phone_number;
+    private FirstPageManager firstPageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,6 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
 
             }
         });
-
         bn_commodity.setImageLoader(new GlideImageLoader());
         bn_commodity.setImages(commodityImagePathList);
         bn_commodity.isAutoPlay(false);
@@ -101,6 +100,8 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
         });
         tv_commodity_name.setText(commodityInfo.getCommodity_name());
         tv_price.setText(String.valueOf(commodityInfo.getPrice()));
+        userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
+        phone_number = userInfo.getString("phone_number", "");
     }
 
     private void setOnClickListener() {
@@ -132,18 +133,31 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
                 finish();
                 break;
             case R.id.iv_collection_commodity_details:
-                if (isCollection) {
-                    iv_collection_commodity_details.setBackgroundResource(R.mipmap.collection_unclick);
-                    isCollection = false;
-                } else {
-                    iv_collection_commodity_details.setBackgroundResource(R.mipmap.collection_click);
-                    isCollection = true;
+                firstPageManager = new FirstPageManager(this);
+                if(phone_number.length()>0){
+                    if (isCollection) {
+                        boolean deleteCommodityCollection = firstPageManager.deleteCommodityCollection(commodityInfo.getCommodity_id());
+                        if(deleteCommodityCollection){
+                            iv_collection_commodity_details.setBackgroundResource(R.mipmap.collection);
+                            isCollection = false;
+                        }
+                    } else {
+                        boolean addCommodityCollection = firstPageManager.addCommodityCollection(commodityInfo.getCommodity_id());
+                        if(addCommodityCollection){
+                            iv_collection_commodity_details.setBackgroundResource(R.mipmap.collection_click);
+                            isCollection = true;
+                        }
+                    }
+                }else{
+                    Toast.makeText(this, "还没登录呢，不能收藏商品", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
             case R.id.tv_select_size:
             case R.id.tv_add_shopping_cart:
                 commoditySizeInfoList = commodityDetailsManager.getCommoditySizeInfoList(commodityInfo.getCommodity_id());
-                AddShoppingCartDialog.showDialog(this,commodityInfo, commoditySizeInfoList);
+                AddShoppingCartDialog addShoppingCartDialog = new AddShoppingCartDialog();
+                addShoppingCartDialog.showDialog(this,commodityInfo, commoditySizeInfoList);
                 break;
         }
     }

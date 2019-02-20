@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,9 +15,9 @@ import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
+import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.ViewHolder> {
@@ -24,6 +25,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
     private Context context;
     private List<CommodityInfo> data;
     private OnItemClickListener onItemClickListener;
+    private FirstPageManager firstPageManager;
 
     public RecommendAdapter(Context context, List<CommodityInfo> data) {
         this.context = context;
@@ -43,11 +45,31 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ViewHolder holder = viewHolder;
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
+        final ViewHolder holder = viewHolder;
         holder.tv_good_name.setText(data.get(i).getCommodity_name());
         holder.tv_price.setText(String.valueOf(data.get(i).getPrice()));
         Glide.with(context).load(new File(data.get(i).getCommodity_image())).into(holder.iv_recommend);
+        holder.bt_collection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((String) holder.bt_collection.getTag()).equals("isCollected")){
+                    firstPageManager = new FirstPageManager(context);
+                    boolean deleteCommodityCollection = firstPageManager.deleteCommodityCollection(data.get(i).getCommodity_id());
+                    if(deleteCommodityCollection){
+                        holder.bt_collection.setBackgroundResource(R.mipmap.collection_click);
+                        holder.bt_collection.setTag("unCollected");
+                    }
+                }else{
+                    firstPageManager = new FirstPageManager(context);
+                    boolean addCommodityCollection = firstPageManager.addCommodityCollection(data.get(i).getCommodity_id());
+                    if(addCommodityCollection){
+                        holder.bt_collection.setBackgroundResource(R.mipmap.collection);
+                        holder.bt_collection.setTag("isCollected");
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -64,6 +86,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         private TextView tv_price;
 
         private OnItemClickListener onItemClickListener;
+        private Button bt_collection;
 
         public ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
@@ -78,6 +101,8 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
             tv_good_name = itemView.findViewById(R.id.tv_good_name);
             tv_unit = itemView.findViewById(R.id.tv_unit);
             tv_price = itemView.findViewById(R.id.tv_price);
+            bt_collection = itemView.findViewById(R.id.bt_collection);
+            bt_collection.setTag("unCollected");
         }
 
         @Override

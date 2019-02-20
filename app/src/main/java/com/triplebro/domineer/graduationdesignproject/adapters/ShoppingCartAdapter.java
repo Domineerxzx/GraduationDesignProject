@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.ShoppingCartInfo;
+import com.triplebro.domineer.graduationdesignproject.managers.ShoppingCartManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,17 @@ public class ShoppingCartAdapter extends BaseAdapter {
 
     private Context context;
     private List<ShoppingCartInfo> shoppingCartInfoList;
+    private ShoppingCartManager shoppingCartManager;
 
-    public ShoppingCartAdapter(Context context, List<ShoppingCartInfo> shoppingCartInfoList) {
+    public ShoppingCartAdapter(Context context, List<ShoppingCartInfo> shoppingCartInfoList,ShoppingCartManager shoppingCartManager) {
         this.context = context;
         this.shoppingCartInfoList = shoppingCartInfoList;
+        this.shoppingCartManager = shoppingCartManager;
+    }
+
+    public void setShoppingCartInfoList(List<ShoppingCartInfo> shoppingCartInfoList) {
+        this.shoppingCartInfoList = shoppingCartInfoList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -52,6 +60,7 @@ public class ShoppingCartAdapter extends BaseAdapter {
             viewHolder.tv_price = convertView.findViewById(R.id.tv_price);
             viewHolder.tv_size = convertView.findViewById(R.id.tv_size);
             viewHolder.tv_count = convertView.findViewById(R.id.tv_count);
+            viewHolder.iv_delete = convertView.findViewById(R.id.iv_delete);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -62,6 +71,14 @@ public class ShoppingCartAdapter extends BaseAdapter {
         viewHolder.tv_count.setText(String.valueOf(shoppingCartInfoList.get(position).getCount()));
         viewHolder.tv_price.setText(String.valueOf(shoppingCartInfoList.get(position).getPrice()));
         viewHolder.tv_size.setText(shoppingCartInfoList.get(position).getSize_name());
+        viewHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShoppingCartInfo remove = shoppingCartInfoList.remove(position);
+                shoppingCartManager.deleteCommodity(remove.getCommodity_id(),remove);
+                notifyDataSetChanged();
+            }
+        });
         return convertView;
     }
 
@@ -71,5 +88,6 @@ public class ShoppingCartAdapter extends BaseAdapter {
         private TextView tv_price;
         private TextView tv_count;
         private TextView tv_size;
+        private ImageView iv_delete;
     }
 }

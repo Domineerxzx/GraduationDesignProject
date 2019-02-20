@@ -26,7 +26,7 @@ public class UserManager {
         if (submitInfoCursor != null && submitInfoCursor.getCount() > 0) {
             while(submitInfoCursor.moveToNext()){
                 SubmitInfo submitInfo = new SubmitInfo();
-                submitInfo.setSubmit_id(submitInfoCursor.getLong(0));
+                submitInfo.setSubmit_id(submitInfoCursor.getInt(0));
                 submitInfo.setPhone_number(submitInfoCursor.getString(1));
                 submitInfo.setNickname(submitInfoCursor.getString(2));
                 submitInfo.setUser_head(submitInfoCursor.getString(3));

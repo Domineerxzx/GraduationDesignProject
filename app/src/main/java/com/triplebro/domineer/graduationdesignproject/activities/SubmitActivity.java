@@ -80,19 +80,18 @@ public class SubmitActivity extends Activity implements View.OnClickListener, On
                 break;
             case R.id.bt_submit:
                 SubmitInfo submitInfo = new SubmitInfo();
-                submitInfo.setSubmit_id(timeStamp);
                 submitInfo.setPhone_number(phone_number);
                 submitInfo.setNickname(userInfo.getString("nickname", ""));
                 submitInfo.setUser_head(userInfo.getString("userHead", ""));
                 submitInfo.setSubmit_content(et_submit_content.getText().toString().trim());
-                submitManager.UploadSubmitInfo(submitInfo);
+                long submit_id = submitManager.UploadSubmitInfo(submitInfo);
                 List<String> data = submitAdapter.getData();
                 if (data.size() > 0 && data.size() < 9) {
                     data.remove(data.size()-1);
                 }
                 for (String s :data) {
                     SubmitImageInfo submitImageInfo = new SubmitImageInfo();
-                    submitImageInfo.setSubmit_id(timeStamp);
+                    submitImageInfo.setSubmit_id((int) submit_id);
                     submitImageInfo.setSubmit_image(s);
                     submitManager.UploadSubmitImageInfo(submitImageInfo);
                 }

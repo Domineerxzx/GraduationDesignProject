@@ -4,15 +4,15 @@ import java.io.Serializable;
 
 public class SubmitImageInfo implements Serializable {
 
-    private long submit_id;
+    private int submit_id;
 
     private String submit_image;
 
-    public long getSubmit_id() {
+    public int getSubmit_id() {
         return submit_id;
     }
 
-    public void setSubmit_id(long submit_id) {
+    public void setSubmit_id(int submit_id) {
         this.submit_id = submit_id;
     }
 

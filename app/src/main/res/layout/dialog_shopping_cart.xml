@@ -31,7 +31,7 @@
             android:textColor="@color/line"
             android:layout_below="@id/rv_size_bt"
             android:layout_marginTop="20dp"
-            android:text="S号"/>
+            android:text="XXS号"/>
 
         <TextView
             android:layout_width="wrap_content"
