@@ -210,6 +210,15 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        commodityInfoList = firstPageManager.getCommodityInfoList();
+        recommendAdapter = new RecommendAdapter(getActivity(), commodityInfoList);
+        rv_recommend.setAdapter(recommendAdapter);
+        recommendAdapter.setOnItemClickListener(this);
+    }
+
+    @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
         if (oldy <= 45) {
             fl_search.setBackgroundColor(Color.TRANSPARENT);

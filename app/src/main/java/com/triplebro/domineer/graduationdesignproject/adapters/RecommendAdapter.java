@@ -1,6 +1,9 @@
 package com.triplebro.domineer.graduationdesignproject.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,8 +17,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
+import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;
+import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
 
 import java.io.File;
 import java.util.List;
@@ -50,27 +55,36 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         holder.tv_good_name.setText(data.get(i).getCommodity_name());
         holder.tv_price.setText(String.valueOf(data.get(i).getPrice()));
         Glide.with(context).load(new File(data.get(i).getCommodity_image())).into(holder.iv_recommend);
+
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        boolean isCollection = databaseOP.getIsCollection(data.get(i).getCommodity_id());
+        if(isCollection){
+            holder.bt_collection.setBackgroundResource(R.mipmap.collection_click);
+            holder.bt_collection.setTag("isCollected");
+        }
+
         holder.bt_collection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((String) holder.bt_collection.getTag()).equals("isCollected")){
+                if (((String) holder.bt_collection.getTag()).equals("isCollected")) {
                     firstPageManager = new FirstPageManager(context);
                     boolean deleteCommodityCollection = firstPageManager.deleteCommodityCollection(data.get(i).getCommodity_id());
-                    if(deleteCommodityCollection){
-                        holder.bt_collection.setBackgroundResource(R.mipmap.collection_click);
+                    if (deleteCommodityCollection) {
+                        holder.bt_collection.setBackgroundResource(R.mipmap.collection);
                         holder.bt_collection.setTag("unCollected");
                     }
-                }else{
+                } else {
                     firstPageManager = new FirstPageManager(context);
                     boolean addCommodityCollection = firstPageManager.addCommodityCollection(data.get(i).getCommodity_id());
-                    if(addCommodityCollection){
-                        holder.bt_collection.setBackgroundResource(R.mipmap.collection);
+                    if (addCommodityCollection) {
+                        holder.bt_collection.setBackgroundResource(R.mipmap.collection_click);
                         holder.bt_collection.setTag("isCollected");
                     }
                 }
             }
         });
     }
+
 
     @Override
     public int getItemCount() {

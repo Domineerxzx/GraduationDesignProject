@@ -18,6 +18,7 @@ import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.CommodityDetailsManager;
 import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;
+import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.AddShoppingCartDialog;
 import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.GlideImageLoader;
 import com.youth.banner.Banner;
@@ -60,7 +61,7 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
 
     private void initData() {
         Intent intent = getIntent();
-        commodityInfo = (CommodityInfo)intent.getSerializableExtra("commodityInfo");
+        commodityInfo = (CommodityInfo) intent.getSerializableExtra("commodityInfo");
         commodityDetailsManager = new CommodityDetailsManager(this);
         commodityInfoList = commodityDetailsManager.getCommodityInfoList();
         commodityImagePathList = commodityDetailsManager.getCommodityImagePathList(commodityInfo.getCommodity_id());
@@ -71,13 +72,13 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
             }
         };
         rv_recommend_inside.setLayoutManager(gridLayoutManager);
-        RecommendAdapter recommendAdapter = new RecommendAdapter(this,commodityInfoList);
+        RecommendAdapter recommendAdapter = new RecommendAdapter(this, commodityInfoList);
         rv_recommend_inside.setAdapter(recommendAdapter);
         recommendAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(CommodityDetailsActivity.this, CommodityDetailsActivity.class);
-                intent.putExtra("commodityInfo",commodityInfoList.get(position));
+                intent.putExtra("commodityInfo", commodityInfoList.get(position));
                 startActivity(intent);
                 finish();
             }
@@ -102,6 +103,11 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
         tv_price.setText(String.valueOf(commodityInfo.getPrice()));
         userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
         phone_number = userInfo.getString("phone_number", "");
+        DatabaseOP databaseOP = new DatabaseOP(this);
+        isCollection = databaseOP.getIsCollection(commodityInfo.getCommodity_id());
+        if(isCollection){
+            iv_collection_commodity_details.setBackgroundResource(R.mipmap.collection_click);
+        }
     }
 
     private void setOnClickListener() {
@@ -134,21 +140,21 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
                 break;
             case R.id.iv_collection_commodity_details:
                 firstPageManager = new FirstPageManager(this);
-                if(phone_number.length()>0){
+                if (phone_number.length() > 0) {
                     if (isCollection) {
                         boolean deleteCommodityCollection = firstPageManager.deleteCommodityCollection(commodityInfo.getCommodity_id());
-                        if(deleteCommodityCollection){
+                        if (deleteCommodityCollection) {
                             iv_collection_commodity_details.setBackgroundResource(R.mipmap.collection);
                             isCollection = false;
                         }
                     } else {
                         boolean addCommodityCollection = firstPageManager.addCommodityCollection(commodityInfo.getCommodity_id());
-                        if(addCommodityCollection){
+                        if (addCommodityCollection) {
                             iv_collection_commodity_details.setBackgroundResource(R.mipmap.collection_click);
                             isCollection = true;
                         }
                     }
-                }else{
+                } else {
                     Toast.makeText(this, "还没登录呢，不能收藏商品", Toast.LENGTH_SHORT).show();
                 }
 
@@ -157,7 +163,7 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
             case R.id.tv_add_shopping_cart:
                 commoditySizeInfoList = commodityDetailsManager.getCommoditySizeInfoList(commodityInfo.getCommodity_id());
                 AddShoppingCartDialog addShoppingCartDialog = new AddShoppingCartDialog();
-                addShoppingCartDialog.showDialog(this,commodityInfo, commoditySizeInfoList);
+                addShoppingCartDialog.showDialog(this, commodityInfo, commoditySizeInfoList);
                 break;
         }
     }

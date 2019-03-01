@@ -7,7 +7,6 @@
         android:id="@+id/iv_photo_wall"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="10dp"
-        android:background="@mipmap/photo_default"/>
+        android:layout_margin="10dp"/>
 
 </RelativeLayout>

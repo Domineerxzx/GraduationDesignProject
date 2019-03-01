@@ -26,24 +26,7 @@
             android:text="地址管理"
             android:textSize="16dp" />
 
-        <ImageView
-            android:id="@+id/iv_search"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@id/tv_title"
-            android:layout_toLeftOf="@id/iv_shopping_cart"
-            android:background="@mipmap/search_inside" />
 
-        <ImageView
-            android:id="@+id/iv_shopping_cart"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@id/tv_title"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@mipmap/shopping_cart" />
 
         <View
             android:layout_width="match_parent"

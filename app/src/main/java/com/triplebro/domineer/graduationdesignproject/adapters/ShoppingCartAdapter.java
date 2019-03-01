@@ -1,11 +1,15 @@
 package com.triplebro.domineer.graduationdesignproject.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.ShoppingCartInfo;
 import com.triplebro.domineer.graduationdesignproject.managers.ShoppingCartManager;
+import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.TwoButtonDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +27,19 @@ public class ShoppingCartAdapter extends BaseAdapter {
     private Context context;
     private List<ShoppingCartInfo> shoppingCartInfoList;
     private ShoppingCartManager shoppingCartManager;
+    private String phone_number;
+    private TextView tv_tip;
+    private ListView lv_shopping_cart;
+    private RelativeLayout rl_pay;
 
-    public ShoppingCartAdapter(Context context, List<ShoppingCartInfo> shoppingCartInfoList,ShoppingCartManager shoppingCartManager) {
+    public ShoppingCartAdapter(Context context, List<ShoppingCartInfo> shoppingCartInfoList, ShoppingCartManager shoppingCartManager, String phone_number, TextView tv_tip, ListView lv_shopping_cart, RelativeLayout rl_pay) {
         this.context = context;
         this.shoppingCartInfoList = shoppingCartInfoList;
         this.shoppingCartManager = shoppingCartManager;
+        this.phone_number = phone_number;
+        this.tv_tip = tv_tip;
+        this.lv_shopping_cart = lv_shopping_cart;
+        this.rl_pay = rl_pay;
     }
 
     public void setShoppingCartInfoList(List<ShoppingCartInfo> shoppingCartInfoList) {
@@ -74,9 +87,35 @@ public class ShoppingCartAdapter extends BaseAdapter {
         viewHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShoppingCartInfo remove = shoppingCartInfoList.remove(position);
-                shoppingCartManager.deleteCommodity(remove.getCommodity_id(),remove);
-                notifyDataSetChanged();
+                TwoButtonDialog twoButtonDialog = new TwoButtonDialog();
+                twoButtonDialog.show("删除商品", "确定要将该商品从购物车中删除吗？", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ShoppingCartInfo remove = shoppingCartInfoList.remove(position);
+                        shoppingCartManager.deleteCommodity(remove.getCommodity_id(),remove);
+                        notifyDataSetChanged();
+                        if(phone_number.length() == 0){
+                            tv_tip.setVisibility(View.VISIBLE);
+                            tv_tip.setText("还没登录呢，查不到信息哦！！！");
+                            lv_shopping_cart.setVisibility(View.GONE);
+                            rl_pay.setVisibility(View.GONE);
+                        }else if(shoppingCartInfoList.size() == 0){
+                            tv_tip.setVisibility(View.VISIBLE);
+                            tv_tip.setText("购物车空空如也，快去买点东西装满它吧！！！");
+                            lv_shopping_cart.setVisibility(View.GONE);
+                            rl_pay.setVisibility(View.GONE);
+                        }else{
+                            lv_shopping_cart.setVisibility(View.VISIBLE);
+                            rl_pay.setVisibility(View.VISIBLE);
+                            tv_tip.setVisibility(View.GONE);
+                        }
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                },((Activity)context).getFragmentManager());
             }
         });
         return convertView;

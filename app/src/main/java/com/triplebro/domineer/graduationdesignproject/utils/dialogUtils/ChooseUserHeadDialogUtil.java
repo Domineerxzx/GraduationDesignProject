@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.PermissionUtil;
+import com.triplebro.domineer.graduationdesignproject.utils.intentUtils.PermissionController;
 
 import java.io.File;
 
@@ -27,12 +28,14 @@ public class ChooseUserHeadDialogUtil {
     public static void showDialog(final Context context, final String phone_number, final long timeStamp) {
         boolean checkPermission = PermissionUtil.checkPermission(context, "android.permission.CAMERA");
         if (!checkPermission) {
-            Toast.makeText(context, "未授权拍照权限，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "未授权拍照或录像，请设置开启权限", Toast.LENGTH_SHORT).show();
+            PermissionController.gotoMeizuPermission(context);
             return;
         }
         checkPermission = PermissionUtil.checkPermission(context, "android.permission.WRITE_EXTERNAL_STORAGE");
         if (!checkPermission) {
-            Toast.makeText(context, "未授权文件读写，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "未授权读写手机存储，请设置开启权限", Toast.LENGTH_SHORT).show();
+            PermissionController.gotoMeizuPermission(context);
             return;
         }
         View view = View.inflate(context, R.layout.dialog_select_photo, null);
@@ -82,12 +85,14 @@ public class ChooseUserHeadDialogUtil {
     public static void showSelectSubmitDialog(final Context context, final String phone_number, final long timeStamp) {
         boolean checkPermission = PermissionUtil.checkPermission(context, "android.permission.CAMERA");
         if (!checkPermission) {
-            Toast.makeText(context, "未授权拍照权限，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "未授权拍照或录像，请设置开启权限", Toast.LENGTH_SHORT).show();
+            PermissionController.gotoMeizuPermission(context);
             return;
         }
         checkPermission = PermissionUtil.checkPermission(context, "android.permission.WRITE_EXTERNAL_STORAGE");
         if (!checkPermission) {
-            Toast.makeText(context, "未授权文件读写，请自行前往设置开启权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "未授权读写手机存储，请设置开启权限", Toast.LENGTH_SHORT).show();
+            PermissionController.gotoMeizuPermission(context);
             return;
         }
         View view = View.inflate(context, R.layout.dialog_select_submit, null);

@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 public class MyOpenHelper extends SQLiteOpenHelper {
     public MyOpenHelper(@Nullable Context context) {
-        super(context, "HiShopping", null, 5);
+        super(context, "HiShopping", null, 1);
     }
 
     @Override

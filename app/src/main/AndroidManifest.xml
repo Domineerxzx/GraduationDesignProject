@@ -33,6 +33,11 @@
         <activity android:name=".activities.SearchActivity" />
         <activity android:name=".activities.UserInfoActivity" />
         <activity android:name=".activities.SettingActivity" />
+        <activity android:name=".activities.ContentActivity" />
+        <activity android:name=".activities.UpdateAddressActivity" />
+        <activity android:name=".activities.AdminManagerActivity" />
+        <activity android:name=".activities.CollectionCommodityActivity" />
+        <activity android:name=".activities.CollectionSubmitActivity"/>
 
         <service android:name=".service.NetworkConnectionService" />
 
@@ -46,9 +51,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activities.ContentActivity" />
-        <activity android:name=".activities.UpdateAddressActivity" />
-        <activity android:name=".activities.AdminManagerActivity"></activity>
     </application>
 
 </manifest>
