@@ -3,6 +3,7 @@ package com.triplebro.domineer.graduationdesignproject.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.triplebro.domineer.graduationdesignproject.managers.CommodityDetailsM
 import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;
 import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.AddShoppingCartDialog;
+import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.ShareUtil;
 import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.GlideImageLoader;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -115,6 +117,7 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
         iv_collection_commodity_details.setOnClickListener(this);
         tv_add_shopping_cart.setOnClickListener(this);
         tv_select_size.setOnClickListener(this);
+        iv_share_commodity_details.setOnClickListener(this);
     }
 
     private void initView() {
@@ -137,6 +140,9 @@ public class CommodityDetailsActivity extends Activity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.iv_close_commodity_details:
                 finish();
+                break;
+            case R.id.iv_share_commodity_details:
+                ShareUtil.shareText(this, "商品名称："+commodityInfo.getCommodity_name()+"价格："+commodityInfo.getPrice(),"分享此商品给朋友");
                 break;
             case R.id.iv_collection_commodity_details:
                 firstPageManager = new FirstPageManager(this);

@@ -70,7 +70,7 @@ public class AdminManagerActivity extends Activity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_admin:
-
+                finish();
                 break;
             case R.id.ll_add_goods:
             case R.id.tv_add_goods:

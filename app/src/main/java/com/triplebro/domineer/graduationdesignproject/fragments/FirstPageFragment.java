@@ -119,7 +119,7 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
 
     private void initData() {
         firstPageManager = new FirstPageManager(getActivity());
-        commodityInfoList = firstPageManager.getCommodityInfoList();
+        commodityInfoList = firstPageManager.getCommodityRecommendInfoList();
         recommendAdapter = new RecommendAdapter(getActivity(), commodityInfoList);
         rv_recommend.setAdapter(recommendAdapter);
         recommendAdapter.setOnItemClickListener(this);
@@ -212,7 +212,7 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     @Override
     public void onStart() {
         super.onStart();
-        commodityInfoList = firstPageManager.getCommodityInfoList();
+        commodityInfoList = firstPageManager.getCommodityRecommendInfoList();
         recommendAdapter = new RecommendAdapter(getActivity(), commodityInfoList);
         rv_recommend.setAdapter(recommendAdapter);
         recommendAdapter.setOnItemClickListener(this);

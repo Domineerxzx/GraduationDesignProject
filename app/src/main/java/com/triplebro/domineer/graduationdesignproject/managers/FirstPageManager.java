@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
+import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,26 +45,10 @@ public class FirstPageManager {
         return bannerImageList;
     }
 
-    public List<CommodityInfo> getCommodityInfoList() {
-        List<CommodityInfo> commodityInfoList = new ArrayList<>();
-        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
-        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor commodityRecommendInfoCursor = db.query("commodityRecommendInfo", null, null, null, null, null, null);
-        if (commodityRecommendInfoCursor != null && commodityRecommendInfoCursor.getCount() > 0) {
-            while (commodityRecommendInfoCursor.moveToNext()) {
-                CommodityInfo commodityInfo = new CommodityInfo();
-                commodityInfo.setCommodity_id(commodityRecommendInfoCursor.getInt(1));
-                commodityInfo.setCommodity_name(commodityRecommendInfoCursor.getString(2));
-                commodityInfo.setPrice(commodityRecommendInfoCursor.getInt(3));
-                commodityInfo.setCommodity_image(commodityRecommendInfoCursor.getString(4));
-                commodityInfoList.add(commodityInfo);
-            }
-        }
-        if (commodityRecommendInfoCursor != null) {
-            commodityRecommendInfoCursor.close();
-        }
-        db.close();
-        return commodityInfoList;
+    public List<CommodityInfo> getCommodityRecommendInfoList() {
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        List<CommodityInfo> commodityRecommendInfoList = databaseOP.getCommodityRecommendInfoList();
+        return commodityRecommendInfoList;
     }
 
     public boolean addCommodityCollection(int commodity_id) {

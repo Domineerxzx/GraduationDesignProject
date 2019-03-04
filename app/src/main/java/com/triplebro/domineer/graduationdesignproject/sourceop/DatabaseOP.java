@@ -170,4 +170,48 @@ public class DatabaseOP {
         db.close();
         return submitInfoList;
     }
+
+    public List<CommodityInfo> getCommodityRecommendInfoList() {
+        List<CommodityInfo> commodityInfoList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor commodityRecommendInfoCursor = db.query("commodityRecommendInfo", null, null, null, null, null, null);
+        if (commodityRecommendInfoCursor != null && commodityRecommendInfoCursor.getCount() > 0) {
+            while (commodityRecommendInfoCursor.moveToNext()) {
+                CommodityInfo commodityInfo = new CommodityInfo();
+                commodityInfo.setCommodity_id(commodityRecommendInfoCursor.getInt(1));
+                commodityInfo.setCommodity_name(commodityRecommendInfoCursor.getString(2));
+                commodityInfo.setPrice(commodityRecommendInfoCursor.getInt(3));
+                commodityInfo.setCommodity_image(commodityRecommendInfoCursor.getString(4));
+                commodityInfoList.add(commodityInfo);
+            }
+        }
+        if (commodityRecommendInfoCursor != null) {
+            commodityRecommendInfoCursor.close();
+        }
+        db.close();
+        return commodityInfoList;
+    }
+
+    public List<CommodityInfo> getSearchInfoList(String searchKey) {
+        List<CommodityInfo> commodityInfoList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor commodityInfoCursor = db.query("commodityInfo", new String[]{"commodity_id","commodity_name","price","commodity_image"}, "commodity_name like ?", new String[]{"%"+searchKey+"%"}, null, null, null);
+        if (commodityInfoCursor != null && commodityInfoCursor.getCount() > 0) {
+            while (commodityInfoCursor.moveToNext()) {
+                CommodityInfo commodityInfo = new CommodityInfo();
+                commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
+                commodityInfo.setCommodity_name(commodityInfoCursor.getString(1));
+                commodityInfo.setPrice(commodityInfoCursor.getInt(2));
+                commodityInfo.setCommodity_image(commodityInfoCursor.getString(3));
+                commodityInfoList.add(commodityInfo);
+            }
+        }
+        if (commodityInfoCursor != null) {
+            commodityInfoCursor.close();
+        }
+        db.close();
+        return commodityInfoList;
+    }
 }
