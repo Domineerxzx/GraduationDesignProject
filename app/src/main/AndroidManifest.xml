@@ -37,7 +37,7 @@
         <activity android:name=".activities.UpdateAddressActivity" />
         <activity android:name=".activities.AdminManagerActivity" />
         <activity android:name=".activities.CollectionCommodityActivity" />
-        <activity android:name=".activities.CollectionSubmitActivity"/>
+        <activity android:name=".activities.CollectionSubmitActivity" />
 
         <service android:name=".service.NetworkConnectionService" />
 
@@ -51,6 +51,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".activities.FeedbackActivity" />
+        <activity android:name=".activities.AboutUsActivity" />
+        <activity android:name=".activities.TypeRecommendActivity"></activity>
     </application>
 
 </manifest>

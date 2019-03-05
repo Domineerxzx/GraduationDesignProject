@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,25 +15,23 @@ import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.ContentManager;
+import com.triplebro.domineer.graduationdesignproject.managers.TypeRecommendManager;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ContentActivity extends Activity implements View.OnClickListener, OnItemClickListener {
+public class TypeRecommendActivity extends Activity implements View.OnClickListener,OnItemClickListener {
 
     private TextView tv_title;
     private ImageView iv_back;
     private RecyclerView rv_content;
-    private TypeConcreteInfo typeConcreteInfo;
-    private int type_concrete_id;
-    private ContentManager contentManager;
-    private List<CommodityInfo> commodityInfoList;
+    private TypeRecommendManager typeRecommendManager;
+    private List<CommodityInfo> commodityList;
+    private RecommendAdapter recommendAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_content);
+        setContentView(R.layout.activity_type_recommend);
 
         initView();
         initData();
@@ -43,26 +40,23 @@ public class ContentActivity extends Activity implements View.OnClickListener, O
 
     private void setOnClickListener() {
         iv_back.setOnClickListener(this);
+        recommendAdapter.setOnItemClickListener(this);
     }
 
     private void initData() {
         Intent intent = getIntent();
-        typeConcreteInfo = (TypeConcreteInfo) intent.getSerializableExtra("type");
-        if (typeConcreteInfo != null) {
-            tv_title.setText(typeConcreteInfo.getType_concrete_name());
-            type_concrete_id = typeConcreteInfo.getType_concrete_id();
-        }
         String title = intent.getStringExtra("title");
         if (title != null) {
             tv_title.setText(title);
         }
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        rv_content.setLayoutManager(gridLayoutManager);
-        contentManager = new ContentManager(this);
-        commodityInfoList = contentManager.getCommodityInfoList(type_concrete_id);
-        RecommendAdapter recommendAdapter = new RecommendAdapter(this,commodityInfoList);
-        rv_content.setAdapter(recommendAdapter);
-        recommendAdapter.setOnItemClickListener(this);
+        int type = intent.getIntExtra("type",-1);
+        if (type != -1) {
+            typeRecommendManager = new TypeRecommendManager(this);
+            commodityList = typeRecommendManager.getCommodityList(type);
+            rv_content.setLayoutManager(new GridLayoutManager(this,2));
+            recommendAdapter = new RecommendAdapter(this, commodityList);
+            rv_content.setAdapter(recommendAdapter);
+        }
     }
 
     private void initView() {
@@ -82,9 +76,9 @@ public class ContentActivity extends Activity implements View.OnClickListener, O
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent commodityDetails = new Intent(this, CommodityDetailsActivity.class);
-        commodityDetails.putExtra("commodityInfo",commodityInfoList.get(position));
-        startActivity(commodityDetails);
+        Intent intent = new Intent(this, CommodityDetailsActivity.class);
+        intent.putExtra("commodityInfo", commodityList.get(position));
+        startActivity(intent);
     }
 
     @Override

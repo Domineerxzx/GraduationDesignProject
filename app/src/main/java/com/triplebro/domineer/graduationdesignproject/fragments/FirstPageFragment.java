@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.activities.CommodityDetailsActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.ContentActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.SearchActivity;
+import com.triplebro.domineer.graduationdesignproject.activities.TypeRecommendActivity;
 import com.triplebro.domineer.graduationdesignproject.adapters.RecommendAdapter;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
@@ -73,6 +75,7 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     private FirstPageManager firstPageManager;
     private List<CommodityInfo> commodityInfoList = new ArrayList<>();
     private RecommendAdapter recommendAdapter;
+    private ImageView iv_scan;
 
     @Nullable
     @Override
@@ -114,7 +117,7 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
         iv_mother_and_baby.setOnClickListener(this);
         iv_beauty_make_up.setOnClickListener(this);
         iv_tide_card.setOnClickListener(this);
-
+        iv_scan.setOnClickListener(this);
     }
 
     private void initData() {
@@ -145,38 +148,7 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
         msv_first_page.setOnScrollChangedListener(this);
 
         countdownView = fragment_firstPage.findViewById(R.id.countdownView);
-        countdownView.setCountTime(300)
-                .setHourTvBackgroundRes(R.drawable.shape_white_card)
-                .setHourTvTextColorHex("#FF0000")
-                .setHourTvTextSize(18)
-
-                .setHourColonTvBackgroundColorHex("#00FFFFFF")
-                .setHourColonTvSize(18, 0)
-                .setHourColonTvTextColorHex("#FF7198")
-                .setHourColonTvTextSize(18)
-
-                .setMinuteTvBackgroundRes(R.drawable.shape_white_card)
-                .setMinuteTvTextColorHex("#FF0000")
-                .setMinuteTvTextSize(18)
-
-                .setMinuteColonTvSize(18, 0)
-                .setMinuteColonTvTextColorHex("#FF7198")
-                .setMinuteColonTvTextSize(18)
-
-                .setSecondTvBackgroundRes(R.drawable.shape_white_card)
-                .setSecondTvTextColorHex("#FF0000")
-                .setSecondTvTextSize(18)
-
-                // 开启倒计时
-                .startCountDown()
-
-                // 设置倒计时结束监听
-                .setCountDownEndListener(new CountDownView.CountDownEndListener() {
-                    @Override
-                    public void onCountDownEnd() {
-                        countdownView.startCountDown();
-                    }
-                });
+        setCountDown();
         tv_search = fragment_firstPage.findViewById(R.id.tv_search);
         rl_search = fragment_firstPage.findViewById(R.id.rl_search);
         ll_clothes = fragment_firstPage.findViewById(R.id.ll_clothes);
@@ -207,6 +179,42 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
         bn_banner.isAutoPlay(true);
         bn_banner.setDelayTime(5000);
         bn_banner.setIndicatorGravity(BannerConfig.CENTER);
+        iv_scan = fragment_firstPage.findViewById(R.id.iv_scan);
+    }
+
+    private void setCountDown() {
+        countdownView.setCountTime(300)
+                .setHourTvBackgroundRes(R.drawable.shape_white_card)
+                .setHourTvTextColorHex("#FF0000")
+                .setHourTvTextSize(18)
+
+                .setHourColonTvBackgroundColorHex("#00FFFFFF")
+                .setHourColonTvSize(18, 0)
+                .setHourColonTvTextColorHex("#FF7198")
+                .setHourColonTvTextSize(18)
+
+                .setMinuteTvBackgroundRes(R.drawable.shape_white_card)
+                .setMinuteTvTextColorHex("#FF0000")
+                .setMinuteTvTextSize(18)
+
+                .setMinuteColonTvSize(18, 0)
+                .setMinuteColonTvTextColorHex("#FF7198")
+                .setMinuteColonTvTextSize(18)
+
+                .setSecondTvBackgroundRes(R.drawable.shape_white_card)
+                .setSecondTvTextColorHex("#FF0000")
+                .setSecondTvTextSize(18)
+
+                // 开启倒计时
+                .startCountDown()
+
+                // 设置倒计时结束监听
+                .setCountDownEndListener(new CountDownView.CountDownEndListener() {
+                    @Override
+                    public void onCountDownEnd() {
+                        setCountDown();
+                    }
+                });
     }
 
     @Override
@@ -231,6 +239,9 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_scan:
+                Toast.makeText(getActivity(), "此功能目前尚未完成", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.tv_search:
             case R.id.rl_search:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
@@ -239,57 +250,65 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
             case R.id.ll_clothes:
             case R.id.tv_clothes:
             case R.id.iv_clothes:
-                Intent clothes = new Intent(getActivity(), ContentActivity.class);
+                Intent clothes = new Intent(getActivity(), TypeRecommendActivity.class);
                 clothes.putExtra("title", tv_clothes.getText().toString());
+                clothes.putExtra("type", 0);
                 getActivity().startActivity(clothes);
                 break;
             case R.id.ll_bags:
             case R.id.tv_bags:
             case R.id.iv_bags:
-                Intent bags = new Intent(getActivity(), ContentActivity.class);
+                Intent bags = new Intent(getActivity(), TypeRecommendActivity.class);
                 bags.putExtra("title", tv_bags.getText().toString());
+                bags.putExtra("type", 3);
                 getActivity().startActivity(bags);
                 break;
             case R.id.ll_household:
             case R.id.tv_household:
             case R.id.iv_household:
-                Intent household = new Intent(getActivity(), ContentActivity.class);
+                Intent household = new Intent(getActivity(), TypeRecommendActivity.class);
                 household.putExtra("title", tv_household.getText().toString());
+                household.putExtra("type", 5);
                 getActivity().startActivity(household);
                 break;
             case R.id.ll_technology:
             case R.id.tv_technology:
             case R.id.iv_technology:
-                Intent technology = new Intent(getActivity(), ContentActivity.class);
+                Intent technology = new Intent(getActivity(), TypeRecommendActivity.class);
                 technology.putExtra("title", tv_technology.getText().toString());
+                technology.putExtra("type", 6);
                 getActivity().startActivity(technology);
                 break;
             case R.id.ll_life:
             case R.id.tv_life:
             case R.id.iv_life:
-                Intent life = new Intent(getActivity(), ContentActivity.class);
+                Intent life = new Intent(getActivity(), TypeRecommendActivity.class);
                 life.putExtra("title", tv_life.getText().toString());
+                life.putExtra("type",4);
                 getActivity().startActivity(life);
                 break;
             case R.id.ll_mother_and_baby:
             case R.id.tv_mother_and_baby:
             case R.id.iv_mother_and_baby:
-                Intent mother_and_baby = new Intent(getActivity(), ContentActivity.class);
+                Intent mother_and_baby = new Intent(getActivity(), TypeRecommendActivity.class);
                 mother_and_baby.putExtra("title", tv_mother_and_baby.getText().toString());
+                mother_and_baby.putExtra("type",7);
                 getActivity().startActivity(mother_and_baby);
                 break;
             case R.id.ll_beauty_make_up:
             case R.id.tv_beauty_make_up:
             case R.id.iv_beauty_make_up:
-                Intent beauty_make_up = new Intent(getActivity(), ContentActivity.class);
+                Intent beauty_make_up = new Intent(getActivity(), TypeRecommendActivity.class);
                 beauty_make_up.putExtra("title", tv_beauty_make_up.getText().toString());
+                beauty_make_up.putExtra("type",8);
                 getActivity().startActivity(beauty_make_up);
                 break;
             case R.id.ll_tide_card:
             case R.id.tv_tide_card:
             case R.id.iv_tide_card:
-                Intent tide_card = new Intent(getActivity(), ContentActivity.class);
+                Intent tide_card = new Intent(getActivity(), TypeRecommendActivity.class);
                 tide_card.putExtra("title", tv_tide_card.getText().toString());
+                tide_card.putExtra("type",9);
                 getActivity().startActivity(tide_card);
                 break;
         }

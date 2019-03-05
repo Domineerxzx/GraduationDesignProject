@@ -53,45 +53,15 @@ public class FirstPageManager {
 
     public boolean addCommodityCollection(int commodity_id) {
 
-        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
-        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        SharedPreferences userInfo = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        String phone_number = userInfo.getString("phone_number", "");
-        if (phone_number == null || phone_number.length() == 0) {
-            Toast.makeText(context, "还没登录呢，不能收藏商品", Toast.LENGTH_SHORT).show();
-            db.close();
-            return false;
-        } else {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("phone_number", phone_number);
-            contentValues.put("commodity_id", commodity_id);
-            long collectionCommodityInfo = db.insert("collectionCommodityInfo", null, contentValues);
-            if (collectionCommodityInfo >= 0) {
-                Toast.makeText(context, "添加收藏成功", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "添加收藏失败", Toast.LENGTH_SHORT).show();
-            }
-            db.close();
-            return true;
-        }
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        boolean addCommodityCollection = databaseOP.addCommodityCollection(commodity_id);
+        return addCommodityCollection;
     }
 
 
     public boolean deleteCommodityCollection(int commodity_id) {
-
-        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
-        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        SharedPreferences userInfo = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
-        String phone_number = userInfo.getString("phone_number", "");
-        int collectionCommodityInfo = db.delete("collectionCommodityInfo", "phone_number = ? and commodity_id = ?", new String[]{phone_number, String.valueOf(commodity_id)});
-        if (collectionCommodityInfo >= 0) {
-            Toast.makeText(context, "取消收藏成功", Toast.LENGTH_SHORT).show();
-            db.close();
-            return true;
-        } else {
-            Toast.makeText(context, "取消收藏失败", Toast.LENGTH_SHORT).show();
-            db.close();
-            return false;
-        }
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        boolean deleteCommodityCollection = databaseOP.deleteCommodityCollection(commodity_id);
+        return deleteCommodityCollection;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.activities.CommodityDetailsActivity;
@@ -60,7 +61,7 @@ public class ShoppingCartFragment extends Fragment implements View.OnClickListen
         super.onStart();
         if(phone_number.length() == 0){
             tv_tip.setVisibility(View.VISIBLE);
-            tv_tip.setText("还没登录呢，查不到信息哦！！！");
+            tv_tip.setText("还没登录呢，神马都没有！！！");
             lv_shopping_cart.setVisibility(View.GONE);
             rl_pay.setVisibility(View.GONE);
         }else if(shoppingCartInfoList.size() == 0){
@@ -98,6 +99,10 @@ public class ShoppingCartFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_clear:
+                if(phone_number.length()!=11){
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(twoButtonDialog == null){
                     twoButtonDialog = new TwoButtonDialog();
                 }
@@ -107,12 +112,7 @@ public class ShoppingCartFragment extends Fragment implements View.OnClickListen
                         shoppingCartManager.clearShoppingCart(shoppingCartInfoList);
                         shoppingCartInfoList = shoppingCartManager.getShoppingCartInfoList();
                         shoppingCartAdapter.setShoppingCartInfoList(shoppingCartInfoList);
-                        if(phone_number.length() == 0){
-                            tv_tip.setVisibility(View.VISIBLE);
-                            tv_tip.setText("还没登录呢，查不到信息哦！！！");
-                            lv_shopping_cart.setVisibility(View.GONE);
-                            rl_pay.setVisibility(View.GONE);
-                        }else if(shoppingCartInfoList.size() == 0){
+                        if(shoppingCartInfoList.size() == 0){
                             tv_tip.setVisibility(View.VISIBLE);
                             tv_tip.setText("购物车空空如也，快去买点东西装满它吧！！！");
                             lv_shopping_cart.setVisibility(View.GONE);

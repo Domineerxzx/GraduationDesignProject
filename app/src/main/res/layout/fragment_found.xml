@@ -33,5 +33,15 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:scrollbars="none"/>
+    <TextView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tv_tip"
+        android:text="还没登录呢，不能看发现！！！"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:textColor="@color/AppColor"/>
 
 </RelativeLayout>

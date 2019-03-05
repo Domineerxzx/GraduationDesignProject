@@ -1,9 +1,11 @@
 package com.triplebro.domineer.graduationdesignproject.sourceop;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.activities.CollectionCommodityActivity;
 import com.triplebro.domineer.graduationdesignproject.beans.CollectionCommodityInfo;
@@ -28,14 +30,14 @@ public class DatabaseOP {
         String phone_number = userInfo.getString("phone_number", "");
         if (phone_number.length() == 0) {
             return false;
-        }else{
+        } else {
             MyOpenHelper myOpenHelper = new MyOpenHelper(context);
             SQLiteDatabase db = myOpenHelper.getWritableDatabase();
             Cursor collectionCommodityInfo = db.query("collectionCommodityInfo", null, "commodity_id = ? and phone_number = ?", new String[]{String.valueOf(commodity_id), phone_number}, null, null, null);
-            if(collectionCommodityInfo!=null&&collectionCommodityInfo.getCount()>0){
+            if (collectionCommodityInfo != null && collectionCommodityInfo.getCount() > 0) {
                 collectionCommodityInfo.moveToNext();
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -46,29 +48,29 @@ public class DatabaseOP {
         String phone_number = userInfo.getString("phone_number", "");
         if (phone_number.length() == 0) {
             return false;
-        }else{
+        } else {
             MyOpenHelper myOpenHelper = new MyOpenHelper(context);
             SQLiteDatabase db = myOpenHelper.getWritableDatabase();
             Cursor collectionSubmitInfo = db.query("collectionSubmitInfo", null, "submit_id = ? and phone_number = ?", new String[]{String.valueOf(submit_id), phone_number}, null, null, null);
-            if(collectionSubmitInfo!=null&&collectionSubmitInfo.getCount()>0){
+            if (collectionSubmitInfo != null && collectionSubmitInfo.getCount() > 0) {
                 collectionSubmitInfo.moveToNext();
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
     }
 
-    public List<CollectionCommodityInfo> getCommodityCollectionInfoList(String phone_number){
+    public List<CollectionCommodityInfo> getCommodityCollectionInfoList(String phone_number) {
         List<CollectionCommodityInfo> collectionCommodityInfoList = new ArrayList<>();
         if (phone_number.length() == 0) {
             return collectionCommodityInfoList;
-        }else{
+        } else {
             MyOpenHelper myOpenHelper = new MyOpenHelper(context);
             SQLiteDatabase db = myOpenHelper.getWritableDatabase();
             Cursor collectionCommodityInfoCursor = db.query("collectionCommodityInfo", null, "phone_number = ?", new String[]{phone_number}, null, null, null);
-            if(collectionCommodityInfoCursor!=null&&collectionCommodityInfoCursor.getCount()>0){
-                while (collectionCommodityInfoCursor.moveToNext()){
+            if (collectionCommodityInfoCursor != null && collectionCommodityInfoCursor.getCount() > 0) {
+                while (collectionCommodityInfoCursor.moveToNext()) {
                     CollectionCommodityInfo collectionCommodityInfo = new CollectionCommodityInfo();
                     collectionCommodityInfo.setPhone_number(phone_number);
                     collectionCommodityInfo.setCommodity_id(collectionCommodityInfoCursor.getInt(2));
@@ -77,7 +79,7 @@ public class DatabaseOP {
                 collectionCommodityInfoCursor.close();
                 db.close();
                 return collectionCommodityInfoList;
-            }else{
+            } else {
                 if (collectionCommodityInfoCursor != null) {
                     collectionCommodityInfoCursor.close();
                 }
@@ -87,16 +89,16 @@ public class DatabaseOP {
         }
     }
 
-    public List<CollectionSubmitInfo> getSubmitCollectionInfoList(String phone_number){
+    public List<CollectionSubmitInfo> getSubmitCollectionInfoList(String phone_number) {
         List<CollectionSubmitInfo> collectionSubmitInfoList = new ArrayList<>();
         if (phone_number.length() == 0) {
             return collectionSubmitInfoList;
-        }else{
+        } else {
             MyOpenHelper myOpenHelper = new MyOpenHelper(context);
             SQLiteDatabase db = myOpenHelper.getWritableDatabase();
             Cursor collectionSubmitInfoCursor = db.query("collectionSubmitInfo", null, "phone_number = ?", new String[]{phone_number}, null, null, null);
-            if(collectionSubmitInfoCursor!=null&&collectionSubmitInfoCursor.getCount()>0){
-                while (collectionSubmitInfoCursor.moveToNext()){
+            if (collectionSubmitInfoCursor != null && collectionSubmitInfoCursor.getCount() > 0) {
+                while (collectionSubmitInfoCursor.moveToNext()) {
                     CollectionSubmitInfo collectionSubmitInfo = new CollectionSubmitInfo();
                     collectionSubmitInfo.setPhone_number(phone_number);
                     collectionSubmitInfo.setSubmit_id(collectionSubmitInfoCursor.getInt(2));
@@ -105,7 +107,7 @@ public class DatabaseOP {
                 collectionSubmitInfoCursor.close();
                 db.close();
                 return collectionSubmitInfoList;
-            }else{
+            } else {
                 if (collectionSubmitInfoCursor != null) {
                     collectionSubmitInfoCursor.close();
                 }
@@ -122,7 +124,7 @@ public class DatabaseOP {
         for (CollectionCommodityInfo collectionCommodityInfo : collectionInfoList) {
             int commodity_id = collectionCommodityInfo.getCommodity_id();
             Cursor commodityInfoCursor = db.query("commodityInfo", null, "commodity_id = ?", new String[]{String.valueOf(commodity_id)}, null, null, null);
-            if(commodityInfoCursor!=null&&commodityInfoCursor.getCount()>0){
+            if (commodityInfoCursor != null && commodityInfoCursor.getCount() > 0) {
                 commodityInfoCursor.moveToNext();
                 CommodityInfo commodityInfo = new CommodityInfo();
                 commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
@@ -134,7 +136,7 @@ public class DatabaseOP {
                 commodityInfo.setPhone_number(commodityInfoCursor.getString(6));
                 commodityInfoList.add(commodityInfo);
                 commodityInfoCursor.close();
-            }else{
+            } else {
                 if (commodityInfoCursor != null) {
                     commodityInfoCursor.close();
                 }
@@ -151,7 +153,7 @@ public class DatabaseOP {
         for (CollectionSubmitInfo collectionSubmitInfo : collectionInfoList) {
             int submit_id = collectionSubmitInfo.getSubmit_id();
             Cursor submitInfoCursor = db.query("submitInfo", null, "submit_id = ?", new String[]{String.valueOf(submit_id)}, null, null, null);
-            if(submitInfoCursor!=null&&submitInfoCursor.getCount()>0){
+            if (submitInfoCursor != null && submitInfoCursor.getCount() > 0) {
                 submitInfoCursor.moveToNext();
                 SubmitInfo submitInfo = new SubmitInfo();
                 submitInfo.setSubmit_id(submitInfoCursor.getInt(0));
@@ -161,7 +163,7 @@ public class DatabaseOP {
                 submitInfo.setSubmit_content(submitInfoCursor.getString(4));
                 submitInfoList.add(submitInfo);
                 submitInfoCursor.close();
-            }else{
+            } else {
                 if (submitInfoCursor != null) {
                     submitInfoCursor.close();
                 }
@@ -197,7 +199,7 @@ public class DatabaseOP {
         List<CommodityInfo> commodityInfoList = new ArrayList<>();
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor commodityInfoCursor = db.query("commodityInfo", new String[]{"commodity_id","commodity_name","price","commodity_image"}, "commodity_name like ?", new String[]{"%"+searchKey+"%"}, null, null, null);
+        Cursor commodityInfoCursor = db.query("commodityInfo", new String[]{"commodity_id", "commodity_name", "price", "commodity_image"}, "commodity_name like ?", new String[]{"%" + searchKey + "%"}, null, null, null);
         if (commodityInfoCursor != null && commodityInfoCursor.getCount() > 0) {
             while (commodityInfoCursor.moveToNext()) {
                 CommodityInfo commodityInfo = new CommodityInfo();
@@ -213,5 +215,84 @@ public class DatabaseOP {
         }
         db.close();
         return commodityInfoList;
+    }
+
+    public List<CommodityInfo> getTypeRecommendCommodityList(int type_id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<CommodityInfo> commodityInfoList = new ArrayList<>();
+        Cursor commodityInfoCursor;
+        switch (type_id) {
+            case 0:
+                commodityInfoCursor = db.query("commodityInfo", new String[]{"commodity_id", "commodity_name", "price", "commodity_image"}, "type_generalize_id = ? or type_generalize_id = ?", new String[]{String.valueOf(1), String.valueOf(2)}, null, null, null);
+                if(commodityInfoCursor != null && commodityInfoCursor.getCount()>0){
+                    while (commodityInfoCursor.moveToNext()){
+                        CommodityInfo commodityInfo = new CommodityInfo();
+                        commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
+                        commodityInfo.setCommodity_name(commodityInfoCursor.getString(1));
+                        commodityInfo.setPrice(commodityInfoCursor.getInt(2));
+                        commodityInfo.setCommodity_image(commodityInfoCursor.getString(3));
+                        commodityInfoList.add(commodityInfo);
+                    }
+                }
+                break;
+            default:
+                commodityInfoCursor = db.query("commodityInfo", new String[]{"commodity_id", "commodity_name", "price", "commodity_image"}, "type_generalize_id = ?", new String[]{String.valueOf(type_id)}, null, null, null);
+                if(commodityInfoCursor != null && commodityInfoCursor.getCount()>0){
+                    while (commodityInfoCursor.moveToNext()){
+                        CommodityInfo commodityInfo = new CommodityInfo();
+                        commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
+                        commodityInfo.setCommodity_name(commodityInfoCursor.getString(1));
+                        commodityInfo.setPrice(commodityInfoCursor.getInt(2));
+                        commodityInfo.setCommodity_image(commodityInfoCursor.getString(3));
+                        commodityInfoList.add(commodityInfo);
+                    }
+                }
+                break;
+        }
+        return commodityInfoList;
+    }
+
+    public boolean addCommodityCollection(int commodity_id) {
+
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        SharedPreferences userInfo = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String phone_number = userInfo.getString("phone_number", "");
+        if (phone_number == null || phone_number.length() == 0) {
+            Toast.makeText(context, "还没登录呢，不能收藏商品", Toast.LENGTH_SHORT).show();
+            db.close();
+            return false;
+        } else {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("phone_number", phone_number);
+            contentValues.put("commodity_id", commodity_id);
+            long collectionCommodityInfo = db.insert("collectionCommodityInfo", null, contentValues);
+            if (collectionCommodityInfo >= 0) {
+                Toast.makeText(context, "添加收藏成功", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "添加收藏失败", Toast.LENGTH_SHORT).show();
+            }
+            db.close();
+            return true;
+        }
+    }
+
+    public boolean deleteCommodityCollection(int commodity_id) {
+
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        SharedPreferences userInfo = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        String phone_number = userInfo.getString("phone_number", "");
+        int collectionCommodityInfo = db.delete("collectionCommodityInfo", "phone_number = ? and commodity_id = ?", new String[]{phone_number, String.valueOf(commodity_id)});
+        if (collectionCommodityInfo >= 0) {
+            Toast.makeText(context, "取消收藏成功", Toast.LENGTH_SHORT).show();
+            db.close();
+            return true;
+        } else {
+            Toast.makeText(context, "取消收藏失败", Toast.LENGTH_SHORT).show();
+            db.close();
+            return false;
+        }
     }
 }

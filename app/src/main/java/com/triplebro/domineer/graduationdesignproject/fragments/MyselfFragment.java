@@ -23,8 +23,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.triplebro.domineer.graduationdesignproject.R;
+import com.triplebro.domineer.graduationdesignproject.activities.AboutUsActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.CollectionCommodityActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.CollectionSubmitActivity;
+import com.triplebro.domineer.graduationdesignproject.activities.FeedbackActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.LocationActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.LoginActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.SettingActivity;
@@ -63,6 +65,14 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
     private TextView tv_collection_commodity;
     private ImageView iv_collection_commodity_more;
     private String phone_number;
+    private View rl_feedback;
+    private View iv_feedback;
+    private View tv_feedback;
+    private View iv_feedback_more;
+    private View rl_about_us;
+    private View iv_about_us;
+    private View tv_about_us;
+    private View iv_about_us_more;
 
     @Nullable
     @Override
@@ -119,6 +129,14 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
         iv_collection_commodity.setOnClickListener(this);
         tv_collection_commodity.setOnClickListener(this);
         iv_collection_commodity_more.setOnClickListener(this);
+        rl_feedback.setOnClickListener(this);
+        iv_feedback.setOnClickListener(this);
+        tv_feedback.setOnClickListener(this);
+        iv_feedback_more.setOnClickListener(this);
+        rl_about_us.setOnClickListener(this);
+        iv_about_us.setOnClickListener(this);
+        tv_about_us.setOnClickListener(this);
+        iv_about_us_more.setOnClickListener(this);
     }
 
     private void initView() {
@@ -146,6 +164,14 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
         iv_collection_commodity = fragment_myself.findViewById(R.id.iv_collection_commodity);
         tv_collection_commodity = fragment_myself.findViewById(R.id.tv_collection_commodity);
         iv_collection_commodity_more = fragment_myself.findViewById(R.id.iv_collection_commodity_more);
+        rl_feedback = fragment_myself.findViewById(R.id.rl_feedback);
+        iv_feedback = fragment_myself.findViewById(R.id.iv_feedback);
+        tv_feedback = fragment_myself.findViewById(R.id.tv_feedback);
+        iv_feedback_more = fragment_myself.findViewById(R.id.iv_feedback_more);
+        rl_about_us = fragment_myself.findViewById(R.id.rl_about_us);
+        iv_about_us = fragment_myself.findViewById(R.id.iv_about_us);
+        tv_about_us = fragment_myself.findViewById(R.id.tv_about_us);
+        iv_about_us_more = fragment_myself.findViewById(R.id.iv_about_us_more);
     }
 
     @Override
@@ -171,6 +197,10 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_location:
             case R.id.tv_location:
             case R.id.iv_location_more:
+                if(phone_number.length()!=11){
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent location = new Intent(getActivity(), LocationActivity.class);
                 startActivity(location);
                 break;
@@ -178,6 +208,10 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_setting:
             case R.id.tv_setting:
             case R.id.iv_setting_more:
+                if(phone_number.length()!=11){
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent setting = new Intent(getActivity(), SettingActivity.class);
                 startActivity(setting);
                 break;
@@ -204,6 +238,26 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
                 }
                 Intent collection_commodity = new Intent(getActivity(), CollectionCommodityActivity.class);
                 startActivity(collection_commodity);
+                break;
+
+            case R.id.rl_feedback:
+            case R.id.iv_feedback:
+            case R.id.tv_feedback:
+            case R.id.iv_feedback_more:
+                if(phone_number.length()!=11){
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent feedback = new Intent(getActivity(), FeedbackActivity.class);
+                startActivity(feedback);
+                break;
+
+            case R.id.rl_about_us:
+            case R.id.iv_about_us:
+            case R.id.tv_about_us:
+            case R.id.iv_about_us_more:
+                Intent about_us = new Intent(getActivity(), AboutUsActivity.class);
+                startActivity(about_us);
                 break;
 
             case R.id.rl_contact_us:

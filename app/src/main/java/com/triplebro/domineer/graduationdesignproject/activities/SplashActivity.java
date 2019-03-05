@@ -9,6 +9,8 @@ import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
 import com.triplebro.domineer.graduationdesignproject.R;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.InitOssClient;
 
 public class SplashActivity extends Activity {
 
@@ -16,6 +18,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        InitOssClient.initOssClient(this,ProjectProperties.TOKEN_ADDRESS,ProjectProperties.ENDPOINT);
         RelativeLayout rv_splash = (RelativeLayout) findViewById(R.id.rv_splash);
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f,1.0f);
         alphaAnimation.setDuration(2500);
