@@ -67,7 +67,7 @@
                 android:layout_height="match_parent"/>
 
             <LinearLayout
-                android:id="@+id/ll_change_goods_info"
+                android:id="@+id/ll_browse_and_change_goods_info"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -76,7 +76,7 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/iv_change_goods_info"
+                    android:id="@+id/iv_browse_and_change_goods_info"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:background="@mipmap/change_good"/>
@@ -84,11 +84,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_change_goods_info"
+                    android:id="@+id/tv_browse_and_change_goods_info"
                     android:layout_marginTop="5dp"
                     android:textSize="15dp"
                     android:textColor="#fff"
-                    android:text="修改商品信息"/>
+                    android:text="查看及修改商品信息"/>
 
             </LinearLayout>
         </LinearLayout>

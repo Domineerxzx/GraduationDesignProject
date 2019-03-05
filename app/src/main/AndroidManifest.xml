@@ -38,6 +38,12 @@
         <activity android:name=".activities.AdminManagerActivity" />
         <activity android:name=".activities.CollectionCommodityActivity" />
         <activity android:name=".activities.CollectionSubmitActivity" />
+        <activity android:name=".activities.FeedbackActivity" />
+        <activity android:name=".activities.AboutUsActivity" />
+        <activity android:name=".activities.TypeRecommendActivity" />
+        <activity android:name=".activities.AddCommodityActivity" />
+        <activity android:name=".activities.BrowseCommodityInfoActivity" />
+        <activity android:name=".activities.DeleteCommodityActivity" />
 
         <service android:name=".service.NetworkConnectionService" />
 
@@ -51,9 +57,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activities.FeedbackActivity" />
-        <activity android:name=".activities.AboutUsActivity" />
-        <activity android:name=".activities.TypeRecommendActivity"></activity>
+        <activity android:name=".activities.ChangeCommodityInfoActivity"></activity>
     </application>
 
 </manifest>

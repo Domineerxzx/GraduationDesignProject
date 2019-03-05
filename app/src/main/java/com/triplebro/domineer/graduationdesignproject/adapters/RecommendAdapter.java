@@ -41,6 +41,15 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         this.onItemClickListener = onItemClickListener;
     }
 
+    public List<CommodityInfo> getData() {
+        return data;
+    }
+
+    public void setData(List<CommodityInfo> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -54,7 +63,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         final ViewHolder holder = viewHolder;
         holder.tv_good_name.setText(data.get(i).getCommodity_name());
         holder.tv_price.setText(String.valueOf(data.get(i).getPrice()));
-        Glide.with(context).load(new File(data.get(i).getCommodity_image())).into(holder.iv_recommend);
+        Glide.with(context).load(data.get(i).getCommodity_image()).into(holder.iv_recommend);
 
         DatabaseOP databaseOP = new DatabaseOP(context);
         boolean isCollection = databaseOP.getIsCollection(data.get(i).getCommodity_id());
@@ -111,6 +120,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
 
         private void initView(View itemView) {
             iv_recommend = itemView.findViewById(R.id.iv_recommend);
+            iv_recommend.setScaleType(ImageView.ScaleType.CENTER_CROP);
             rl_recommend = itemView.findViewById(R.id.rl_recommend);
             tv_good_name = itemView.findViewById(R.id.tv_good_name);
             tv_unit = itemView.findViewById(R.id.tv_unit);

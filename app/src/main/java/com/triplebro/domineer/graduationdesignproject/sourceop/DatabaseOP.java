@@ -11,7 +11,10 @@ import com.triplebro.domineer.graduationdesignproject.activities.CollectionCommo
 import com.triplebro.domineer.graduationdesignproject.beans.CollectionCommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CollectionSubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.TypeGeneralizeInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 
 import java.util.ArrayList;
@@ -36,8 +39,12 @@ public class DatabaseOP {
             Cursor collectionCommodityInfo = db.query("collectionCommodityInfo", null, "commodity_id = ? and phone_number = ?", new String[]{String.valueOf(commodity_id), phone_number}, null, null, null);
             if (collectionCommodityInfo != null && collectionCommodityInfo.getCount() > 0) {
                 collectionCommodityInfo.moveToNext();
+                collectionCommodityInfo.close();
+                db.close();
                 return true;
             } else {
+                collectionCommodityInfo.close();
+                db.close();
                 return false;
             }
         }
@@ -54,8 +61,12 @@ public class DatabaseOP {
             Cursor collectionSubmitInfo = db.query("collectionSubmitInfo", null, "submit_id = ? and phone_number = ?", new String[]{String.valueOf(submit_id), phone_number}, null, null, null);
             if (collectionSubmitInfo != null && collectionSubmitInfo.getCount() > 0) {
                 collectionSubmitInfo.moveToNext();
+                collectionSubmitInfo.close();
+                db.close();
                 return true;
             } else {
+                collectionSubmitInfo.close();
+                db.close();
                 return false;
             }
         }
@@ -225,8 +236,8 @@ public class DatabaseOP {
         switch (type_id) {
             case 0:
                 commodityInfoCursor = db.query("commodityInfo", new String[]{"commodity_id", "commodity_name", "price", "commodity_image"}, "type_generalize_id = ? or type_generalize_id = ?", new String[]{String.valueOf(1), String.valueOf(2)}, null, null, null);
-                if(commodityInfoCursor != null && commodityInfoCursor.getCount()>0){
-                    while (commodityInfoCursor.moveToNext()){
+                if (commodityInfoCursor != null && commodityInfoCursor.getCount() > 0) {
+                    while (commodityInfoCursor.moveToNext()) {
                         CommodityInfo commodityInfo = new CommodityInfo();
                         commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
                         commodityInfo.setCommodity_name(commodityInfoCursor.getString(1));
@@ -238,8 +249,8 @@ public class DatabaseOP {
                 break;
             default:
                 commodityInfoCursor = db.query("commodityInfo", new String[]{"commodity_id", "commodity_name", "price", "commodity_image"}, "type_generalize_id = ?", new String[]{String.valueOf(type_id)}, null, null, null);
-                if(commodityInfoCursor != null && commodityInfoCursor.getCount()>0){
-                    while (commodityInfoCursor.moveToNext()){
+                if (commodityInfoCursor != null && commodityInfoCursor.getCount() > 0) {
+                    while (commodityInfoCursor.moveToNext()) {
                         CommodityInfo commodityInfo = new CommodityInfo();
                         commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
                         commodityInfo.setCommodity_name(commodityInfoCursor.getString(1));
@@ -250,6 +261,10 @@ public class DatabaseOP {
                 }
                 break;
         }
+        if (commodityInfoCursor != null) {
+            commodityInfoCursor.close();
+        }
+        db.close();
         return commodityInfoList;
     }
 
@@ -294,5 +309,201 @@ public class DatabaseOP {
             db.close();
             return false;
         }
+    }
+
+    public List<TypeGeneralizeInfo> getCommodityGeneralizeType() {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<TypeGeneralizeInfo> typeGeneralizeInfoList = new ArrayList<>();
+        Cursor typeGeneralize = db.query("typeGeneralize", null, null, null, null, null, null);
+        if (typeGeneralize != null && typeGeneralize.getCount() > 0) {
+            while (typeGeneralize.moveToNext()) {
+                TypeGeneralizeInfo typeGeneralizeInfo = new TypeGeneralizeInfo();
+                typeGeneralizeInfo.setType_generalize_id(typeGeneralize.getInt(0));
+                typeGeneralizeInfo.setType_generalize_name(typeGeneralize.getString(1));
+                typeGeneralizeInfoList.add(typeGeneralizeInfo);
+            }
+        }
+        if (typeGeneralize != null) {
+            typeGeneralize.close();
+        }
+        db.close();
+        return typeGeneralizeInfoList;
+    }
+
+    public List<TypeConcreteInfo> getCommodityConcreteType(int type_generalize_id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<TypeConcreteInfo> typeConcreteInfoList = new ArrayList<>();
+        Cursor typeConcrete = db.query("typeConcrete", null, "type_generalize_id = ?", new String[]{String.valueOf(type_generalize_id)}, null, null, null);
+        if (typeConcrete != null && typeConcrete.getCount() > 0) {
+            while (typeConcrete.moveToNext()) {
+                TypeConcreteInfo typeConcreteInfo = new TypeConcreteInfo();
+                typeConcreteInfo.setType_concrete_id(typeConcrete.getInt(0));
+                typeConcreteInfo.setType_concrete_name(typeConcrete.getString(2));
+                typeConcreteInfoList.add(typeConcreteInfo);
+            }
+        }
+        if (typeConcrete != null) {
+            typeConcrete.close();
+        }
+        db.close();
+        return typeConcreteInfoList;
+    }
+
+    public TypeGeneralizeInfo getCommodityGeneralizeTypeInfo(int type_generalize_id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor typeGeneralize = db.query("typeGeneralize", null, "type_generalize_id = ?", new String[]{String.valueOf(type_generalize_id)}, null, null, null);
+        if (typeGeneralize != null && typeGeneralize.getCount() > 0) {
+            typeGeneralize.moveToNext();
+            TypeGeneralizeInfo typeGeneralizeInfo = new TypeGeneralizeInfo();
+            typeGeneralizeInfo.setType_generalize_id(typeGeneralize.getInt(0));
+            typeGeneralizeInfo.setType_generalize_name(typeGeneralize.getString(1));
+            typeGeneralize.close();
+            return typeGeneralizeInfo;
+        }
+        return null;
+    }
+
+    public TypeConcreteInfo getCommodityConcreteTypeInfo(int type_concrete_id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor typeConcrete = db.query("typeConcrete", null, "type_concrete_id = ?", new String[]{String.valueOf(type_concrete_id)}, null, null, null);
+        if (typeConcrete != null && typeConcrete.getCount() > 0) {
+            typeConcrete.moveToNext();
+            TypeConcreteInfo typeConcreteInfo = new TypeConcreteInfo();
+            typeConcreteInfo.setType_concrete_id(typeConcrete.getInt(0));
+            typeConcreteInfo.setType_concrete_name(typeConcrete.getString(2));
+            typeConcrete.close();
+            db.close();
+            return typeConcreteInfo;
+        }
+        return null;
+    }
+
+
+    public int addCommodityInfo(ContentValues commodityInfo) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        long insert = db.insert("commodityInfo", null, commodityInfo);
+        if (insert != -1) {
+            Toast.makeText(context, "添加商品信息成功", Toast.LENGTH_SHORT).show();
+            Cursor cursor = db.query("commodityInfo", new String[]{"commodity_id"}, "phone_number = ?", new String[]{commodityInfo.getAsString("phone_number")}, null, null, "commodity_id desc");
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToNext();
+                int commodity_id = cursor.getInt(0);
+                cursor.close();
+                db.close();
+                return commodity_id;
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+            return -1;
+        } else {
+            Toast.makeText(context, "添加商品信息失败", Toast.LENGTH_SHORT).show();
+            db.close();
+            return -1;
+        }
+    }
+
+    public void addCommoditySizeInfo(ContentValues sizeInfo) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        long commoditySizeInfo = db.insert("commoditySizeInfo", null, sizeInfo);
+        if (commoditySizeInfo != -1) {
+            Toast.makeText(context, "添加商品尺码及库存成功", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "添加商品尺码及库存失败", Toast.LENGTH_SHORT).show();
+        }
+        db.close();
+    }
+
+    public void addCommodityImageInfo(ContentValues imageInfo) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        long commoditySizeInfo = db.insert("commodityImageInfo", null, imageInfo);
+        if (commoditySizeInfo != -1) {
+            Toast.makeText(context, "添加商品图片成功", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "添加商品图片失败", Toast.LENGTH_SHORT).show();
+        }
+        db.close();
+    }
+
+    public List<CommodityInfo> getCommodityInfoList(String phone_number) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<CommodityInfo> commodityInfoList = new ArrayList<>();
+        Cursor commodityInfoCursor = db.query("commodityInfo", null, "phone_number = ?", new String[]{phone_number}, null, null, null);
+        if (commodityInfoCursor != null && commodityInfoCursor.getCount() > 0) {
+            while (commodityInfoCursor.moveToNext()) {
+                CommodityInfo commodityInfo = new CommodityInfo();
+                commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
+                commodityInfo.setCommodity_name(commodityInfoCursor.getString(1));
+                commodityInfo.setPrice(commodityInfoCursor.getInt(2));
+                commodityInfo.setCommodity_image(commodityInfoCursor.getString(3));
+                commodityInfo.setType_generalize_id(commodityInfoCursor.getInt(4));
+                commodityInfo.setType_concrete_id(commodityInfoCursor.getInt(5));
+                commodityInfo.setPhone_number(commodityInfoCursor.getString(6));
+                commodityInfoList.add(commodityInfo);
+            }
+        }
+        if (commodityInfoCursor != null) {
+            commodityInfoCursor.close();
+        }
+        db.close();
+        return commodityInfoList;
+    }
+
+    public List<String> getCommodityImageList(int commodity_id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<String> commodityImageList = new ArrayList<>();
+        Cursor commodityImageInfo = db.query("commodityImageInfo", null, "commodity_id = ?", new String[]{String.valueOf(commodity_id)}, null, null, null);
+        if(commodityImageInfo != null && commodityImageInfo.getCount() > 0){
+            while (commodityImageInfo.moveToNext()){
+                String s = commodityImageInfo.getString(2);
+                commodityImageList.add(s);
+            }
+        }
+        if (commodityImageInfo != null) {
+            commodityImageInfo.close();
+        }
+        db.close();
+        return commodityImageList;
+    }
+
+    public List<CommoditySizeInfo> getCommoditySizeInfoList(int commodity_id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<CommoditySizeInfo> commoditySizeInfoList = new ArrayList<>();
+        Cursor commoditySizeInfoCursor = db.query("commoditySizeInfo", null, "commodity_id = ?", new String[]{String.valueOf(commodity_id)}, null, null, null);
+        if(commoditySizeInfoCursor != null && commoditySizeInfoCursor.getCount() > 0){
+            while (commoditySizeInfoCursor.moveToNext()){
+                CommoditySizeInfo commoditySizeInfo = new CommoditySizeInfo();
+                commoditySizeInfo.setSize_name(commoditySizeInfoCursor.getString(2));
+                commoditySizeInfo.setSize_count(commoditySizeInfoCursor.getInt(3));
+                commoditySizeInfoList.add(commoditySizeInfo);
+            }
+        }
+        if (commoditySizeInfoCursor != null) {
+            commoditySizeInfoCursor.close();
+        }
+        db.close();
+        return commoditySizeInfoList;
+    }
+
+    public void deleteCommodity(int commodity_id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.delete("commodityImageInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
+        db.delete("commoditySizeInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
+        db.delete("collectionCommodityInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
+        db.delete("shoppingCartInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
+        db.delete("commodityRecommendInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
+        db.delete("commodityInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
     }
 }

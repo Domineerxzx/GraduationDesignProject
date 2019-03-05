@@ -1,11 +1,8 @@
 package com.triplebro.domineer.graduationdesignproject.managers;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
@@ -63,5 +60,10 @@ public class FirstPageManager {
         DatabaseOP databaseOP = new DatabaseOP(context);
         boolean deleteCommodityCollection = databaseOP.deleteCommodityCollection(commodity_id);
         return deleteCommodityCollection;
+    }
+
+    public List<CommodityInfo> getFunctionCommodityList(){
+
+        return null;
     }
 }
