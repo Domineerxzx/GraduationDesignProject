@@ -28,8 +28,7 @@
                     android:id="@+id/iv_user_head"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/user_head_default" />
+                    android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:id="@+id/ll_user_info"

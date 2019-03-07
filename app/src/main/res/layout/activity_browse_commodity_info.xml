@@ -6,7 +6,8 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="#fff">
 
         <ImageView
             android:id="@+id/iv_close_browse_and_change_commodity"
@@ -22,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="修改商品信息"
+            android:text="查看商品信息"
             android:textSize="16dp" />
 
         <View

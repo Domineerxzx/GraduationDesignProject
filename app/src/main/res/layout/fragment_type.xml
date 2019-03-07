@@ -25,13 +25,14 @@ android:layout_height="match_parent">
             android:background="@mipmap/scan" />
 
         <RelativeLayout
+            android:id="@+id/rl_search"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/iv_scan"
             android:background="@drawable/shape_alpha_card"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true" >
 
             <ImageView
                 android:id="@+id/iv_search"
@@ -47,13 +48,13 @@ android:layout_height="match_parent">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+                android:gravity="center"
                 android:layout_toRightOf="@id/iv_search"
                 android:background="#0000"
-                android:hint="请输入想要购买的商品名称或类别"
+                android:hint="搜索"
                 android:textColor="#fff"
                 android:textColorHint="#fff"
-                android:textSize="12dp" />
+                android:textSize="12dp"/>
 
         </RelativeLayout>
 

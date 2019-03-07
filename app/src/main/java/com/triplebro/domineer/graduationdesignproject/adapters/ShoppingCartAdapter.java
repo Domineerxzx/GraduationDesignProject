@@ -16,9 +16,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.ShoppingCartInfo;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.managers.ShoppingCartManager;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.TwoButtonDialog;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,8 +82,13 @@ public class ShoppingCartAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
-        Glide.with(context).load(shoppingCartInfoList.get(position).getCommodity_image()).into(viewHolder.iv_shopping_cart);
+        File file = new File(shoppingCartInfoList.get(position).getCommodity_image());
+        if (file.length() > 0) {
+            Glide.with(context).load(file).into(viewHolder.iv_shopping_cart);
+        }else{
+            OssHandler ossHandler = new OssHandler(context, viewHolder.iv_shopping_cart);
+            DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+shoppingCartInfoList.get(position).getCommodity_image());
+        }
         viewHolder.tv_shopping_cart_name.setText(shoppingCartInfoList.get(position).getCommodity_name());
         viewHolder.tv_count.setText(String.valueOf(shoppingCartInfoList.get(position).getCount()));
         viewHolder.tv_price.setText(String.valueOf(shoppingCartInfoList.get(position).getPrice()));
@@ -92,19 +101,19 @@ public class ShoppingCartAdapter extends BaseAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ShoppingCartInfo remove = shoppingCartInfoList.remove(position);
-                        shoppingCartManager.deleteCommodity(remove.getCommodity_id(),remove);
+                        shoppingCartManager.deleteCommodity(remove.getCommodity_id(), remove);
                         notifyDataSetChanged();
-                        if(phone_number.length() == 0){
+                        if (phone_number.length() == 0) {
                             tv_tip.setVisibility(View.VISIBLE);
                             tv_tip.setText("还没登录呢，查不到信息哦！！！");
                             lv_shopping_cart.setVisibility(View.GONE);
                             rl_pay.setVisibility(View.GONE);
-                        }else if(shoppingCartInfoList.size() == 0){
+                        } else if (shoppingCartInfoList.size() == 0) {
                             tv_tip.setVisibility(View.VISIBLE);
                             tv_tip.setText("购物车空空如也，快去买点东西装满它吧！！！");
                             lv_shopping_cart.setVisibility(View.GONE);
                             rl_pay.setVisibility(View.GONE);
-                        }else{
+                        } else {
                             lv_shopping_cart.setVisibility(View.VISIBLE);
                             rl_pay.setVisibility(View.VISIBLE);
                             tv_tip.setVisibility(View.GONE);
@@ -115,7 +124,7 @@ public class ShoppingCartAdapter extends BaseAdapter {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                },((Activity)context).getFragmentManager());
+                }, ((Activity) context).getFragmentManager());
             }
         });
         return convertView;

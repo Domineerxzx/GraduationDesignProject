@@ -25,9 +25,13 @@ import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.adapters.MyselfSubmitAdapter;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.managers.UserManager;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.ChooseUserHeadDialogUtil;
+import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.RealPathFromUriUtils;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.UploadUtils;
 import com.triplebro.domineer.graduationdesignproject.views.MyListView;
 
 import java.io.File;
@@ -72,8 +76,14 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
         nickname = userInfo.getString("nickname", "获取信息失败");
         userHead = userInfo.getString("userHead", "");
         if (userHead.length() != 0) {
-            Glide.with(this).load(Uri.parse(userHead)).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
-        }else{
+            File file = new File(userHead);
+            if (file.length() > 0) {
+                Glide.with(this).load(file).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
+            }else{
+                OssHandler ossHandler = new OssHandler(this, iv_user_head, true);
+                DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+userHead);
+            }
+        } else {
             Glide.with(this).load(R.drawable.user_head_default).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
         }
         tv_nickname.setText(nickname);
@@ -99,9 +109,9 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
             case R.id.iv_user_head:
                 long timeStamp = System.currentTimeMillis();
                 SharedPreferences.Editor edit = userInfo.edit();
-                edit.putLong("timeStamp",timeStamp);
+                edit.putLong("timeStamp", timeStamp);
                 edit.commit();
-                ChooseUserHeadDialogUtil.showDialog(this,phone_number,timeStamp);
+                ChooseUserHeadDialogUtil.showDialog(this, phone_number, timeStamp);
                 break;
         }
     }
@@ -116,33 +126,35 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
         switch (requestCode) {
             case ProjectProperties.FROM_GALLERY:
                 if (resultCode == RESULT_OK) {
-                    userHeadFile = new File(String.valueOf(data.getData()));
-                    Glide.with(this).load(data.getData()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
-                    edit.putString("userHead", String.valueOf(data.getData()));
-                    contentValues.put("user_head",String.valueOf(data.getData()));
-                } else{
+                    userHeadFile = new File(RealPathFromUriUtils.getRealPathFromUri(this, data.getData()));
+                    Glide.with(this).load(userHeadFile).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
+                    edit.putString("userHead", userHeadFile.getAbsolutePath());
+                    contentValues.put("user_head", userHeadFile.getAbsolutePath());
+                } else {
                     isCheck = false;
                 }
                 break;
             case ProjectProperties.FROM_CAMERA:
                 if (resultCode == RESULT_OK) {
                     long timeStamp = userInfo.getLong("timeStamp", -1);
-                    userHeadFile = new File(getFilesDir() + File.separator + "images" + File.separator+phone_number+timeStamp+".jpg");
+                    userHeadFile = new File(getFilesDir() + File.separator + "images" + File.separator + phone_number + timeStamp + ".jpg");
                     Glide.with(this).load(userHeadFile).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
-                    edit.putString("userHead", userHeadFile.getPath());
-                    contentValues.put("user_head", userHeadFile.getPath());
-                }else{
+                    edit.putString("userHead", userHeadFile.getAbsolutePath());
+                    contentValues.put("user_head", userHeadFile.getAbsolutePath());
+                } else {
                     isCheck = false;
                 }
                 break;
             default:
                 break;
         }
-        if(isCheck){
+        if (isCheck) {
             edit.commit();
-            writableDatabase.update("userInfo",contentValues,"phone_number = ?",new String[]{phone_number});
+            writableDatabase.update("userInfo", contentValues, "phone_number = ?", new String[]{phone_number});
+            OssHandler ossHandler = new OssHandler(this);
+            UploadUtils.uploadFileToOss(ossHandler, ProjectProperties.BUCKET_NAME, "xuzhanxin/" + contentValues.getAsString("user_head"), contentValues.getAsString("user_head"));
             writableDatabase.close();
-        }else{
+        } else {
             Toast.makeText(this, "取消修改", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);

@@ -16,6 +16,9 @@ import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeGeneralizeInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.UploadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,14 +191,14 @@ public class DatabaseOP {
         List<CommodityInfo> commodityInfoList = new ArrayList<>();
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor commodityRecommendInfoCursor = db.query("commodityRecommendInfo", null, null, null, null, null, null);
+        Cursor commodityRecommendInfoCursor = db.query("commodityInfo", null, null, null, null, null, "commodity_id desc");
         if (commodityRecommendInfoCursor != null && commodityRecommendInfoCursor.getCount() > 0) {
             while (commodityRecommendInfoCursor.moveToNext()) {
                 CommodityInfo commodityInfo = new CommodityInfo();
-                commodityInfo.setCommodity_id(commodityRecommendInfoCursor.getInt(1));
-                commodityInfo.setCommodity_name(commodityRecommendInfoCursor.getString(2));
-                commodityInfo.setPrice(commodityRecommendInfoCursor.getInt(3));
-                commodityInfo.setCommodity_image(commodityRecommendInfoCursor.getString(4));
+                commodityInfo.setCommodity_id(commodityRecommendInfoCursor.getInt(0));
+                commodityInfo.setCommodity_name(commodityRecommendInfoCursor.getString(1));
+                commodityInfo.setPrice(commodityRecommendInfoCursor.getInt(2));
+                commodityInfo.setCommodity_image(commodityRecommendInfoCursor.getString(3));
                 commodityInfoList.add(commodityInfo);
             }
         }
@@ -387,6 +390,8 @@ public class DatabaseOP {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         long insert = db.insert("commodityInfo", null, commodityInfo);
+        OssHandler ossHandler = new OssHandler(context);
+        UploadUtils.uploadFileToOss(ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+commodityInfo.getAsString("commodity_image"),commodityInfo.getAsString("commodity_image"));
         if (insert != -1) {
             Toast.makeText(context, "添加商品信息成功", Toast.LENGTH_SHORT).show();
             Cursor cursor = db.query("commodityInfo", new String[]{"commodity_id"}, "phone_number = ?", new String[]{commodityInfo.getAsString("phone_number")}, null, null, "commodity_id desc");
@@ -425,6 +430,8 @@ public class DatabaseOP {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         long commoditySizeInfo = db.insert("commodityImageInfo", null, imageInfo);
+        OssHandler ossHandler = new OssHandler(context);
+        UploadUtils.uploadFileToOss(ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+imageInfo.getAsString("commodity_image"),imageInfo.getAsString("commodity_image"));
         if (commoditySizeInfo != -1) {
             Toast.makeText(context, "添加商品图片成功", Toast.LENGTH_SHORT).show();
         } else {

@@ -11,12 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.activities.ContentActivity;
+import com.triplebro.domineer.graduationdesignproject.activities.SearchActivity;
 import com.triplebro.domineer.graduationdesignproject.adapters.RecommendAdapter;
 import com.triplebro.domineer.graduationdesignproject.adapters.TypeContentAdapter;
 import com.triplebro.domineer.graduationdesignproject.adapters.TypeNameAdapter;
@@ -30,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TypeFragment extends Fragment implements AdapterView.OnItemClickListener,OnItemClickListener{
+public class TypeFragment extends Fragment implements AdapterView.OnItemClickListener,OnItemClickListener,View.OnClickListener {
 
     private View fragment_type;
     private ListView lv_type_name;
@@ -38,6 +42,10 @@ public class TypeFragment extends Fragment implements AdapterView.OnItemClickLis
     private TypeManager typeManager;
     private List<TypeGeneralizeInfo> generalizeTypeList;
     private List<TypeConcreteInfo> concreteTypeList;
+    private RelativeLayout rl_search;
+    private ImageView iv_search;
+    private TextView tv_search;
+    private ImageView iv_scan;
 
     @Nullable
     @Override
@@ -45,7 +53,15 @@ public class TypeFragment extends Fragment implements AdapterView.OnItemClickLis
         fragment_type = inflater.inflate(R.layout.fragment_type, null);
         initView();
         initData();
+        setOnClickListener();
         return fragment_type;
+    }
+
+    private void setOnClickListener() {
+        rl_search.setOnClickListener(this);
+        iv_search.setOnClickListener(this);
+        tv_search.setOnClickListener(this);
+        iv_scan.setOnClickListener(this);
     }
 
     private void initData() {
@@ -70,6 +86,10 @@ public class TypeFragment extends Fragment implements AdapterView.OnItemClickLis
             }
         };
         rv_type_content.setLayoutManager(gridLayoutManager);
+        rl_search = (RelativeLayout) fragment_type.findViewById(R.id.rl_search);
+        iv_search = (ImageView) fragment_type.findViewById(R.id.iv_search);
+        tv_search = (TextView) fragment_type.findViewById(R.id.tv_search);
+        iv_scan = (ImageView) fragment_type.findViewById(R.id.iv_scan);
     }
 
     @SuppressLint("ResourceAsColor")
@@ -93,5 +113,20 @@ public class TypeFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemLongClick(View view) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.rl_search:
+            case R.id.iv_search:
+            case R.id.tv_search:
+                Intent search = new Intent(getActivity(), SearchActivity.class);
+                startActivity(search);
+                break;
+            case R.id.iv_scan:
+                Toast.makeText(getActivity(), "此功能暂未开发完成", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

@@ -16,8 +16,12 @@ import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.activities.ContentActivity;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.fragments.TypeFragment;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 
+import java.io.File;
 import java.util.List;
 
 public class TypeContentAdapter extends RecyclerView.Adapter {
@@ -39,14 +43,27 @@ public class TypeContentAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(context).inflate(R.layout.item_type_content, parent, false);
-        ViewHolder viewHolder = new ViewHolder(inflate,onItemClickListener);
+        ViewHolder viewHolder = new ViewHolder(inflate, onItemClickListener);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((ViewHolder) holder).tv_type_content.setText(typeConcreteInfoList.get(position).getType_concrete_name());
-        Glide.with(context).load(typeConcreteInfoList.get(position).getType_concrete_image()).into(((ViewHolder)holder).iv_type_content);
+        if (typeConcreteInfoList.get(position).getType_concrete_image() != null && typeConcreteInfoList.get(position).getType_concrete_image().length() > 0) {
+            File file = new File(context.getCacheDir(),
+                    typeConcreteInfoList.get(position).getType_concrete_image());
+            if (file.length() > 0) {
+                Glide.with(context).load(file).into(((ViewHolder) holder).iv_type_content);
+            } else {
+                OssHandler ossHandler = new OssHandler(context, ((ViewHolder) holder).iv_type_content);
+                DownloadUtils.downloadFileFromOss(file, ossHandler,
+                        ProjectProperties.BUCKET_NAME, "xuzhanxin/" +
+                                typeConcreteInfoList.get(position).getType_concrete_image());
+            }
+        }else{
+            Glide.with(context).load(R.drawable.photo_default).into(((ViewHolder) holder).iv_type_content);
+        }
     }
 
 
@@ -64,7 +81,7 @@ public class TypeContentAdapter extends RecyclerView.Adapter {
         private OnItemClickListener onItemClickListener;
 
 
-        public ViewHolder(View itemView,OnItemClickListener onItemClickListener) {
+        public ViewHolder(View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
             this.onItemClickListener = onItemClickListener;
             itemView.setOnClickListener(this);

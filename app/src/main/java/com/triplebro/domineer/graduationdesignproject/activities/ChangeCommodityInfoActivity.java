@@ -24,19 +24,22 @@ import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeGeneralizeInfo;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.AddCommodityManager;
 import com.triplebro.domineer.graduationdesignproject.managers.ChangeCommodityManager;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.ChooseUserHeadDialogUtil;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.SingleChooseDialog;
+import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.RealPathFromUriUtils;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChangeCommodityInfoActivity extends Activity implements View.OnClickListener,OnItemClickListener {
+public class ChangeCommodityInfoActivity extends Activity implements View.OnClickListener, OnItemClickListener {
 
     private ImageView iv_close_change_commodity;
     private EditText et_commodity_name;
@@ -88,6 +91,7 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
         rv_commodity_image_content = findViewById(R.id.rv_commodity_image_content);
         iv_commodity_image_show = findViewById(R.id.iv_commodity_image_show);
         iv_delete_commodity_image_show = findViewById(R.id.iv_delete_commodity_image_show);
+        iv_delete_commodity_image_show.bringToFront();
         iv_commodity_image_show.setScaleType(ImageView.ScaleType.CENTER_CROP);
         lv_commodity_size = findViewById(R.id.lv_commodity_size);
         iv_add_commodity_size = findViewById(R.id.iv_add_commodity_size);
@@ -99,22 +103,29 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
         adminInfo = getSharedPreferences("adminInfo", MODE_PRIVATE);
         phone_number = adminInfo.getString("phone_number", "");
         Intent intent = getIntent();
-        commodityInfo = (CommodityInfo)intent.getSerializableExtra("commodityInfo");
+        commodityInfo = (CommodityInfo) intent.getSerializableExtra("commodityInfo");
         changeCommodityManager = new ChangeCommodityManager(this);
-        Glide.with(this).load(commodityInfo.getCommodity_image()).into(iv_commodity_image_show);
+        File file = new File(commodityInfo.getCommodity_image());
+        if (file.length()>0) {
+            Glide.with(this).load(file).into(iv_commodity_image_show);
+        }else{
+            OssHandler ossHandler = new OssHandler(this, iv_commodity_image_show);
+            DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+commodityInfo.getCommodity_image());
+        }
         image_show = commodityInfo.getCommodity_image();
         et_commodity_name.setText(commodityInfo.getCommodity_name());
         et_commodity_price.setText(String.valueOf(commodityInfo.getPrice()));
-        rv_commodity_image_content.setLayoutManager(new GridLayoutManager(this,3));
+        rv_commodity_image_content.setLayoutManager(new GridLayoutManager(this, 3));
         commodityGeneralizeTypeInfo = changeCommodityManager.getCommodityGeneralizeTypeInfo(commodityInfo.getType_generalize_id());
         commodityConcreteTypeInfo = changeCommodityManager.getCommodityConcreteTypeInfo(commodityInfo.getType_concrete_id());
-        if(commodityGeneralizeTypeInfo != null){
+        if (commodityGeneralizeTypeInfo != null) {
             tv_commodity_generalize_type_content.setText(commodityGeneralizeTypeInfo.getType_generalize_name());
         }
-        if(commodityConcreteTypeInfo != null){
+        if (commodityConcreteTypeInfo != null) {
             tv_commodity_concrete_type_content.setText(commodityConcreteTypeInfo.getType_concrete_name());
         }
         submitList = changeCommodityManager.getCommodityImageList(commodityInfo.getCommodity_id());
+        submitList.add("");
         submitAdapter = new SubmitAdapter(this, submitList);
         rv_commodity_image_content.setAdapter(submitAdapter);
         chooseFrom = "image_show";
@@ -211,6 +222,7 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
             case R.id.iv_delete_commodity_image_show:
                 Glide.with(this).load(R.drawable.submit).into(iv_commodity_image_show);
                 image_show = "";
+                iv_delete_commodity_image_show.setVisibility(View.GONE);
                 break;
             case R.id.bt_change_commodity:
                 changeCommodityManager.deleteCommodity(commodityInfo.getCommodity_id());
@@ -219,18 +231,18 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
                 int type_generalize_id = chooseTypeGeneralizeInfo.getType_generalize_id();
                 int type_concrete_id = chooseTypeConcreteInfo.getType_concrete_id();
                 ContentValues commodityInfo = new ContentValues();
-                commodityInfo.put("commodity_name",commodity_name);
-                commodityInfo.put("type_generalize_id",type_generalize_id);
-                commodityInfo.put("type_concrete_id",type_concrete_id);
-                commodityInfo.put("price",Integer.parseInt(commodity_price));
-                commodityInfo.put("commodity_image",image_show);
-                commodityInfo.put("phone_number",phone_number);
+                commodityInfo.put("commodity_name", commodity_name);
+                commodityInfo.put("type_generalize_id", type_generalize_id);
+                commodityInfo.put("type_concrete_id", type_concrete_id);
+                commodityInfo.put("price", Integer.parseInt(commodity_price));
+                commodityInfo.put("commodity_image", image_show);
+                commodityInfo.put("phone_number", phone_number);
                 int commodity_id = changeCommodityManager.addCommodityInfo(commodityInfo);
-                if(commodity_id != -1){
+                if (commodity_id != -1) {
                     commoditySizeInfoList = sizeInfoAdapter.getCommoditySizeInfoList();
-                    changeCommodityManager.addCommoditySizeInfo(commodity_id,commoditySizeInfoList,phone_number);
+                    changeCommodityManager.addCommoditySizeInfo(commodity_id, commoditySizeInfoList, phone_number);
                     List<String> commodityImageList = submitAdapter.getData();
-                    changeCommodityManager.addCommodityImageInfo(commodity_id,commodityImageList,phone_number);
+                    changeCommodityManager.addCommodityImageInfo(commodity_id, commodityImageList, phone_number);
                 }
                 break;
         }
@@ -255,7 +267,7 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
         switch (requestCode) {
             case ProjectProperties.FROM_GALLERY:
                 if (resultCode == RESULT_OK) {
-                    s = data.getData().toString();
+                    s = RealPathFromUriUtils.getRealPathFromUri(this, data.getData());
                 } else {
                     isCheck = false;
                 }
@@ -271,7 +283,7 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
                 break;
         }
         if (isCheck) {
-            if(chooseFrom.equals("image_content")){
+            if (chooseFrom.equals("image_content")) {
                 List<String> strings = submitAdapter.getData();
                 if (strings.size() == 0) {
                     strings.add(s);
@@ -283,9 +295,10 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
                     strings.add("");
                 }
                 submitAdapter.setData(strings);
-            }else{
+            } else {
                 Glide.with(this).load(s).into(iv_commodity_image_show);
                 image_show = s;
+                iv_delete_commodity_image_show.setVisibility(View.VISIBLE);
             }
         } else {
             Toast.makeText(this, "取消选择", Toast.LENGTH_SHORT).show();

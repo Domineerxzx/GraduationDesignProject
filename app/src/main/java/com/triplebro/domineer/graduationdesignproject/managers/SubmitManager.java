@@ -9,6 +9,9 @@ import android.widget.Toast;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitImageInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.UploadUtils;
 
 public class SubmitManager {
 
@@ -48,6 +51,8 @@ public class SubmitManager {
         ContentValues contentValues = new ContentValues();
         contentValues.put("submit_id", submitImageInfo.getSubmit_id());
         contentValues.put("submit_image", submitImageInfo.getSubmit_image());
+        OssHandler ossHandler = new OssHandler(context);
+        UploadUtils.uploadFileToOss(ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+submitImageInfo.getSubmit_image(),submitImageInfo.getSubmit_image());
         db.insert("submitImageInfo", null, contentValues);
         db.close();
     }

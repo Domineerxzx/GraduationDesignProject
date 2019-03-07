@@ -34,8 +34,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
-                    android:src="@drawable/user_head_default" />
+                    android:layout_marginTop="30dp" />
 
                 <TextView
                     android:id="@+id/tv_nickname"

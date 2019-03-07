@@ -27,6 +27,7 @@ import com.triplebro.domineer.graduationdesignproject.managers.AddCommodityManag
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.ChooseUserHeadDialogUtil;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.SingleChooseDialog;
+import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.RealPathFromUriUtils;
 import com.triplebro.domineer.graduationdesignproject.views.MyListView;
 
 import java.io.File;
@@ -113,6 +114,8 @@ public class AddCommodityActivity extends Activity implements View.OnClickListen
         rv_commodity_image_content = findViewById(R.id.rv_commodity_image_content);
         iv_commodity_image_show = findViewById(R.id.iv_commodity_image_show);
         iv_delete_commodity_image_show = findViewById(R.id.iv_delete_commodity_image_show);
+        iv_delete_commodity_image_show.setVisibility(View.GONE);
+        iv_delete_commodity_image_show.bringToFront();
         iv_commodity_image_show.setScaleType(ImageView.ScaleType.CENTER_CROP);
         lv_commodity_size = findViewById(R.id.lv_commodity_size);
         iv_add_commodity_size = findViewById(R.id.iv_add_commodity_size);
@@ -192,6 +195,7 @@ public class AddCommodityActivity extends Activity implements View.OnClickListen
             case R.id.iv_delete_commodity_image_show:
                 Glide.with(this).load(R.drawable.submit).into(iv_commodity_image_show);
                 image_show = "";
+                iv_delete_commodity_image_show.setVisibility(View.GONE);
                 break;
             case R.id.bt_add_commodity:
                 String commodity_name = et_commodity_name.getText().toString().trim();
@@ -235,7 +239,7 @@ public class AddCommodityActivity extends Activity implements View.OnClickListen
         switch (requestCode) {
             case ProjectProperties.FROM_GALLERY:
                 if (resultCode == RESULT_OK) {
-                    s = data.getData().toString();
+                    s = RealPathFromUriUtils.getRealPathFromUri(this,data.getData());
                 } else {
                     isCheck = false;
                 }
@@ -266,6 +270,7 @@ public class AddCommodityActivity extends Activity implements View.OnClickListen
             }else{
                 Glide.with(this).load(s).into(iv_commodity_image_show);
                 image_show = s;
+                iv_delete_commodity_image_show.setVisibility(View.VISIBLE);
             }
         } else {
             Toast.makeText(this, "取消选择", Toast.LENGTH_SHORT).show();

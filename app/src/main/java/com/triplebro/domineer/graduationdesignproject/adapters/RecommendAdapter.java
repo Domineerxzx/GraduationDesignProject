@@ -18,9 +18,12 @@ import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 
 import java.io.File;
 import java.util.List;
@@ -63,11 +66,16 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.View
         final ViewHolder holder = viewHolder;
         holder.tv_good_name.setText(data.get(i).getCommodity_name());
         holder.tv_price.setText(String.valueOf(data.get(i).getPrice()));
-        Glide.with(context).load(data.get(i).getCommodity_image()).into(holder.iv_recommend);
-
+        File file = new File(data.get(i).getCommodity_image());
+        if (file.length() > 0) {
+            Glide.with(context).load(data.get(i).getCommodity_image()).into(holder.iv_recommend);
+        }else{
+            OssHandler ossHandler = new OssHandler(context, holder.iv_recommend);
+            DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+data.get(i).getCommodity_image());
+        }
         DatabaseOP databaseOP = new DatabaseOP(context);
         boolean isCollection = databaseOP.getIsCollection(data.get(i).getCommodity_id());
-        if(isCollection){
+        if (isCollection) {
             holder.bt_collection.setBackgroundResource(R.mipmap.collection_click);
             holder.bt_collection.setTag("isCollected");
         }

@@ -15,8 +15,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.activities.CommodityDetailsActivity;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 
+import java.io.File;
 import java.util.List;
 
 public class SubmitAdapter extends RecyclerView.Adapter<SubmitAdapter.ViewHolder> {
@@ -54,9 +58,15 @@ public class SubmitAdapter extends RecyclerView.Adapter<SubmitAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         if (data.size() > 0 && data.get(i).length() > 0) {
-            Glide.with(context).load(data.get(i)).into(viewHolder.iv_submit);
+            File file = new File(data.get(i));
+            if (file.length() > 0) {
+                Glide.with(context).load(data.get(i)).into(viewHolder.iv_submit);
+            }else{
+                OssHandler ossHandler = new OssHandler(context, viewHolder.iv_submit);
+                DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+data.get(i));
+            }
             viewHolder.iv_delete_submit.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             Glide.with(context).load(R.drawable.submit).into(viewHolder.iv_submit);
             viewHolder.iv_delete_submit.setVisibility(View.GONE);
         }

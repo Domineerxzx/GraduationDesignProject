@@ -176,19 +176,6 @@ public class SearchActivity extends Activity implements View.OnClickListener, Te
                 rl_no_search.setVisibility(View.GONE);
                 searchResultAdapter = new RecommendAdapter(this, searchInfoList);
                 rv_search_result.setAdapter(searchResultAdapter);
-                searchHistoryListString = searchHistory.getString("searchHistory", "");
-                if(searchHistoryListString.indexOf(s.toString().trim()) != -1){
-                    return;
-                }
-                searchHistoryListString = searchHistoryListString +s.toString().trim()+",";
-                SharedPreferences.Editor edit = searchHistory.edit();
-                edit.clear();
-                edit.putString("searchHistory",searchHistoryListString);
-                edit.commit();
-                tv_no_history.setVisibility(View.GONE);
-                lv_history.setVisibility(View.VISIBLE);
-                searchHistoryList.add(s.toString().trim());
-                searchHistoryAdapter.setStrings(searchHistoryList);
                 searchResultAdapter.setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -202,6 +189,19 @@ public class SearchActivity extends Activity implements View.OnClickListener, Te
 
                     }
                 });
+                searchHistoryListString = searchHistory.getString("searchHistory", "");
+                if(searchHistoryListString.indexOf(s.toString().trim()) != -1){
+                    return;
+                }
+                searchHistoryListString = searchHistoryListString +s.toString().trim()+",";
+                SharedPreferences.Editor edit = searchHistory.edit();
+                edit.clear();
+                edit.putString("searchHistory",searchHistoryListString);
+                edit.commit();
+                tv_no_history.setVisibility(View.GONE);
+                lv_history.setVisibility(View.VISIBLE);
+                searchHistoryList.add(s.toString().trim());
+                searchHistoryAdapter.setStrings(searchHistoryList);
             } else {
                 rl_history.setVisibility(View.GONE);
                 rv_search_result.setVisibility(View.GONE);

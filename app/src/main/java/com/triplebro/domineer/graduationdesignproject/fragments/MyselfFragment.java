@@ -31,11 +31,16 @@ import com.triplebro.domineer.graduationdesignproject.activities.LocationActivit
 import com.triplebro.domineer.graduationdesignproject.activities.LoginActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.SettingActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.UserInfoActivity;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.PermissionUtil;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.TwoButtonDialog;
 import com.triplebro.domineer.graduationdesignproject.utils.intentUtils.PermissionController;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
 
 public class MyselfFragment extends Fragment implements View.OnClickListener {
 
@@ -92,7 +97,14 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
         String nickname = userInfo.getString("nickname", "点击  登录/注册");
         String userHead = userInfo.getString("userHead", "");
         if (userHead.length() != 0) {
-            Glide.with(getActivity()).load(userHead).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
+            File file = new File(userHead);
+            boolean exists = file.exists();
+            if (file.length() > 0) {
+                Glide.with(getActivity()).load(file).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
+            }else{
+                OssHandler ossHandler = new OssHandler(getActivity(), iv_user_head, true);
+                DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+userHead);
+            }
         } else {
             Glide.with(getActivity()).load(R.drawable.user_head_default).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
         }

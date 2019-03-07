@@ -26,6 +26,7 @@ import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickList
 import com.triplebro.domineer.graduationdesignproject.managers.SubmitManager;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.dialogUtils.ChooseUserHeadDialogUtil;
+import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.RealPathFromUriUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -121,7 +122,7 @@ public class SubmitActivity extends Activity implements View.OnClickListener, On
         switch (requestCode) {
             case ProjectProperties.FROM_GALLERY:
                 if (resultCode == RESULT_OK) {
-                    s = data.getData().toString();
+                    s = RealPathFromUriUtils.getRealPathFromUri(this,data.getData());
                 } else {
                     isCheck = false;
                 }

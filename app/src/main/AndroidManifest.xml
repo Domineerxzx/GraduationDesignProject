@@ -44,6 +44,7 @@
         <activity android:name=".activities.AddCommodityActivity" />
         <activity android:name=".activities.BrowseCommodityInfoActivity" />
         <activity android:name=".activities.DeleteCommodityActivity" />
+        <activity android:name=".activities.ChangeCommodityInfoActivity"/>
 
         <service android:name=".service.NetworkConnectionService" />
 
@@ -57,7 +58,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activities.ChangeCommodityInfoActivity"></activity>
     </application>
 
 </manifest>

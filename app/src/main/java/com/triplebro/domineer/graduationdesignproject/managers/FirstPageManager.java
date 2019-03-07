@@ -23,8 +23,8 @@ public class FirstPageManager {
         List<String> bannerImageList = new ArrayList<>();
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor commodityRecommendInfo = db.query("commodityRecommendInfo",
-                new String[]{"recommend_image"}, null, null,
+        Cursor commodityRecommendInfo = db.query("commodityInfo",
+                new String[]{"commodity_image"}, null, null,
                 null, null, null);
         if (commodityRecommendInfo != null && commodityRecommendInfo.getCount() > 0) {
             while (commodityRecommendInfo.moveToNext()) {
