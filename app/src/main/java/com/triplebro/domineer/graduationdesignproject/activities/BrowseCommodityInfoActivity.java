@@ -37,6 +37,13 @@ public class BrowseCommodityInfoActivity extends Activity implements OnItemClick
         setOnClickListener();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        commodityInfoList = browseCommodityManager.getCommodityInfoList(phone_number);
+        recommendAdapter.setData(commodityInfoList);
+    }
+
     private void initView() {
         iv_close_browse_and_change_commodity = (ImageView) findViewById(R.id.iv_close_browse_and_change_commodity);
         rv_commodity_info = (RecyclerView) findViewById(R.id.rv_commodity_info);

@@ -70,14 +70,14 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
     private TextView tv_collection_commodity;
     private ImageView iv_collection_commodity_more;
     private String phone_number;
-    private View rl_feedback;
-    private View iv_feedback;
-    private View tv_feedback;
-    private View iv_feedback_more;
-    private View rl_about_us;
-    private View iv_about_us;
-    private View tv_about_us;
-    private View iv_about_us_more;
+    private RelativeLayout rl_feedback;
+    private ImageView iv_feedback;
+    private TextView tv_feedback;
+    private ImageView iv_feedback_more;
+    private RelativeLayout rl_about_us;
+    private ImageView iv_about_us;
+    private TextView tv_about_us;
+    private ImageView iv_about_us_more;
 
     @Nullable
     @Override
