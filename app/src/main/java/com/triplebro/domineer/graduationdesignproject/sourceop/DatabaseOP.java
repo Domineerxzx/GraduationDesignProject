@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
-
-import com.triplebro.domineer.graduationdesignproject.activities.CollectionCommodityActivity;
 import com.triplebro.domineer.graduationdesignproject.beans.CollectionCommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CollectionSubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
@@ -18,12 +16,13 @@ import com.triplebro.domineer.graduationdesignproject.beans.TypeGeneralizeInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
+import com.triplebro.domineer.graduationdesignproject.sourceproviders.ISource;
 import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.UploadUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseOP {
+public class DatabaseOP implements ISource {
 
     private Context context;
 
@@ -465,6 +464,28 @@ public class DatabaseOP {
         return commodityInfoList;
     }
 
+    public List<CommodityInfo> getCommodityInfoList() {
+        List<CommodityInfo> commodityInfoList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor commodityRecommendInfoCursor = db.query("commodityRecommendInfo", null, null, null, null, null, null);
+        if(commodityRecommendInfoCursor != null && commodityRecommendInfoCursor.getCount() > 0){
+            while (commodityRecommendInfoCursor.moveToNext()) {
+                CommodityInfo commodityInfo = new CommodityInfo();
+                commodityInfo.setCommodity_id(commodityRecommendInfoCursor.getInt(1));
+                commodityInfo.setCommodity_name(commodityRecommendInfoCursor.getString(2));
+                commodityInfo.setPrice(commodityRecommendInfoCursor.getInt(3));
+                commodityInfo.setCommodity_image(commodityRecommendInfoCursor.getString(4));
+                commodityInfoList.add(commodityInfo);
+            }
+        }
+        if (commodityRecommendInfoCursor != null) {
+            commodityRecommendInfoCursor.close();
+        }
+        db.close();
+        return commodityInfoList;
+    }
+
     public List<String> getCommodityImageList(int commodity_id) {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
@@ -512,5 +533,165 @@ public class DatabaseOP {
         db.delete("shoppingCartInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
         db.delete("commodityRecommendInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
         db.delete("commodityInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
+    }
+
+    public List<TypeConcreteInfo> getConcreteTypeList(int type_generalize_id) {
+        List<TypeConcreteInfo> typeConcreteInfoList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor typeConcrete = db.query("typeConcrete", new String[]{"type_concrete_id","type_concrete_name","type_concrete_image"},
+                "type_generalize_id = ?", new String[]{String.valueOf(type_generalize_id)}, null, null, null);
+        if(typeConcrete != null && typeConcrete.getCount() > 0){
+            while (typeConcrete.moveToNext()) {
+                TypeConcreteInfo typeConcreteInfo = new TypeConcreteInfo();
+                typeConcreteInfo.setType_concrete_id(typeConcrete.getInt(0));
+                typeConcreteInfo.setType_concrete_name(typeConcrete.getString(1));
+                typeConcreteInfo.setType_concrete_image(typeConcrete.getString(2));
+                typeConcreteInfoList.add(typeConcreteInfo);
+            }
+        }
+        if (typeConcrete != null) {
+            typeConcrete.close();
+        }
+        db.close();
+        return typeConcreteInfoList;
+    }
+
+    public List<TypeGeneralizeInfo> getGeneralizeTypeList() {
+        List<TypeGeneralizeInfo> typeGeneralizeInfoList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor typeGeneralize = db.query("typeGeneralize", null, null, null, null, null, null);
+        if(typeGeneralize != null && typeGeneralize.getCount() > 0){
+            while (typeGeneralize.moveToNext()) {
+                TypeGeneralizeInfo typeGeneralizeInfo = new TypeGeneralizeInfo();
+                typeGeneralizeInfo.setType_generalize_id(typeGeneralize.getInt(0));
+                typeGeneralizeInfo.setType_generalize_name(typeGeneralize.getString(1));
+                typeGeneralizeInfoList.add(typeGeneralizeInfo);
+            }
+        }
+        if (typeGeneralize != null) {
+            typeGeneralize.close();
+        }
+        db.close();
+        return typeGeneralizeInfoList;
+    }
+
+    public List<String> getSubmitImageInfoList(int submit_id) {
+        List<String> submitImageList = new ArrayList<String>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor submitImageInfoCursor = db.query("submitImageInfo", new String[]{"submit_image"}, "submit_id = ?", new String[]{String.valueOf(submit_id)}, null, null, null);
+        if(submitImageInfoCursor!=null&&submitImageInfoCursor.getCount()>0){
+            while (submitImageInfoCursor.moveToNext()){
+                String submitImage = submitImageInfoCursor.getString(0);
+                submitImageList.add(submitImage);
+            }
+        }
+        if (submitImageInfoCursor != null) {
+            submitImageInfoCursor.close();
+        }
+        db.close();
+        return submitImageList;
+    }
+
+    public List<String> getBannerImageList() {
+        List<String> bannerImageList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor commodityRecommendInfo = db.query("commodityInfo",
+                new String[]{"commodity_image"}, null, null,
+                null, null, null);
+        if (commodityRecommendInfo != null && commodityRecommendInfo.getCount() > 0) {
+            while (commodityRecommendInfo.moveToNext()) {
+                String recommendImage = commodityRecommendInfo.getString(0);
+                bannerImageList.add(recommendImage);
+                if (bannerImageList.size() == 5) {
+                    break;
+                }
+            }
+        }
+        if (commodityRecommendInfo != null) {
+            commodityRecommendInfo.close();
+        }
+        db.close();
+        return bannerImageList;
+    }
+
+    public List<CommodityInfo> getCommodityInfoList(int type_concrete_id) {
+        List<CommodityInfo> commodityInfoList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor commodityInfoCursor = db.query("commodityInfo", null, "type_concrete_id = ?", new String[]{String.valueOf(type_concrete_id)}, null, null, null);
+        if(commodityInfoCursor != null && commodityInfoCursor.getCount() > 0){
+            while (commodityInfoCursor.moveToNext()) {
+                CommodityInfo commodityInfo = new CommodityInfo();
+                commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
+                commodityInfo.setCommodity_name(commodityInfoCursor.getString(1));
+                commodityInfo.setPrice(commodityInfoCursor.getInt(2));
+                commodityInfo.setCommodity_image(commodityInfoCursor.getString(3));
+                commodityInfo.setType_generalize_id(commodityInfoCursor.getInt(4));
+                commodityInfo.setType_concrete_id(commodityInfoCursor.getInt(5));
+                commodityInfo.setPhone_number(commodityInfoCursor.getString(6));
+                commodityInfoList.add(commodityInfo);
+            }
+        }
+        if (commodityInfoCursor != null) {
+            commodityInfoCursor.close();
+        }
+        db.close();
+        return commodityInfoList;
+    }
+
+    public boolean checkTableIsExist(String tableName) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        Cursor isExist = db.query(tableName, null, null, null, null, null, null);
+        if(isExist.getCount()>0){
+            isExist.close();
+            db.close();
+            return true;
+        }else{
+            isExist.close();
+            db.close();
+            return false;
+        }
+    }
+
+    public void insertUserInfo(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("userInfo", null, contentValues);
+        db.close();
+    }
+
+    public void insertAdminInfo(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("adminInfo", null, contentValues);
+        db.close();
+    }
+
+    public void deleteTable() {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.delete("adminInfo",null,null);
+        db.delete("userInfo",null,null);
+        db.delete("typeConcrete",null,null);
+        db.delete("typeGeneralize",null,null);
+    }
+
+    public void insertTypeGeneralize(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("typeGeneralize", null, contentValues);
+        db.close();
+    }
+
+    public void insertTypeConcrete(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("typeConcrete", null, contentValues);
+        db.close();
     }
 }

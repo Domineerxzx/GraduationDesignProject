@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.AddressInfo;
@@ -69,12 +70,38 @@ public class UpdateAddressActivity extends Activity implements View.OnClickListe
                 finish();
                 break;
             case R.id.bt_save_address:
+                AddressInfo addressInfo = new AddressInfo();
                 addressInfo.setPhone_number(getSharedPreferences("userInfo",MODE_PRIVATE).getString("phone_number",""));
-                addressInfo.setName(et_address_name.getText().toString().trim());
-                addressInfo.setCity(et_address_area_city.getText().toString().trim());
-                addressInfo.setLocation(et_address_detailed.getText().toString().trim());
-                addressInfo.setZip_code(Integer.parseInt(et_address_postcode.getText().toString()));
-                addressInfo.setMobile(et_address_telephone.getText().toString().trim());
+                String address_name = et_address_name.getText().toString().trim();
+                String city = et_address_area_city.getText().toString().trim();
+                String address_detailed = et_address_detailed.getText().toString().trim();
+                int zip_code = Integer.parseInt(et_address_postcode.getText().toString());
+                String mobile = et_address_telephone.getText().toString().trim();
+                if(address_name.length() == 0){
+                    Toast.makeText(this, "姓名不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(city.length() == 0){
+                    Toast.makeText(this, "城市不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(address_detailed.length() == 0){
+                    Toast.makeText(this, "详细地址信息不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(zip_code == 0){
+                    Toast.makeText(this, "邮编不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(mobile.length() == 0){
+                    Toast.makeText(this, "联系电话不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                addressInfo.setName(address_name);
+                addressInfo.setCity(city);
+                addressInfo.setLocation(address_detailed);
+                addressInfo.setZip_code(zip_code);
+                addressInfo.setMobile(mobile);
                 locationManager.updateAddressInfo(addressInfo);
                 finish();
                 break;

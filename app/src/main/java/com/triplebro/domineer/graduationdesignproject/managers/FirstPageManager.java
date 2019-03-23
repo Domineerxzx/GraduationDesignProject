@@ -1,14 +1,8 @@
 package com.triplebro.domineer.graduationdesignproject.managers;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
-import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class FirstPageManager {
@@ -20,25 +14,10 @@ public class FirstPageManager {
     }
 
     public List<String> getBannerImageList() {
-        List<String> bannerImageList = new ArrayList<>();
-        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
-        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor commodityRecommendInfo = db.query("commodityInfo",
-                new String[]{"commodity_image"}, null, null,
-                null, null, null);
-        if (commodityRecommendInfo != null && commodityRecommendInfo.getCount() > 0) {
-            while (commodityRecommendInfo.moveToNext()) {
-                String recommendImage = commodityRecommendInfo.getString(0);
-                bannerImageList.add(recommendImage);
-                if (bannerImageList.size() == 5) {
-                    break;
-                }
-            }
-        }
-        if (commodityRecommendInfo != null) {
-            commodityRecommendInfo.close();
-        }
-        db.close();
+
+        List<String> bannerImageList;
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        bannerImageList = databaseOP.getBannerImageList();
         return bannerImageList;
     }
 
@@ -62,7 +41,7 @@ public class FirstPageManager {
         return deleteCommodityCollection;
     }
 
-    public List<CommodityInfo> getFunctionCommodityList(){
+    public List<CommodityInfo> getFunctionCommodityList() {
 
         return null;
     }

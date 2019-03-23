@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.adapters.RecommendAdapter;
@@ -45,6 +46,9 @@ public class CollectionCommodityActivity extends Activity implements View.OnClic
         phone_number = userInfo.getString("phone_number", "");
         collectionManager = new CollectionManager(this);
         collectedCommodityInfoList = collectionManager.getCollectedCommodityInfoList(phone_number);
+        if(collectedCommodityInfoList.size() == 0){
+            Toast.makeText(this, "暂无收藏信息，快去添加吧", Toast.LENGTH_SHORT).show();
+        }
         recommendAdapter = new RecommendAdapter(this, collectedCommodityInfoList);
         rv_collection_commodity.setAdapter(recommendAdapter);
         recommendAdapter.setOnItemClickListener(this);

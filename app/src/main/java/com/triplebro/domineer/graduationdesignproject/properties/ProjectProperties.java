@@ -36,6 +36,10 @@ public class ProjectProperties {
 
     public static final int REGISTER_ADMIN_SUCCESS = 4;
 
+    public static final int DATA_INSERT_SUCCESS = 1;
+
+    public static final int DATA_INSERT_FAILED = 2;
+
     //获取token令牌的地址
     public static final String TOKEN_ADDRESS = "https://thethreestooges.cn:5210/identity/oss/token.php";
     //oss服务器地址

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="190dp"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_recommend"
     android:padding="10dp"
@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/tv_good_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/iv_recommend"
         android:layout_alignRight="@id/iv_recommend"
@@ -52,8 +52,7 @@
         android:layout_height="20dp"
         android:id="@+id/bt_collection"
         android:layout_alignBottom="@id/tv_price"
-        android:layout_toRightOf="@id/tv_price"
-        android:layout_marginLeft="90dp"
+        android:layout_alignParentRight="true"
         android:background="@mipmap/collection"/>
 
 </RelativeLayout>

@@ -42,6 +42,9 @@ public class CollectionSubmitActivity extends Activity implements View.OnClickLi
         phone_number = userInfo.getString("phone_number", "");
         collectionManager = new CollectionManager(this);
         collectionSubmitInfoList = collectionManager.getCollectionSubmitInfoList(phone_number);
+        if(collectionSubmitInfoList.size() == 0){
+            Toast.makeText(this, "暂无收藏信息，快去添加吧", Toast.LENGTH_SHORT).show();
+        }
         foundAdapter = new FoundAdapter(this, collectionSubmitInfoList,lv_collection_submit);
         lv_collection_submit.setAdapter(foundAdapter);
     }

@@ -2,23 +2,16 @@ package com.triplebro.domineer.graduationdesignproject.activities;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.triplebro.domineer.graduationdesignproject.R;
@@ -33,9 +26,7 @@ import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.RealPathF
 import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.UploadUtils;
 import com.triplebro.domineer.graduationdesignproject.views.MyListView;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserInfoActivity extends Activity implements View.OnClickListener {

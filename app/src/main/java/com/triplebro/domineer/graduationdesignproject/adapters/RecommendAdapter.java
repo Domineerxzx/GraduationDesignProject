@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
-import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;

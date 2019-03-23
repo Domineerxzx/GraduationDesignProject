@@ -43,6 +43,9 @@ public class LocationActivity extends Activity implements View.OnClickListener {
         SharedPreferences userInfo = getSharedPreferences("userInfo", MODE_PRIVATE);
         phone_number = userInfo.getString("phone_number", "");
         addressInfoList = locationManager.getAddressInfoList(phone_number);
+        if(addressInfoList.size() == 0){
+
+        }
         addressAdapter.setAddressInfoList(addressInfoList);
     }
 

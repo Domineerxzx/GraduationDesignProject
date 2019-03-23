@@ -1,28 +1,24 @@
 package com.triplebro.domineer.graduationdesignproject.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
-import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
+import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyselfSubmitAdapter extends BaseAdapter {
 
     private Context context;
     private List<SubmitInfo> data;
-    private ArrayList<String> submitImageList;
+    private List<String> submitImageList;
 
     public MyselfSubmitAdapter(Context context, List<SubmitInfo> data) {
         this.context = context;
@@ -64,23 +60,13 @@ public class MyselfSubmitAdapter extends BaseAdapter {
             }
         };
         viewHolder.rv_photo_wall.setLayoutManager(gridLayoutManager);
-        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
-        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor submitImageInfoCursor = db.query("submitImageInfo", new String[]{"submit_image"}, "submit_id = ?", new String[]{String.valueOf(data.get(position).getSubmit_id())}, null, null, null);
-        submitImageList = new ArrayList<String>();
-        if(submitImageInfoCursor!=null&&submitImageInfoCursor.getCount()>0){
-            while (submitImageInfoCursor.moveToNext()){
-                String submitImage = submitImageInfoCursor.getString(0);
-                submitImageList.add(submitImage);
-            }
-        }
-        if (submitImageInfoCursor != null) {
-            submitImageInfoCursor.close();
-        }
-        db.close();
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        submitImageList = databaseOP.getSubmitImageInfoList(data.get(position).getSubmit_id());
         viewHolder.rv_photo_wall.setAdapter(new PhotoWallAdapter(context,submitImageList));
         return convertView;
     }
+
+
 
     private class ViewHolder{
         private TextView tv_submit;

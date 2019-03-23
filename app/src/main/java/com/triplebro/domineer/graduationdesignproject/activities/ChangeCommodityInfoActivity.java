@@ -225,11 +225,31 @@ public class ChangeCommodityInfoActivity extends Activity implements View.OnClic
                 iv_delete_commodity_image_show.setVisibility(View.GONE);
                 break;
             case R.id.bt_change_commodity:
-                changeCommodityManager.deleteCommodity(commodityInfo.getCommodity_id());
                 String commodity_name = et_commodity_name.getText().toString().trim();
                 String commodity_price = et_commodity_price.getText().toString().trim();
                 int type_generalize_id = chooseTypeGeneralizeInfo.getType_generalize_id();
                 int type_concrete_id = chooseTypeConcreteInfo.getType_concrete_id();
+                if(commodity_name.length() == 0){
+                    Toast.makeText(this, "商品名称不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(commodity_price.length() == 0){
+                    Toast.makeText(this, "商品价格不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(type_generalize_id == 0){
+                    Toast.makeText(this, "请选择概括类别", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(type_concrete_id == 0){
+                    Toast.makeText(this, "请选择详细类别", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(image_show.length() == 0){
+                    Toast.makeText(this, "请选择商品展示图片", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                changeCommodityManager.deleteCommodity(commodityInfo.getCommodity_id());
                 ContentValues commodityInfo = new ContentValues();
                 commodityInfo.put("commodity_name", commodity_name);
                 commodityInfo.put("type_generalize_id", type_generalize_id);

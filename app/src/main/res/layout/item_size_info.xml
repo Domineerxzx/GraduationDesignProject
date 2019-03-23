@@ -24,7 +24,8 @@
         android:layout_alignTop="@id/tv_size_name"
         android:layout_toRightOf="@id/tv_size_name"
         android:layout_marginLeft="10dp"
-        android:paddingLeft="10dp"/>
+        android:paddingLeft="10dp"
+        android:singleLine="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,6 +48,7 @@
         android:layout_alignTop="@id/tv_size_count"
         android:layout_toRightOf="@id/tv_size_count"
         android:layout_marginLeft="10dp"
-        android:paddingLeft="10dp"/>
+        android:paddingLeft="10dp"
+        android:singleLine="true"/>
 
 </RelativeLayout>

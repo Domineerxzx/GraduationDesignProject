@@ -2,6 +2,7 @@ package com.triplebro.domineer.graduationdesignproject.managers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
@@ -55,6 +56,10 @@ public class AddCommodityManager {
         for (String commodity_image : commodityImageList) {
             ContentValues imageInfo = new ContentValues();
             imageInfo.put("commodity_id",commodity_id);
+            if(commodity_image.length() == 0){
+                Toast.makeText(context, "商品图片不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
             imageInfo.put("commodity_image",commodity_image);
             imageInfo.put("phone_number",phone_number);
             databaseOP.addCommodityImageInfo(imageInfo);

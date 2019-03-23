@@ -202,6 +202,26 @@ public class AddCommodityActivity extends Activity implements View.OnClickListen
                 String commodity_price = et_commodity_price.getText().toString().trim();
                 int type_generalize_id = chooseTypeGeneralizeInfo.getType_generalize_id();
                 int type_concrete_id = chooseTypeConcreteInfo.getType_concrete_id();
+                if(commodity_name.length() == 0){
+                    Toast.makeText(this, "商品名称不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(commodity_price.length() == 0){
+                    Toast.makeText(this, "商品价格不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(type_generalize_id == 0){
+                    Toast.makeText(this, "请选择概括类别", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(type_concrete_id == 0){
+                    Toast.makeText(this, "请选择详细类别", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(image_show.length() == 0){
+                    Toast.makeText(this, "请选择商品展示图片", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 ContentValues commodityInfo = new ContentValues();
                 commodityInfo.put("commodity_name",commodity_name);
                 commodityInfo.put("type_generalize_id",type_generalize_id);

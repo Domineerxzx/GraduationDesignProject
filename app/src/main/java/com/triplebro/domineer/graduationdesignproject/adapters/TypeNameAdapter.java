@@ -1,8 +1,6 @@
 package com.triplebro.domineer.graduationdesignproject.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +10,7 @@ import android.widget.TextView;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeGeneralizeInfo;
-import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TypeNameAdapter extends BaseAdapter {

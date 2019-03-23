@@ -49,6 +49,10 @@ public class FeedbackActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.bt_feedback:
                 String feedback = et_feedback.getText().toString().trim();
+                if(feedback.length() == 0){
+                    Toast.makeText(this, "反馈信息不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 SharedPreferences feedbackInfo = getSharedPreferences("feedbackInfo", MODE_PRIVATE);
                 SharedPreferences.Editor edit = feedbackInfo.edit();
                 edit.putString("feedbackInfo",feedback);

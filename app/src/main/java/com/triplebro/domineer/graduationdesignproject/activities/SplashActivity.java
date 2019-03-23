@@ -10,10 +10,17 @@ import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 
 import com.triplebro.domineer.graduationdesignproject.R;
+import com.triplebro.domineer.graduationdesignproject.handlers.DataInsertHandler;
+import com.triplebro.domineer.graduationdesignproject.managers.SplashManager;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.InitOssClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SplashActivity extends Activity {
+
+    private SplashManager splashManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,24 +28,32 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         InitOssClient.initOssClient(this, ProjectProperties.TOKEN_ADDRESS, ProjectProperties.ENDPOINT);
         RelativeLayout rv_splash = (RelativeLayout) findViewById(R.id.rv_splash);
-        AlphaAnimation alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
-        alphaAnimation.setDuration(2500);
-        rv_splash.startAnimation(alphaAnimation);
-        alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        final DataInsertHandler dataInsertHandler = new DataInsertHandler(this);
+        new Thread(){
             @Override
-            public void onAnimationStart(Animation animation) {
+            public void run() {
+                splashManager = new SplashManager(SplashActivity.this);
+                List<String> table_name = new ArrayList<>();
+                table_name.add("adminInfo");
+                table_name.add("userInfo");
+                table_name.add("typeGeneralize");
+                table_name.add("typeConcrete");
+                List<String> nonentity_table_name  = splashManager.checkData(table_name);
+                if(nonentity_table_name.size() == 0){
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    try {
+                        sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                splashManager.uploadData(nonentity_table_name,dataInsertHandler);
             }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+        }.start();
     }
 }

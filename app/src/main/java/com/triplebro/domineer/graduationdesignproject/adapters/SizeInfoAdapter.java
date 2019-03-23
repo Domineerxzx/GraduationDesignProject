@@ -1,14 +1,14 @@
 package com.triplebro.domineer.graduationdesignproject.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
@@ -68,36 +68,32 @@ public class SizeInfoAdapter extends BaseAdapter {
         if (commoditySizeInfoList.get(position).getSize_count() != 0) {
             viewHolder.et_size_count.setText(String.valueOf(commoditySizeInfoList.get(position).getSize_count()));
         }
-        viewHolder.et_size_name.addTextChangedListener(new TextWatcher() {
+        viewHolder.et_size_name.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        viewHolder.et_size_count.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        viewHolder.et_size_name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                commoditySizeInfoList.get(position).setSize_name(s.toString().trim());
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                String size_name = viewHolder.et_size_name.getText().toString();
+                if(size_name.length() == 0){
+                    Toast.makeText(context, "尺码名称不能为空", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                commoditySizeInfoList.get(position).setSize_name(size_name);
+                viewHolder.et_size_count.requestFocus();
+                return false;
             }
         });
-        viewHolder.et_size_count.addTextChangedListener(new TextWatcher() {
+        viewHolder.et_size_count.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                commoditySizeInfoList.get(position).setSize_count(Integer.parseInt(s.toString()));
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                int size_count = Integer.parseInt(viewHolder.et_size_count.getText().toString());
+                if(size_count == 0){
+                    Toast.makeText(context, "库存不能为零", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                commoditySizeInfoList.get(position).setSize_count(size_count);
+                viewHolder.et_size_count.clearFocus();
+                return false;
             }
         });
         return convertView;

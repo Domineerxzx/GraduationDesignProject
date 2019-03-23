@@ -13,15 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.adapters.SubmitAdapter;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitImageInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
-import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.managers.SubmitManager;
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;

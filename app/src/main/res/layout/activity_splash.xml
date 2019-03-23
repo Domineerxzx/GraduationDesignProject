@@ -10,7 +10,43 @@
         android:layout_height="200dp"
         android:id="@+id/iv_logo"
         android:background="@mipmap/logo"
-        android:layout_centerInParent="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="180dp"/>
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="（可能第一次进入会有些慢，请耐心等待）"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/AppColor"
+        android:layout_marginBottom="100dp"
+        android:textSize="12dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加载中..."
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/AppColor"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:layout_above="@id/tv_tip"/>
+
+
+    <ProgressBar
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/pb_upload_data"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/tv_progress"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateDrawable="@drawable/anim"
+        android:layout_marginBottom="10dp"/>
 
 
 </RelativeLayout>
