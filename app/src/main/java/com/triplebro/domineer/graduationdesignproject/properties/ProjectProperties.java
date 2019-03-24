@@ -54,4 +54,16 @@ public class ProjectProperties {
     public static final int WHAT_FAILED_UPLOAD = 2;
 
     public static final int WHAT_FAILED_DOWNLOAD = 4;
+
+    public static final int ORDER_STATE_WAIT_PAY = 0;
+
+    public static final int ORDER_STATE_WAIT_SEND = 1;
+
+    public static final int ORDER_STATE_WAIT_GET = 2;
+
+    public static final int ORDER_STATE_WAIT_EVALYATE = 3;
+
+    public static final int ORDER_STATE_CANCEL = 4;
+
+    public static final int ORDER_STATE_DONE = 5;
 }

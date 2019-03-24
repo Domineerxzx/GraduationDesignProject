@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
+
 import com.triplebro.domineer.graduationdesignproject.beans.CollectionCommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CollectionSubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.OrderInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.ShoppingCartInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.SubmitInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeGeneralizeInfo;
@@ -390,7 +393,7 @@ public class DatabaseOP implements ISource {
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         long insert = db.insert("commodityInfo", null, commodityInfo);
         OssHandler ossHandler = new OssHandler(context);
-        UploadUtils.uploadFileToOss(ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+commodityInfo.getAsString("commodity_image"),commodityInfo.getAsString("commodity_image"));
+        UploadUtils.uploadFileToOss(ossHandler, ProjectProperties.BUCKET_NAME, "xuzhanxin/" + commodityInfo.getAsString("commodity_image"), commodityInfo.getAsString("commodity_image"));
         if (insert != -1) {
             Toast.makeText(context, "添加商品信息成功", Toast.LENGTH_SHORT).show();
             Cursor cursor = db.query("commodityInfo", new String[]{"commodity_id"}, "phone_number = ?", new String[]{commodityInfo.getAsString("phone_number")}, null, null, "commodity_id desc");
@@ -430,7 +433,7 @@ public class DatabaseOP implements ISource {
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         long commoditySizeInfo = db.insert("commodityImageInfo", null, imageInfo);
         OssHandler ossHandler = new OssHandler(context);
-        UploadUtils.uploadFileToOss(ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+imageInfo.getAsString("commodity_image"),imageInfo.getAsString("commodity_image"));
+        UploadUtils.uploadFileToOss(ossHandler, ProjectProperties.BUCKET_NAME, "xuzhanxin/" + imageInfo.getAsString("commodity_image"), imageInfo.getAsString("commodity_image"));
         if (commoditySizeInfo != -1) {
             Toast.makeText(context, "添加商品图片成功", Toast.LENGTH_SHORT).show();
         } else {
@@ -468,14 +471,14 @@ public class DatabaseOP implements ISource {
         List<CommodityInfo> commodityInfoList = new ArrayList<>();
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor commodityRecommendInfoCursor = db.query("commodityRecommendInfo", null, null, null, null, null, null);
-        if(commodityRecommendInfoCursor != null && commodityRecommendInfoCursor.getCount() > 0){
+        Cursor commodityRecommendInfoCursor = db.query("commodityInfo", null, null, null, null, null, null);
+        if (commodityRecommendInfoCursor != null && commodityRecommendInfoCursor.getCount() > 0) {
             while (commodityRecommendInfoCursor.moveToNext()) {
                 CommodityInfo commodityInfo = new CommodityInfo();
-                commodityInfo.setCommodity_id(commodityRecommendInfoCursor.getInt(1));
-                commodityInfo.setCommodity_name(commodityRecommendInfoCursor.getString(2));
-                commodityInfo.setPrice(commodityRecommendInfoCursor.getInt(3));
-                commodityInfo.setCommodity_image(commodityRecommendInfoCursor.getString(4));
+                commodityInfo.setCommodity_id(commodityRecommendInfoCursor.getInt(0));
+                commodityInfo.setCommodity_name(commodityRecommendInfoCursor.getString(1));
+                commodityInfo.setPrice(commodityRecommendInfoCursor.getInt(2));
+                commodityInfo.setCommodity_image(commodityRecommendInfoCursor.getString(3));
                 commodityInfoList.add(commodityInfo);
             }
         }
@@ -491,8 +494,8 @@ public class DatabaseOP implements ISource {
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         List<String> commodityImageList = new ArrayList<>();
         Cursor commodityImageInfo = db.query("commodityImageInfo", null, "commodity_id = ?", new String[]{String.valueOf(commodity_id)}, null, null, null);
-        if(commodityImageInfo != null && commodityImageInfo.getCount() > 0){
-            while (commodityImageInfo.moveToNext()){
+        if (commodityImageInfo != null && commodityImageInfo.getCount() > 0) {
+            while (commodityImageInfo.moveToNext()) {
                 String s = commodityImageInfo.getString(2);
                 commodityImageList.add(s);
             }
@@ -509,8 +512,8 @@ public class DatabaseOP implements ISource {
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         List<CommoditySizeInfo> commoditySizeInfoList = new ArrayList<>();
         Cursor commoditySizeInfoCursor = db.query("commoditySizeInfo", null, "commodity_id = ?", new String[]{String.valueOf(commodity_id)}, null, null, null);
-        if(commoditySizeInfoCursor != null && commoditySizeInfoCursor.getCount() > 0){
-            while (commoditySizeInfoCursor.moveToNext()){
+        if (commoditySizeInfoCursor != null && commoditySizeInfoCursor.getCount() > 0) {
+            while (commoditySizeInfoCursor.moveToNext()) {
                 CommoditySizeInfo commoditySizeInfo = new CommoditySizeInfo();
                 commoditySizeInfo.setSize_name(commoditySizeInfoCursor.getString(2));
                 commoditySizeInfo.setSize_count(commoditySizeInfoCursor.getInt(3));
@@ -527,21 +530,21 @@ public class DatabaseOP implements ISource {
     public void deleteCommodity(int commodity_id) {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        db.delete("commodityImageInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
-        db.delete("commoditySizeInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
-        db.delete("collectionCommodityInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
-        db.delete("shoppingCartInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
-        db.delete("commodityRecommendInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
-        db.delete("commodityInfo","commodity_id = ?",new String[]{String.valueOf(commodity_id)});
+        db.delete("commodityImageInfo", "commodity_id = ?", new String[]{String.valueOf(commodity_id)});
+        db.delete("commoditySizeInfo", "commodity_id = ?", new String[]{String.valueOf(commodity_id)});
+        db.delete("collectionCommodityInfo", "commodity_id = ?", new String[]{String.valueOf(commodity_id)});
+        db.delete("shoppingCartInfo", "commodity_id = ?", new String[]{String.valueOf(commodity_id)});
+        db.delete("commodityRecommendInfo", "commodity_id = ?", new String[]{String.valueOf(commodity_id)});
+        db.delete("commodityInfo", "commodity_id = ?", new String[]{String.valueOf(commodity_id)});
     }
 
     public List<TypeConcreteInfo> getConcreteTypeList(int type_generalize_id) {
         List<TypeConcreteInfo> typeConcreteInfoList = new ArrayList<>();
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        Cursor typeConcrete = db.query("typeConcrete", new String[]{"type_concrete_id","type_concrete_name","type_concrete_image"},
+        Cursor typeConcrete = db.query("typeConcrete", new String[]{"type_concrete_id", "type_concrete_name", "type_concrete_image"},
                 "type_generalize_id = ?", new String[]{String.valueOf(type_generalize_id)}, null, null, null);
-        if(typeConcrete != null && typeConcrete.getCount() > 0){
+        if (typeConcrete != null && typeConcrete.getCount() > 0) {
             while (typeConcrete.moveToNext()) {
                 TypeConcreteInfo typeConcreteInfo = new TypeConcreteInfo();
                 typeConcreteInfo.setType_concrete_id(typeConcrete.getInt(0));
@@ -562,7 +565,7 @@ public class DatabaseOP implements ISource {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         Cursor typeGeneralize = db.query("typeGeneralize", null, null, null, null, null, null);
-        if(typeGeneralize != null && typeGeneralize.getCount() > 0){
+        if (typeGeneralize != null && typeGeneralize.getCount() > 0) {
             while (typeGeneralize.moveToNext()) {
                 TypeGeneralizeInfo typeGeneralizeInfo = new TypeGeneralizeInfo();
                 typeGeneralizeInfo.setType_generalize_id(typeGeneralize.getInt(0));
@@ -582,8 +585,8 @@ public class DatabaseOP implements ISource {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         Cursor submitImageInfoCursor = db.query("submitImageInfo", new String[]{"submit_image"}, "submit_id = ?", new String[]{String.valueOf(submit_id)}, null, null, null);
-        if(submitImageInfoCursor!=null&&submitImageInfoCursor.getCount()>0){
-            while (submitImageInfoCursor.moveToNext()){
+        if (submitImageInfoCursor != null && submitImageInfoCursor.getCount() > 0) {
+            while (submitImageInfoCursor.moveToNext()) {
                 String submitImage = submitImageInfoCursor.getString(0);
                 submitImageList.add(submitImage);
             }
@@ -601,7 +604,7 @@ public class DatabaseOP implements ISource {
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         Cursor commodityRecommendInfo = db.query("commodityInfo",
                 new String[]{"commodity_image"}, null, null,
-                null, null, null);
+                null, null, "commodity_id desc");
         if (commodityRecommendInfo != null && commodityRecommendInfo.getCount() > 0) {
             while (commodityRecommendInfo.moveToNext()) {
                 String recommendImage = commodityRecommendInfo.getString(0);
@@ -623,7 +626,7 @@ public class DatabaseOP implements ISource {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         Cursor commodityInfoCursor = db.query("commodityInfo", null, "type_concrete_id = ?", new String[]{String.valueOf(type_concrete_id)}, null, null, null);
-        if(commodityInfoCursor != null && commodityInfoCursor.getCount() > 0){
+        if (commodityInfoCursor != null && commodityInfoCursor.getCount() > 0) {
             while (commodityInfoCursor.moveToNext()) {
                 CommodityInfo commodityInfo = new CommodityInfo();
                 commodityInfo.setCommodity_id(commodityInfoCursor.getInt(0));
@@ -647,11 +650,11 @@ public class DatabaseOP implements ISource {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         Cursor isExist = db.query(tableName, null, null, null, null, null, null);
-        if(isExist.getCount()>0){
+        if (isExist.getCount() > 0) {
             isExist.close();
             db.close();
             return true;
-        }else{
+        } else {
             isExist.close();
             db.close();
             return false;
@@ -675,10 +678,10 @@ public class DatabaseOP implements ISource {
     public void deleteTable() {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-        db.delete("adminInfo",null,null);
-        db.delete("userInfo",null,null);
-        db.delete("typeConcrete",null,null);
-        db.delete("typeGeneralize",null,null);
+        db.delete("adminInfo", null, null);
+        db.delete("userInfo", null, null);
+        db.delete("typeConcrete", null, null);
+        db.delete("typeGeneralize", null, null);
     }
 
     public void insertTypeGeneralize(ContentValues contentValues) {
@@ -692,6 +695,140 @@ public class DatabaseOP implements ISource {
         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         db.insert("typeConcrete", null, contentValues);
+        db.close();
+    }
+
+    public long commitOrder(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        long orderInfo = db.insert("orderInfo", null, contentValues);
+        db.close();
+        return orderInfo;
+    }
+
+    public List<OrderInfo> getAllOrderInfoList(String phone_number) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<OrderInfo> allOrderInfoList = new ArrayList<>();
+        Cursor orderInfoCursor = db.query("orderInfo", null, "phone_number = ?", new String[]{phone_number}, null, null, null);
+        if (orderInfoCursor != null && orderInfoCursor.getCount() > 0) {
+            while (orderInfoCursor.moveToNext()) {
+                OrderInfo orderInfo = new OrderInfo();
+                orderInfo.set_id(orderInfoCursor.getInt(0));
+                orderInfo.setOrder_state(orderInfoCursor.getInt(1));
+                orderInfo.setPhone_number(orderInfoCursor.getString(2));
+                allOrderInfoList.add(orderInfo);
+            }
+        }
+        if (orderInfoCursor != null) {
+            orderInfoCursor.close();
+        }
+        db.close();
+        return allOrderInfoList;
+    }
+
+    public List<ShoppingCartInfo> getOrderContentInfoList(int order_id) {
+        List<ShoppingCartInfo> shoppingCartInfoList = new ArrayList<>();
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<Integer> shoppingCartIdList = new ArrayList<>();
+        Cursor orderContentInfo = db.query("orderContentInfo", null, "order_id = ?", new String[]{String.valueOf(order_id)}, null, null, null);
+        if (orderContentInfo != null && orderContentInfo.getCount() > 0) {
+            while (orderContentInfo.moveToNext()) {
+                shoppingCartIdList.add(orderContentInfo.getInt(2));
+            }
+        }
+        if (orderContentInfo != null) {
+            orderContentInfo.close();
+        }
+        for (Integer shoppingCartId :
+                shoppingCartIdList) {
+            Cursor shoppingCartInfoCursor = db.query("shoppingCartInfo", null, "_id = ? and isCommit = ?", new String[]{String.valueOf(shoppingCartId),"1"}, null, null, null);
+            if(shoppingCartInfoCursor!= null&&shoppingCartInfoCursor.getCount()>0){
+                shoppingCartInfoCursor.moveToNext();
+                ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
+                shoppingCartInfo.set_id(shoppingCartInfoCursor.getInt(0));
+                shoppingCartInfo.setCommodity_id(shoppingCartInfoCursor.getInt(1));
+                shoppingCartInfo.setSize_name(shoppingCartInfoCursor.getString(2));
+                shoppingCartInfo.setCount(shoppingCartInfoCursor.getInt(3));
+                shoppingCartInfo.setCommodity_name(shoppingCartInfoCursor.getString(4));
+                shoppingCartInfo.setPhone_number(shoppingCartInfoCursor.getString(5));
+                shoppingCartInfo.setCommodity_image(shoppingCartInfoCursor.getString(6));
+                shoppingCartInfo.setPrice(shoppingCartInfoCursor.getInt(7));
+                shoppingCartInfo.setIsCommit(shoppingCartInfoCursor.getInt(8));
+                shoppingCartInfoList.add(shoppingCartInfo);
+            }
+        }
+        return shoppingCartInfoList;
+    }
+
+    public void updateShoppingCartInfo(ContentValues contentValues, int id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.update("shoppingCartInfo",contentValues,"_id = ?",new String[]{String.valueOf(id)});
+    }
+
+    public void commitOrderContent(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("orderContentInfo", null, contentValues);
+        db.close();
+    }
+
+    public List<OrderInfo> getStateOrderInfoList(String phone_number, int orderState) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        List<OrderInfo> stateOrderInfoList = new ArrayList<>();
+        Cursor orderInfoCursor = db.query("orderInfo", null, "phone_number = ? and order_state = ?", new String[]{phone_number,String.valueOf(orderState)}, null, null, null);
+        if (orderInfoCursor != null && orderInfoCursor.getCount() > 0) {
+            while (orderInfoCursor.moveToNext()) {
+                OrderInfo orderInfo = new OrderInfo();
+                orderInfo.set_id(orderInfoCursor.getInt(0));
+                orderInfo.setOrder_state(orderInfoCursor.getInt(1));
+                orderInfo.setPhone_number(orderInfoCursor.getString(2));
+                stateOrderInfoList.add(orderInfo);
+            }
+        }
+        if (orderInfoCursor != null) {
+            orderInfoCursor.close();
+        }
+        db.close();
+        return stateOrderInfoList;
+    }
+
+    public void updateWaitGetToWaitEvaluate(int id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("order_state",ProjectProperties.ORDER_STATE_WAIT_EVALYATE);
+        db.update("orderInfo",contentValues,"_id = ?",new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void updateWaitPayToWaitSend(int id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("order_state",ProjectProperties.ORDER_STATE_WAIT_SEND);
+        db.update("orderInfo",contentValues,"_id = ?",new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void updateWaitSendToWaitGet(int id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("order_state",ProjectProperties.ORDER_STATE_WAIT_GET);
+        db.update("orderInfo",contentValues,"_id = ?",new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public void updateWaitEvaluateToDone(int id) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("order_state",ProjectProperties.ORDER_STATE_DONE);
+        db.update("orderInfo",contentValues,"_id = ?",new String[]{String.valueOf(id)});
         db.close();
     }
 }

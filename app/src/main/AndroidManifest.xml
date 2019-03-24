@@ -44,7 +44,9 @@
         <activity android:name=".activities.AddCommodityActivity" />
         <activity android:name=".activities.BrowseCommodityInfoActivity" />
         <activity android:name=".activities.DeleteCommodityActivity" />
-        <activity android:name=".activities.ChangeCommodityInfoActivity"/>
+        <activity android:name=".activities.ChangeCommodityInfoActivity" />
+        <activity android:name=".activities.OrderActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
 
         <service android:name=".service.NetworkConnectionService" />
 

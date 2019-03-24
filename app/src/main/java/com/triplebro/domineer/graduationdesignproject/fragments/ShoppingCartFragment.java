@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,8 +40,8 @@ public class ShoppingCartFragment extends Fragment implements View.OnClickListen
     private TextView tv_count_price;
     private TextView tv_clear;
     private ShoppingCartAdapter shoppingCartAdapter;
-    private long sumShoppingCart;
     private TwoButtonDialog twoButtonDialog;
+    private Button bt_commit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +55,7 @@ public class ShoppingCartFragment extends Fragment implements View.OnClickListen
 
     private void setOnClickListener() {
         tv_clear.setOnClickListener(this);
+        bt_commit.setOnClickListener(this);
     }
 
     @Override
@@ -93,6 +95,7 @@ public class ShoppingCartFragment extends Fragment implements View.OnClickListen
         rl_pay = fragment_ShoppingCart.findViewById(R.id.rl_pay);
         tv_count_price = fragment_ShoppingCart.findViewById(R.id.tv_count_price);
         tv_clear = fragment_ShoppingCart.findViewById(R.id.tv_clear);
+        bt_commit = (Button) fragment_ShoppingCart.findViewById(R.id.bt_commit);
     }
 
     @Override
@@ -129,6 +132,23 @@ public class ShoppingCartFragment extends Fragment implements View.OnClickListen
                         dialog.dismiss();
                     }
                 },getActivity().getFragmentManager());
+                break;
+            case R.id.bt_commit:
+                long order_id = shoppingCartManager.commitOrder();
+                shoppingCartManager.commitOrderContent(order_id,shoppingCartInfoList);
+                shoppingCartManager.updateShoppingCartInfo(shoppingCartInfoList);
+                shoppingCartInfoList = shoppingCartManager.getShoppingCartInfoList();
+                shoppingCartAdapter.setShoppingCartInfoList(shoppingCartInfoList);
+                if(shoppingCartInfoList.size() == 0){
+                    tv_tip.setVisibility(View.VISIBLE);
+                    tv_tip.setText("购物车空空如也，快去买点东西装满它吧！！！");
+                    lv_shopping_cart.setVisibility(View.GONE);
+                    rl_pay.setVisibility(View.GONE);
+                }else{
+                    lv_shopping_cart.setVisibility(View.VISIBLE);
+                    rl_pay.setVisibility(View.VISIBLE);
+                    tv_tip.setVisibility(View.GONE);
+                }
                 break;
         }
     }

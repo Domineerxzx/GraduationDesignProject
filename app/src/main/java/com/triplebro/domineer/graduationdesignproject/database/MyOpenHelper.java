@@ -48,7 +48,7 @@ public class MyOpenHelper extends SQLiteOpenHelper {
 
         //购物车表
         db.execSQL("create table shoppingCartInfo(_id Integer primary key autoincrement,commodity_id Integer,size_name varchar(20),count number,commodity_name varchar(20)," +
-                "phone_number varchar(20),commodity_image varchar(200),price number," +
+                "phone_number varchar(20),commodity_image varchar(200),price number,isCommit int," +
                 "FOREIGN KEY (commodity_id) REFERENCES commodityInfo(commodity_id)," +
                 "FOREIGN KEY (phone_number) REFERENCES userInfo(phone_number))");
 
@@ -70,6 +70,15 @@ public class MyOpenHelper extends SQLiteOpenHelper {
         db.execSQL("create table commodityRecommendInfo(_id Integer primary key autoincrement,commodity_id Integer,commodity_name varchar(20)," +
                 "price number,recommend_image varchar(200)," +
                 "FOREIGN KEY (commodity_id) REFERENCES commodityInfo(commodity_id))");
+
+        //订单表
+        db.execSQL("create table orderInfo(_id Integer primary key autoincrement,order_state Integer,phone_number varchar(20)," +
+                "FOREIGN KEY (phone_number) REFERENCES userInfo(phone_number))");
+        //订单详细信息表
+        db.execSQL("create table orderContentInfo(_id Integer primary key autoincrement,order_id Integer,shopping_cart_id Integer,phone_number varchar(20)," +
+                "FOREIGN KEY (phone_number) REFERENCES userInfo(phone_number)," +
+                "FOREIGN KEY (order_id) REFERENCES orderInfo(_id)," +
+                "FOREIGN KEY (shopping_cart_id) REFERENCES shoppingCartInfo(_id))");
     }
 
     @Override

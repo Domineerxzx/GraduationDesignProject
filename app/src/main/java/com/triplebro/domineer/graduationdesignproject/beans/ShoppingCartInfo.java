@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class ShoppingCartInfo implements Serializable {
 
+    private int _id;
     private int commodity_id;
     private String size_name;
     private int count;
@@ -11,6 +12,15 @@ public class ShoppingCartInfo implements Serializable {
     private String phone_number;
     private String commodity_image;
     private int price;
+    private int isCommit;
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 
     public int getCommodity_id() {
         return commodity_id;
@@ -68,16 +78,26 @@ public class ShoppingCartInfo implements Serializable {
         this.price = price;
     }
 
+    public int getIsCommit() {
+        return isCommit;
+    }
+
+    public void setIsCommit(int isCommit) {
+        this.isCommit = isCommit;
+    }
+
     @Override
     public String toString() {
         return "ShoppingCartInfo{" +
-                "commodity_id=" + commodity_id +
+                "_id=" + _id +
+                ", commodity_id=" + commodity_id +
                 ", size_name='" + size_name + '\'' +
                 ", count=" + count +
                 ", commodity_name='" + commodity_name + '\'' +
                 ", phone_number='" + phone_number + '\'' +
                 ", commodity_image='" + commodity_image + '\'' +
                 ", price=" + price +
+                ", isCommit=" + isCommit +
                 '}';
     }
 }

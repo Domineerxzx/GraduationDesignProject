@@ -8,7 +8,8 @@
         android:id="@+id/msv_commodity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp">
+        android:layout_marginBottom="60dp"
+        android:scrollbars="none">
 
         <RelativeLayout
             android:id="@+id/rl_commodity"
@@ -149,57 +150,6 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/ll_message"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:id="@+id/iv_message"
-                android:background="@mipmap/message_inside"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/tv_message"
-                android:text="联系客服"
-                android:textSize="10dp"
-                android:textColor="#000000"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/ll_shopping_cart"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:id="@+id/iv_shopping_cart"
-                android:background="@mipmap/shopping_cart_onclick"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/tv_shopping_cart"
-                android:text="购物车"
-                android:textSize="10dp"
-                android:textColor="#000000"/>
-
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"

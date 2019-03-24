@@ -98,6 +98,7 @@ public class AddShoppingCartDialog {
                     shoppingCartInfo.setCount(Integer.parseInt(tv_count.getText().toString()));
                     shoppingCartInfo.setPhone_number(phone_number);
                     shoppingCartInfo.setPrice(commodityInfo.getPrice());
+                    shoppingCartInfo.setIsCommit(0);
                     AddShoppingCartDialog.uploadShoppingCartInfo(context, shoppingCartInfo, tv_commodity_count);
                     /*mShareDialog.dismiss();*/
                 }
@@ -153,8 +154,8 @@ public class AddShoppingCartDialog {
             commoditySizeInfoCursor.close();
         }
         Cursor shoppingCartInfoCursor = db.query("shoppingCartInfo", null,
-                "commodity_id = ? and size_name = ?",
-                new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()},
+                "commodity_id = ? and size_name = ? and isCommit = ?",
+                new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name(),String.valueOf(0)},
                 null, null, null);
         if (shoppingCartInfoCursor != null && shoppingCartInfoCursor.getCount() > 0) {
             while (shoppingCartInfoCursor.moveToNext()) {
@@ -185,6 +186,7 @@ public class AddShoppingCartDialog {
             contentValues.put("phone_number", shoppingCartInfo.getPhone_number());
             contentValues.put("commodity_image", shoppingCartInfo.getCommodity_image());
             contentValues.put("price", shoppingCartInfo.getPrice());
+            contentValues.put("isCommit",shoppingCartInfo.getIsCommit());
             long shoppingCartInsetResult = db.insert("shoppingCartInfo", null, contentValues);
             if (shoppingCartInsetResult >= 0) {
                 Toast.makeText(context, "加入购物车成功，去付款吧！！！", Toast.LENGTH_SHORT).show();

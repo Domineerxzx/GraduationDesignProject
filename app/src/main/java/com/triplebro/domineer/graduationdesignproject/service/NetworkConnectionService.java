@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 import com.triplebro.domineer.graduationdesignproject.handlers.LoginHandler;
 import com.triplebro.domineer.graduationdesignproject.handlers.RegisterHandler;
@@ -22,6 +23,7 @@ import com.triplebro.domineer.graduationdesignproject.utils.httpUtils.HttpUtils;
 
 import java.io.IOException;
 
+import cc.ibooker.zcountdownviewlib.CountDownView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -53,6 +55,45 @@ public class NetworkConnectionService extends Service {
         public void getRequestCode(Context context, String phone_number,ServiceConnection serviceConnection) {
             NetworkConnectionService.this.getRequestCode(context,phone_number,serviceConnection);
         }
+
+        public void setCountDown(CountDownView countDownView) {
+            NetworkConnectionService.this.setCountDown(countDownView);
+        }
+    }
+
+    private void setCountDown(final CountDownView countDownView) {
+        countDownView.setCountTime(300)
+                .setHourTvBackgroundRes(R.drawable.shape_white_card)
+                .setHourTvTextColorHex("#FF0000")
+                .setHourTvTextSize(18)
+
+                .setHourColonTvBackgroundColorHex("#00FFFFFF")
+                .setHourColonTvSize(18, 0)
+                .setHourColonTvTextColorHex("#FF7198")
+                .setHourColonTvTextSize(18)
+
+                .setMinuteTvBackgroundRes(R.drawable.shape_white_card)
+                .setMinuteTvTextColorHex("#FF0000")
+                .setMinuteTvTextSize(18)
+
+                .setMinuteColonTvSize(18, 0)
+                .setMinuteColonTvTextColorHex("#FF7198")
+                .setMinuteColonTvTextSize(18)
+
+                .setSecondTvBackgroundRes(R.drawable.shape_white_card)
+                .setSecondTvTextColorHex("#FF0000")
+                .setSecondTvTextSize(18)
+
+                // 开启倒计时
+                .startCountDown()
+
+                // 设置倒计时结束监听
+                .setCountDownEndListener(new CountDownView.CountDownEndListener() {
+                    @Override
+                    public void onCountDownEnd() {
+                        setCountDown(countDownView);
+                    }
+                });
     }
 
     private void updateRegisterInfo(final Context context, final String phone_number, final String password, final String nickname, ServiceConnection serviceConnection, final RegisterHandler registerHandler, final int userType) {

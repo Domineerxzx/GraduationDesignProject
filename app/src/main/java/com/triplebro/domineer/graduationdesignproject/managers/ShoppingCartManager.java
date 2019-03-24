@@ -13,6 +13,8 @@ import com.triplebro.domineer.graduationdesignproject.beans.ShoppingCartInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.database.MyOpenHelper;
 import com.triplebro.domineer.graduationdesignproject.fragments.ShoppingCartFragment;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
+import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +34,18 @@ public class ShoppingCartManager {
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         List<ShoppingCartInfo> shoppingCartInfoList = new ArrayList<>();
         Cursor shoppingCartInfoCursor = db.query("shoppingCartInfo", null,
-                "phone_number = ?", new String[]{phone_number}, null, null, null);
+                "phone_number = ? and isCommit = ?", new String[]{phone_number, "0"}, null, null, null);
         if (shoppingCartInfoCursor != null && shoppingCartInfoCursor.getCount() > 0) {
             while (shoppingCartInfoCursor.moveToNext()) {
                 ShoppingCartInfo shoppingCartInfo = new ShoppingCartInfo();
+                shoppingCartInfo.set_id(shoppingCartInfoCursor.getInt(0));
                 shoppingCartInfo.setCommodity_id(shoppingCartInfoCursor.getInt(1));
                 shoppingCartInfo.setSize_name(shoppingCartInfoCursor.getString(2));
                 shoppingCartInfo.setCount(shoppingCartInfoCursor.getInt(3));
                 shoppingCartInfo.setCommodity_name(shoppingCartInfoCursor.getString(4));
                 shoppingCartInfo.setCommodity_image(shoppingCartInfoCursor.getString(6));
                 shoppingCartInfo.setPrice(shoppingCartInfoCursor.getInt(7));
+                shoppingCartInfo.setIsCommit(shoppingCartInfoCursor.getInt(8));
                 shoppingCartInfoList.add(shoppingCartInfo);
             }
         }
@@ -81,7 +85,7 @@ public class ShoppingCartManager {
         SQLiteDatabase db = myOpenHelper.getWritableDatabase();
         SharedPreferences userInfo = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String phone_number = userInfo.getString("phone_number", "");
-        int clearShoppingCartInfo = db.delete("shoppingCartInfo", "phone_number = ?", new String[]{phone_number});
+        int clearShoppingCartInfo = db.delete("shoppingCartInfo", "phone_number = ? and ", new String[]{phone_number});
         if (clearShoppingCartInfo >= 0) {
             Toast.makeText(context, "清空购物车成功", Toast.LENGTH_SHORT).show();
         } else {
@@ -127,5 +131,38 @@ public class ShoppingCartManager {
         contentValues.put("size_count", size_count + shoppingCartInfo.getCount());
         db.update("commoditySizeInfo", contentValues, "commodity_id = ? and size_name = ?", new String[]{String.valueOf(shoppingCartInfo.getCommodity_id()), shoppingCartInfo.getSize_name()});
         db.close();
+    }
+
+    public long commitOrder() {
+        String phone_number = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("phone_number", "");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("order_state", ProjectProperties.ORDER_STATE_WAIT_PAY);
+        contentValues.put("phone_number", phone_number);
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        long order_id = databaseOP.commitOrder(contentValues);
+        return order_id;
+    }
+
+    public void updateShoppingCartInfo(List<ShoppingCartInfo> shoppingCartInfoList) {
+        DatabaseOP databaseOP = new DatabaseOP(context);
+        for (ShoppingCartInfo shoppingCartInfo :
+                shoppingCartInfoList) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("isCommit",1);
+            databaseOP.updateShoppingCartInfo(contentValues,shoppingCartInfo.get_id());
+        }
+    }
+
+    public void commitOrderContent(long order_id, List<ShoppingCartInfo> shoppingCartInfoList) {
+        String phone_number = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getString("phone_number", "");
+        for (ShoppingCartInfo shoppingCartInfo :
+                shoppingCartInfoList) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("order_id",order_id);
+            contentValues.put("shopping_cart_id",shoppingCartInfo.get_id());
+            contentValues.put("phone_number",phone_number);
+            DatabaseOP databaseOP = new DatabaseOP(context);
+            databaseOP.commitOrderContent(contentValues);
+        }
     }
 }

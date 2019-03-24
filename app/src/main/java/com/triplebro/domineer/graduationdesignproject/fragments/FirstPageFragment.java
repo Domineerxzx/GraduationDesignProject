@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.triplebro.domineer.graduationdesignproject.R;
 import com.triplebro.domineer.graduationdesignproject.activities.CommodityDetailsActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.ContentActivity;
@@ -23,16 +24,21 @@ import com.triplebro.domineer.graduationdesignproject.activities.SearchActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.TypeRecommendActivity;
 import com.triplebro.domineer.graduationdesignproject.adapters.RecommendAdapter;
 import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
+import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnItemClickListener;
 import com.triplebro.domineer.graduationdesignproject.interfaces.OnScrollChangedListener;
 import com.triplebro.domineer.graduationdesignproject.managers.FirstPageManager;
+import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.utils.imageUtils.GlideImageLoader;
+import com.triplebro.domineer.graduationdesignproject.utils.ossUtils.DownloadUtils;
 import com.triplebro.domineer.graduationdesignproject.views.MyScrollView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +82,18 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
     private List<CommodityInfo> commodityInfoList = new ArrayList<>();
     private RecommendAdapter recommendAdapter;
     private ImageView iv_scan;
+    private List<String> bannerImageList;
+    private ImageView iv_second_kill_1;
+    private ImageView iv_second_kill_2;
+    private ImageView iv_second_kill_3;
+    private ImageView iv_need_buy_list_1;
+    private ImageView iv_need_buy_list_2;
+    private ImageView iv_preference_1;
+    private ImageView iv_preference_2;
+    private ImageView iv_quality_life_1;
+    private ImageView iv_quality_life_2;
+    private List<CommodityInfo> functionCommodityList;
+    private List<ImageView> functionImageViewList;
 
     @Nullable
     @Override
@@ -118,6 +136,16 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
         iv_beauty_make_up.setOnClickListener(this);
         iv_tide_card.setOnClickListener(this);
         iv_scan.setOnClickListener(this);
+        for (final ImageView imageView : functionImageViewList) {
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), CommodityDetailsActivity.class);
+                    intent.putExtra("commodityInfo", functionCommodityList.get(functionImageViewList.indexOf(imageView)));
+                    startActivity(intent);
+                }
+            });
+        }
     }
 
     private void initData() {
@@ -126,9 +154,32 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
         recommendAdapter = new RecommendAdapter(getActivity(), commodityInfoList);
         rv_recommend.setAdapter(recommendAdapter);
         recommendAdapter.setOnItemClickListener(this);
-        List<String> bannerImageList = firstPageManager.getBannerImageList();
+        bannerImageList = firstPageManager.getBannerImageList();
         bn_banner.setImages(bannerImageList);
         bn_banner.start();
+        bn_banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Intent intent = new Intent(getActivity(), CommodityDetailsActivity.class);
+                intent.putExtra("commodityInfo", commodityInfoList.get(position));
+                startActivity(intent);
+            }
+        });
+        firstPageManager.setCountDown(countdownView);
+        functionCommodityList = firstPageManager.getFunctionCommodityList(commodityInfoList);
+        if(functionCommodityList.size() == 9){
+            for (CommodityInfo commodityInfo: functionCommodityList) {
+                File file = new File(commodityInfo.getCommodity_image());
+                if (file.length() > 0) {
+                    Glide.with(getActivity()).load(file).into(functionImageViewList.get(functionCommodityList.indexOf(commodityInfo)));
+                }else{
+                    OssHandler ossHandler = new OssHandler(getActivity(), functionImageViewList.get(functionCommodityList.indexOf(commodityInfo)));
+                    DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+commodityInfo.getCommodity_image());
+                }
+            }
+        }else{
+            Toast.makeText(getActivity(), "目前商品数目不足9个，无法进行推荐", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initView() {
@@ -146,9 +197,7 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
 
         msv_first_page = fragment_firstPage.findViewById(R.id.msv_first_page);
         msv_first_page.setOnScrollChangedListener(this);
-
         countdownView = fragment_firstPage.findViewById(R.id.countdownView);
-        setCountDown();
         tv_search = fragment_firstPage.findViewById(R.id.tv_search);
         rl_search = fragment_firstPage.findViewById(R.id.rl_search);
         ll_clothes = fragment_firstPage.findViewById(R.id.ll_clothes);
@@ -180,41 +229,25 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
         bn_banner.setDelayTime(5000);
         bn_banner.setIndicatorGravity(BannerConfig.CENTER);
         iv_scan = fragment_firstPage.findViewById(R.id.iv_scan);
-    }
-
-    private void setCountDown() {
-        countdownView.setCountTime(300)
-                .setHourTvBackgroundRes(R.drawable.shape_white_card)
-                .setHourTvTextColorHex("#FF0000")
-                .setHourTvTextSize(18)
-
-                .setHourColonTvBackgroundColorHex("#00FFFFFF")
-                .setHourColonTvSize(18, 0)
-                .setHourColonTvTextColorHex("#FF7198")
-                .setHourColonTvTextSize(18)
-
-                .setMinuteTvBackgroundRes(R.drawable.shape_white_card)
-                .setMinuteTvTextColorHex("#FF0000")
-                .setMinuteTvTextSize(18)
-
-                .setMinuteColonTvSize(18, 0)
-                .setMinuteColonTvTextColorHex("#FF7198")
-                .setMinuteColonTvTextSize(18)
-
-                .setSecondTvBackgroundRes(R.drawable.shape_white_card)
-                .setSecondTvTextColorHex("#FF0000")
-                .setSecondTvTextSize(18)
-
-                // 开启倒计时
-                .startCountDown()
-
-                // 设置倒计时结束监听
-                .setCountDownEndListener(new CountDownView.CountDownEndListener() {
-                    @Override
-                    public void onCountDownEnd() {
-                        setCountDown();
-                    }
-                });
+        iv_second_kill_1 = fragment_firstPage.findViewById(R.id.iv_second_kill_1);
+        iv_second_kill_2 = fragment_firstPage.findViewById(R.id.iv_second_kill_2);
+        iv_second_kill_3 = fragment_firstPage.findViewById(R.id.iv_second_kill_3);
+        iv_need_buy_list_1 = fragment_firstPage.findViewById(R.id.iv_need_buy_list_1);
+        iv_need_buy_list_2 = fragment_firstPage.findViewById(R.id.iv_need_buy_list_2);
+        iv_preference_1 = fragment_firstPage.findViewById(R.id.iv_preference_1);
+        iv_preference_2 = fragment_firstPage.findViewById(R.id.iv_preference_2);
+        iv_quality_life_1 = fragment_firstPage.findViewById(R.id.iv_quality_life_1);
+        iv_quality_life_2 = fragment_firstPage.findViewById(R.id.iv_quality_life_2);
+        functionImageViewList = new ArrayList<>();
+        functionImageViewList.add(iv_second_kill_1);
+        functionImageViewList.add(iv_second_kill_2);
+        functionImageViewList.add(iv_second_kill_3);
+        functionImageViewList.add(iv_need_buy_list_1);
+        functionImageViewList.add(iv_need_buy_list_2);
+        functionImageViewList.add(iv_preference_1);
+        functionImageViewList.add(iv_preference_2);
+        functionImageViewList.add(iv_quality_life_1);
+        functionImageViewList.add(iv_quality_life_2);
     }
 
     @Override
@@ -326,4 +359,9 @@ public class FirstPageFragment extends Fragment implements OnScrollChangedListen
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unbindService(firstPageManager);
+    }
 }

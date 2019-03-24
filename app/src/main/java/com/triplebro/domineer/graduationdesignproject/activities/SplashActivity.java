@@ -27,7 +27,6 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         InitOssClient.initOssClient(this, ProjectProperties.TOKEN_ADDRESS, ProjectProperties.ENDPOINT);
-        RelativeLayout rv_splash = (RelativeLayout) findViewById(R.id.rv_splash);
         final DataInsertHandler dataInsertHandler = new DataInsertHandler(this);
         new Thread(){
             @Override
@@ -41,7 +40,7 @@ public class SplashActivity extends Activity {
                 List<String> nonentity_table_name  = splashManager.checkData(table_name);
                 if(nonentity_table_name.size() == 0){
                     try {
-                        sleep(1000);
+                        sleep(1500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

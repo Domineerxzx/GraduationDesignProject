@@ -29,6 +29,7 @@ import com.triplebro.domineer.graduationdesignproject.activities.CollectionSubmi
 import com.triplebro.domineer.graduationdesignproject.activities.FeedbackActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.LocationActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.LoginActivity;
+import com.triplebro.domineer.graduationdesignproject.activities.OrderActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.SettingActivity;
 import com.triplebro.domineer.graduationdesignproject.activities.UserInfoActivity;
 import com.triplebro.domineer.graduationdesignproject.handlers.OssHandler;
@@ -78,6 +79,22 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
     private ImageView iv_about_us;
     private TextView tv_about_us;
     private ImageView iv_about_us_more;
+    private LinearLayout ll_my_order;
+    private LinearLayout ll_order_wait_pay;
+    private LinearLayout ll_order_wait_send;
+    private LinearLayout ll_order_wait_get;
+    private LinearLayout ll_order_wait_evaluate;
+    private TextView tv_my_order;
+    private TextView tv_all_order;
+    private TextView tv_order_wait_pay;
+    private TextView tv_order_wait_send;
+    private TextView tv_order_wait_get;
+    private TextView tv_order_wait_evaluate;
+    private ImageView iv_order_wait_evaluate;
+    private ImageView iv_order_wait_get;
+    private ImageView iv_order_wait_send;
+    private ImageView iv_order_wait_pay;
+    private ImageView iv_all_order;
 
     @Nullable
     @Override
@@ -101,9 +118,9 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             boolean exists = file.exists();
             if (file.length() > 0) {
                 Glide.with(getActivity()).load(file).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
-            }else{
+            } else {
                 OssHandler ossHandler = new OssHandler(getActivity(), iv_user_head, true);
-                DownloadUtils.downloadFileFromOss(file,ossHandler,ProjectProperties.BUCKET_NAME,"xuzhanxin/"+userHead);
+                DownloadUtils.downloadFileFromOss(file, ossHandler, ProjectProperties.BUCKET_NAME, "xuzhanxin/" + userHead);
             }
         } else {
             Glide.with(getActivity()).load(R.drawable.user_head_default).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(iv_user_head);
@@ -149,6 +166,22 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
         iv_about_us.setOnClickListener(this);
         tv_about_us.setOnClickListener(this);
         iv_about_us_more.setOnClickListener(this);
+        ll_my_order.setOnClickListener(this);
+        ll_order_wait_pay.setOnClickListener(this);
+        ll_order_wait_send.setOnClickListener(this);
+        ll_order_wait_get.setOnClickListener(this);
+        ll_order_wait_evaluate.setOnClickListener(this);
+        tv_my_order.setOnClickListener(this);
+        tv_all_order.setOnClickListener(this);
+        tv_order_wait_pay.setOnClickListener(this);
+        tv_order_wait_send.setOnClickListener(this);
+        tv_order_wait_get.setOnClickListener(this);
+        tv_order_wait_evaluate.setOnClickListener(this);
+        iv_order_wait_evaluate.setOnClickListener(this);
+        iv_order_wait_get.setOnClickListener(this);
+        iv_order_wait_send.setOnClickListener(this);
+        iv_order_wait_pay.setOnClickListener(this);
+        iv_all_order.setOnClickListener(this);
     }
 
     private void initView() {
@@ -184,6 +217,22 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
         iv_about_us = fragment_myself.findViewById(R.id.iv_about_us);
         tv_about_us = fragment_myself.findViewById(R.id.tv_about_us);
         iv_about_us_more = fragment_myself.findViewById(R.id.iv_about_us_more);
+        ll_my_order = fragment_myself.findViewById(R.id.ll_my_order);
+        ll_order_wait_pay = fragment_myself.findViewById(R.id.ll_order_wait_pay);
+        ll_order_wait_send = fragment_myself.findViewById(R.id.ll_order_wait_send);
+        ll_order_wait_get = fragment_myself.findViewById(R.id.ll_order_wait_get);
+        ll_order_wait_evaluate = fragment_myself.findViewById(R.id.ll_order_wait_evaluate);
+        tv_my_order = fragment_myself.findViewById(R.id.tv_my_order);
+        tv_all_order = fragment_myself.findViewById(R.id.tv_all_order);
+        tv_order_wait_pay = fragment_myself.findViewById(R.id.tv_order_wait_pay);
+        tv_order_wait_send = fragment_myself.findViewById(R.id.tv_order_wait_send);
+        tv_order_wait_get = fragment_myself.findViewById(R.id.tv_order_wait_get);
+        tv_order_wait_evaluate = fragment_myself.findViewById(R.id.tv_order_wait_evaluate);
+        iv_all_order = fragment_myself.findViewById(R.id.iv_all_order);
+        iv_order_wait_pay = fragment_myself.findViewById(R.id.iv_order_wait_pay);
+        iv_order_wait_send = fragment_myself.findViewById(R.id.iv_order_wait_send);
+        iv_order_wait_get = fragment_myself.findViewById(R.id.iv_order_wait_get);
+        iv_order_wait_evaluate = fragment_myself.findViewById(R.id.iv_order_wait_evaluate);
     }
 
     @Override
@@ -205,11 +254,67 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
                     startActivity(user_info);
                     break;
                 }
+            case R.id.ll_my_order:
+            case R.id.tv_all_order:
+            case R.id.iv_all_order:
+            case R.id.tv_my_order:
+                if (phone_number.length() != 11) {
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent all_order = new Intent(getActivity(), OrderActivity.class);
+                all_order.putExtra("type",0);
+                startActivity(all_order);
+                break;
+            case R.id.ll_order_wait_pay:
+            case R.id.tv_order_wait_pay:
+            case R.id.iv_order_wait_pay:
+                if (phone_number.length() != 11) {
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent wait_pay = new Intent(getActivity(), OrderActivity.class);
+                wait_pay.putExtra("type",1);
+                startActivity(wait_pay);
+                break;
+            case R.id.ll_order_wait_send:
+            case R.id.tv_order_wait_send:
+            case R.id.iv_order_wait_send:
+                if (phone_number.length() != 11) {
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent wait_send = new Intent(getActivity(), OrderActivity.class);
+                wait_send.putExtra("type",2);
+                startActivity(wait_send);
+                break;
+            case R.id.ll_order_wait_get:
+            case R.id.tv_order_wait_get:
+            case R.id.iv_order_wait_get:
+                if (phone_number.length() != 11) {
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent wait_get = new Intent(getActivity(), OrderActivity.class);
+                wait_get.putExtra("type",3);
+                startActivity(wait_get);
+                break;
+            case R.id.ll_order_wait_evaluate:
+            case R.id.tv_order_wait_evaluate:
+            case R.id.iv_order_wait_evaluate:
+                if (phone_number.length() != 11) {
+                    Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent wait_evaluate = new Intent(getActivity(), OrderActivity.class);
+                wait_evaluate.putExtra("type",4);
+                startActivity(wait_evaluate);
+                break;
             case R.id.rl_location:
             case R.id.iv_location:
             case R.id.tv_location:
             case R.id.iv_location_more:
-                if(phone_number.length()!=11){
+                if (phone_number.length() != 11) {
                     Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -220,7 +325,7 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_setting:
             case R.id.tv_setting:
             case R.id.iv_setting_more:
-                if(phone_number.length()!=11){
+                if (phone_number.length() != 11) {
                     Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -232,7 +337,7 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_collection_submit:
             case R.id.tv_collection_submit:
             case R.id.iv_collection_submit_more:
-                if(phone_number.length()!=11){
+                if (phone_number.length() != 11) {
                     Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -244,7 +349,7 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_collection_commodity:
             case R.id.tv_collection_commodity:
             case R.id.iv_collection_commodity_more:
-                if(phone_number.length()!=11){
+                if (phone_number.length() != 11) {
                     Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -256,7 +361,7 @@ public class MyselfFragment extends Fragment implements View.OnClickListener {
             case R.id.iv_feedback:
             case R.id.tv_feedback:
             case R.id.iv_feedback_more:
-                if(phone_number.length()!=11){
+                if (phone_number.length() != 11) {
                     Toast.makeText(getActivity(), "还没登录呢，快去登录吧", Toast.LENGTH_SHORT).show();
                     return;
                 }

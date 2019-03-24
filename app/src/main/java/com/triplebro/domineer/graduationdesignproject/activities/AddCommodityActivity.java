@@ -236,6 +236,17 @@ public class AddCommodityActivity extends Activity implements View.OnClickListen
                     List<String> commodityImageList = submitAdapter.getData();
                     addCommodityManager.addCommodityImageInfo(commodity_id,commodityImageList,phone_number);
                 }
+                et_commodity_name.setText("");
+                et_commodity_price.setText("");
+                tv_commodity_generalize_type_content.setText("");
+                tv_commodity_concrete_type_content.setText("");
+                chooseTypeGeneralizeInfo = new TypeGeneralizeInfo();
+                chooseTypeConcreteInfo = new TypeConcreteInfo();
+                sizeInfoAdapter.setCommoditySizeInfoList(new ArrayList<CommoditySizeInfo>());
+                Glide.with(this).load(R.drawable.submit).into(iv_commodity_image_show);
+                image_show = "";
+                iv_delete_commodity_image_show.setVisibility(View.GONE);
+                submitAdapter.setData(new ArrayList<String>());
                 break;
         }
     }

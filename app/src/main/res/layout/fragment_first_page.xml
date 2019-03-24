@@ -423,7 +423,8 @@
                         android:layout_below="@id/tv_count_down"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
 
                     <ImageView
                         android:id="@+id/iv_second_kill_2"
@@ -433,7 +434,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@id/iv_second_kill_1"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
 
                     <ImageView
                         android:id="@+id/iv_second_kill_3"
@@ -443,7 +445,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@id/iv_second_kill_2"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -470,7 +473,8 @@
                         android:layout_height="75dp"
                         android:layout_below="@id/tv_need_buy_list"
                         android:layout_marginTop="5dp"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
 
                     <ImageView
                         android:id="@+id/iv_need_buy_list_2"
@@ -480,7 +484,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@id/iv_need_buy_list_1"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -510,7 +515,8 @@
                         android:layout_below="@id/tv_preference"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
 
                     <ImageView
                         android:id="@+id/iv_preference_2"
@@ -520,7 +526,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@id/iv_preference_1"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -550,7 +557,8 @@
                         android:layout_below="@id/tv_quality_life"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
 
                     <ImageView
                         android:id="@+id/iv_quality_life_2"
@@ -560,7 +568,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@id/iv_quality_life_1"
-                        android:background="@mipmap/photo_default" />
+                        android:background="@mipmap/photo_default"
+                        android:scaleType="centerCrop"/>
                 </RelativeLayout>
             </RelativeLayout>
 
