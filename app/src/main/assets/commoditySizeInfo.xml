@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CommoditySizeInfoList>
+	<commoditySizeInfo _id="1">
+		<commodity_id>1</commodity_id>
+		<size_name>M</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="2">
+		<commodity_id>2</commodity_id>
+		<size_name>M</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="3">
+		<commodity_id>3</commodity_id>
+		<size_name>4XL</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="4">
+		<commodity_id>4</commodity_id>
+		<size_name>M</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="5">
+		<commodity_id>5</commodity_id>
+		<size_name>M</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="6">
+		<commodity_id>6</commodity_id>
+		<size_name>S</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="7">
+		<commodity_id>7</commodity_id>
+		<size_name>均码</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="8">
+		<commodity_id>8</commodity_id>
+		<size_name>白色</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="9">
+		<commodity_id>8</commodity_id>
+		<size_name>红色</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="10">
+		<commodity_id>8</commodity_id>
+		<size_name>黑色</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="11">
+		<commodity_id>9</commodity_id>
+		<size_name>白色</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="12">
+		<commodity_id>9</commodity_id>
+		<size_name>红色</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+	<commoditySizeInfo _id="13">
+		<commodity_id>9</commodity_id>
+		<size_name>黑色</size_name>
+		<size_count>50</size_count>
+		<phone_number>17709841369</phone_number>
+	</commoditySizeInfo>
+</CommoditySizeInfoList>

@@ -4,8 +4,16 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
+import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 

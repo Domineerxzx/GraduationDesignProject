@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.triplebro.domineer.graduationdesignproject.beans.AdminInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.CommodityImageInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.CommodityInfo;
+import com.triplebro.domineer.graduationdesignproject.beans.CommoditySizeInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeConcreteInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.TypeGeneralizeInfo;
 import com.triplebro.domineer.graduationdesignproject.beans.UserInfo;
@@ -12,6 +15,9 @@ import com.triplebro.domineer.graduationdesignproject.handlers.DataInsertHandler
 import com.triplebro.domineer.graduationdesignproject.properties.ProjectProperties;
 import com.triplebro.domineer.graduationdesignproject.sourceop.DatabaseOP;
 import com.triplebro.domineer.graduationdesignproject.utils.xml.AdminInfoParser;
+import com.triplebro.domineer.graduationdesignproject.utils.xml.CommodityImageInfoParser;
+import com.triplebro.domineer.graduationdesignproject.utils.xml.CommodityInfoParser;
+import com.triplebro.domineer.graduationdesignproject.utils.xml.CommoditySizeInfoParser;
 import com.triplebro.domineer.graduationdesignproject.utils.xml.TypeConcreteParser;
 import com.triplebro.domineer.graduationdesignproject.utils.xml.TypeGeneralizeParser;
 import com.triplebro.domineer.graduationdesignproject.utils.xml.UserInfoParser;
@@ -96,7 +102,7 @@ public class SplashManager {
                         contentValues.put("type_generalize_name", typeGeneralizeInfo.getType_generalize_name());
                         databaseOP.insertTypeGeneralize(contentValues);
                     }
-                } else {
+                } else if(nonentityTableName.equals("typeConcrete")){
                     assetsFileName = "TypeConcreteList.xml";
                     TypeConcreteParser xmlParser = new TypeConcreteParser();
                     inputStream = assets.open(assetsFileName);
@@ -108,6 +114,48 @@ public class SplashManager {
                         contentValues.put("type_concrete_name", typeConcreteInfo.getType_concrete_name());
                         contentValues.put("type_concrete_image", typeConcreteInfo.getType_concrete_image());
                         databaseOP.insertTypeConcrete(contentValues);
+                    }
+                }else if(nonentityTableName.equals("commodityInfo")){
+                    assetsFileName = "commodityInfo.xml";
+                    CommodityInfoParser xmlParser = new CommodityInfoParser();
+                    inputStream = assets.open(assetsFileName);
+                    List<CommodityInfo> list = xmlParser.parseXML(inputStream);
+                    for (CommodityInfo commodityInfo : list) {
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("commodity_id", commodityInfo.getCommodity_id());
+                        contentValues.put("price", commodityInfo.getPrice());
+                        contentValues.put("commodity_name", commodityInfo.getCommodity_name());
+                        contentValues.put("commodity_image", commodityInfo.getCommodity_image());
+                        contentValues.put("type_concrete_id", commodityInfo.getType_concrete_id());
+                        contentValues.put("phone_number", commodityInfo.getPhone_number());
+                        databaseOP.insertCommodityInfo(contentValues);
+                    }
+                }else if(nonentityTableName.equals("commodityImageInfo")){
+                    assetsFileName = "commodityImageInfo.xml";
+                    CommodityImageInfoParser xmlParser = new CommodityImageInfoParser();
+                    inputStream = assets.open(assetsFileName);
+                    List<CommodityImageInfo> list = xmlParser.parseXML(inputStream);
+                    for (CommodityImageInfo commodityImageInfo : list) {
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("_id", commodityImageInfo.get_id());
+                        contentValues.put("commodity_id", commodityImageInfo.getCommodity_id());
+                        contentValues.put("commodity_image", commodityImageInfo.getCommodity_image());
+                        contentValues.put("phone_number", commodityImageInfo.getPhone_number());
+                        databaseOP.insertCommodityImageInfo(contentValues);
+                    }
+                }else if(nonentityTableName.equals("commoditySizeInfo")){
+                    assetsFileName = "commoditySizeInfo.xml";
+                    CommoditySizeInfoParser xmlParser = new CommoditySizeInfoParser();
+                    inputStream = assets.open(assetsFileName);
+                    List<CommoditySizeInfo> list = xmlParser.parseXML(inputStream);
+                    for (CommoditySizeInfo commoditySizeInfo : list) {
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("_id", commoditySizeInfo.get_id());
+                        contentValues.put("commodity_id", commoditySizeInfo.getCommodity_id());
+                        contentValues.put("size_name", commoditySizeInfo.getSize_name());
+                        contentValues.put("size_count", commoditySizeInfo.getSize_count());
+                        contentValues.put("phone_number", commoditySizeInfo.getPhone_number());
+                        databaseOP.insertCommoditySizeInfo(contentValues);
                     }
                 }
             }

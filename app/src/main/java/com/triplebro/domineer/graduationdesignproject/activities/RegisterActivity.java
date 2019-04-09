@@ -116,7 +116,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 bt_user_register.setBackgroundResource(R.drawable.shape_alpha_card);
                 userType = ProjectProperties.ADMIN;
                 break;
-            case R.id.bt_user_login:
+            case R.id.bt_user_register:
                 bt_admin_register.setBackgroundResource(R.drawable.shape_alpha_card);
                 bt_user_register.setBackgroundResource(R.drawable.shape_pay);
                 userType = ProjectProperties.USER;

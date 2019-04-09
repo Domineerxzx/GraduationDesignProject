@@ -831,4 +831,25 @@ public class DatabaseOP implements ISource {
         db.update("orderInfo",contentValues,"_id = ?",new String[]{String.valueOf(id)});
         db.close();
     }
+
+    public void insertCommodityInfo(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("commodityInfo", null, contentValues);
+        db.close();
+    }
+
+    public void insertCommodityImageInfo(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("commodityImageInfo", null, contentValues);
+        db.close();
+    }
+
+    public void insertCommoditySizeInfo(ContentValues contentValues) {
+        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+        SQLiteDatabase db = myOpenHelper.getWritableDatabase();
+        db.insert("commoditySizeInfo", null, contentValues);
+        db.close();
+    }
 }

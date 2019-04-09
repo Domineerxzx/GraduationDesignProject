@@ -42,18 +42,18 @@ public class NetworkConnectionService extends Service {
         return new MyBinder();
     }
 
-    public class MyBinder extends Binder{
+    public class MyBinder extends Binder {
 
         public void login(Context context, String phone_number, String password, ServiceConnection serviceConnection, int userType) {
-            NetworkConnectionService.this.login(context,phone_number,password,serviceConnection,userType);
+            NetworkConnectionService.this.login(context, phone_number, password, serviceConnection, userType);
         }
 
         public void register(Context context, String phone_number, String request_code, String password, String nickname, ServiceConnection serviceConnection, int userType) {
-            NetworkConnectionService.this.register(context,phone_number,request_code,password,nickname,serviceConnection,userType);
+            NetworkConnectionService.this.register(context, phone_number, request_code, password, nickname, serviceConnection, userType);
         }
 
-        public void getRequestCode(Context context, String phone_number,ServiceConnection serviceConnection) {
-            NetworkConnectionService.this.getRequestCode(context,phone_number,serviceConnection);
+        public void getRequestCode(Context context, String phone_number, ServiceConnection serviceConnection) {
+            NetworkConnectionService.this.getRequestCode(context, phone_number, serviceConnection);
         }
 
         public void setCountDown(CountDownView countDownView) {
@@ -98,9 +98,9 @@ public class NetworkConnectionService extends Service {
 
     private void updateRegisterInfo(final Context context, final String phone_number, final String password, final String nickname, ServiceConnection serviceConnection, final RegisterHandler registerHandler, final int userType) {
         FormBody.Builder builder = new FormBody.Builder();
-        builder.add("userPhoneNumber",phone_number);
-        builder.add("userNickName",nickname);
-        builder.add("userPassword",password);
+        builder.add("userPhoneNumber", phone_number);
+        builder.add("userNickName", nickname);
+        builder.add("userPassword", password);
         builder.build();
         HttpUtils.sendOkHttpRequest(ProjectProperties.ADDRESS_UPDATE_REGISTER_INFO, builder, new Callback() {
             @Override
@@ -111,27 +111,27 @@ public class NetworkConnectionService extends Service {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String register_message = response.body().string();
-                if(register_message.equals("{\"message\":1}")){
-                    if(userType == ProjectProperties.ADMIN){
+                if (register_message.equals("{\"message\":1}")) {
+                    if (userType == ProjectProperties.ADMIN) {
                         SharedPreferences sharedPreferences = context.getSharedPreferences("adminInfo", Context.MODE_PRIVATE);
                         SharedPreferences.Editor edit = sharedPreferences.edit();
-                        edit.putString("nickname",nickname);
-                        edit.putString("phone_number",phone_number);
-                        edit.putString("password",password);
+                        edit.putString("nickname", nickname);
+                        edit.putString("phone_number", phone_number);
+                        edit.putString("password", password);
                         edit.commit();
                         registerHandler.sendEmptyMessage(ProjectProperties.REGISTER_ADMIN_SUCCESS);
-                    }else{
+                    } else {
                         SharedPreferences sharedPreferences = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         SharedPreferences.Editor edit = sharedPreferences.edit();
-                        edit.putString("nickname",nickname);
-                        edit.putString("phone_number",phone_number);
-                        edit.putString("password",password);
+                        edit.putString("nickname", nickname);
+                        edit.putString("phone_number", phone_number);
+                        edit.putString("password", password);
                         edit.commit();
                         registerHandler.sendEmptyMessage(ProjectProperties.REGISTER_SUCCESS);
                     }
                 } else {
                     registerHandler.sendEmptyMessage(ProjectProperties.REGISTER_FAILED);
-                    ((Activity)context).runOnUiThread(new Runnable() {
+                    ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(context, "更新注册信息失败", Toast.LENGTH_SHORT).show();
@@ -143,9 +143,9 @@ public class NetworkConnectionService extends Service {
     }
 
     private void getRequestCode(final Context context, final String phone_number, ServiceConnection serviceConnection) {
-        final RegisterHandler registerHandler = new RegisterHandler(context,serviceConnection);
+        final RegisterHandler registerHandler = new RegisterHandler(context, serviceConnection);
         FormBody.Builder builder = new FormBody.Builder();
-        builder.add("phoneNumber",phone_number);
+        builder.add("phoneNumber", phone_number);
         builder.build();
         HttpUtils.sendOkHttpRequest(ProjectProperties.ADDRESS_GET_REQUEST_CODE, builder, new Callback() {
             @Override
@@ -156,10 +156,10 @@ public class NetworkConnectionService extends Service {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String register_message = response.body().string();
-                System.out.println("register"+"------------------------------------"+register_message);
-                if(register_message.contains("{\"message\":1}")){
+                System.out.println("registerRequestCode------------------------------------" + register_message);
+                if (register_message.contains("{\"message\":1}")) {
                     registerHandler.sendEmptyMessage(ProjectProperties.GET_REQUEST_CODE_SUCCESS);
-                    ((Activity)context).runOnUiThread(new Runnable() {
+                    ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(context, "获取验证码", Toast.LENGTH_SHORT).show();
@@ -167,7 +167,7 @@ public class NetworkConnectionService extends Service {
                     });
                 } else {
                     registerHandler.sendEmptyMessage(ProjectProperties.GET_REQUEST_CODE_FAILED);
-                    ((Activity)context).runOnUiThread(new Runnable() {
+                    ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(context, "获取验证码失败", Toast.LENGTH_SHORT).show();
@@ -179,10 +179,10 @@ public class NetworkConnectionService extends Service {
     }
 
     private void register(final Context context, final String phone_number, String request_code, final String password, final String nickname, final ServiceConnection serviceConnection, final int userType) {
-        final RegisterHandler registerHandler = new RegisterHandler(context,serviceConnection);
+        final RegisterHandler registerHandler = new RegisterHandler(context, serviceConnection);
         FormBody.Builder builder = new FormBody.Builder();
-        builder.add("phoneNumber",phone_number);
-        builder.add("registerNumber",request_code);
+        builder.add("phoneNumber", phone_number);
+        builder.add("registerNumber", request_code);
         builder.build();
         HttpUtils.sendOkHttpRequest(ProjectProperties.ADDRESS_REGISTER, builder, new Callback() {
 
@@ -195,29 +195,30 @@ public class NetworkConnectionService extends Service {
             public void onResponse(Call call, Response response) throws IOException {
                 long userInfo;
                 String register_message = response.body().string();
-                if(register_message.equals("{\"message\":1}")){
-                    updateRegisterInfo(context,phone_number,password,nickname,serviceConnection,registerHandler,userType);
+                System.out.println("register------------------------------------" + register_message);
+                if (register_message.equals("{\"message\":1}")) {
+                    updateRegisterInfo(context, phone_number, password, nickname, serviceConnection, registerHandler, userType);
                     MyOpenHelper myOpenHelper = new MyOpenHelper(context);
                     SQLiteDatabase writableDatabase = myOpenHelper.getWritableDatabase();
                     ContentValues contentValues = new ContentValues();
-                    contentValues.put("phone_number",phone_number);
-                    contentValues.put("password",password);
-                    contentValues.put("nickname",nickname);
-                    if(userType == ProjectProperties.ADMIN){
+                    contentValues.put("phone_number", phone_number);
+                    contentValues.put("password", password);
+                    contentValues.put("nickname", nickname);
+                    if (userType == ProjectProperties.ADMIN) {
                         userInfo = writableDatabase.insert("adminInfo", null, contentValues);
-                    }else{
+                    } else {
                         userInfo = writableDatabase.insert("userInfo", null, contentValues);
                     }
-                    System.out.println("SUCCESS-----------------------数据库插入成功"+userInfo);
-                    if(userInfo != -1){
+                    if (userInfo != -1) {
+                        System.out.println("SUCCESS-----------------------数据库插入成功" + userInfo);
                         writableDatabase.close();
-                    }else {
-                        System.out.println("error-----------------------数据库插入失败"+userInfo);
+                    } else {
+                        System.out.println("error-----------------------数据库插入失败" + userInfo);
                         writableDatabase.close();
                     }
                 } else {
                     registerHandler.sendEmptyMessage(ProjectProperties.REGISTER_FAILED);
-                    ((Activity)context).runOnUiThread(new Runnable() {
+                    ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(context, "验证码错误", Toast.LENGTH_SHORT).show();
@@ -230,10 +231,10 @@ public class NetworkConnectionService extends Service {
 
     private void login(final Context context, final String phone_number, final String password, ServiceConnection serviceConnection, final int userType) {
 
-        final LoginHandler loginHandler = new LoginHandler(context,serviceConnection);
+        final LoginHandler loginHandler = new LoginHandler(context, serviceConnection);
         FormBody.Builder builder = new FormBody.Builder();
-        builder.add("userPhone",phone_number);
-        builder.add("password",password);
+        builder.add("userPhone", phone_number);
+        builder.add("password", password);
         builder.build();
         HttpUtils.sendOkHttpRequest(ProjectProperties.ADDRESS_LOGIN, builder, new Callback() {
 
@@ -245,72 +246,72 @@ public class NetworkConnectionService extends Service {
                 boolean isCheckSuccess = false;
                 MyOpenHelper myOpenHelper = new MyOpenHelper(context);
                 SQLiteDatabase db = myOpenHelper.getWritableDatabase();
-                if(userType == ProjectProperties.ADMIN){
-                    Cursor adminInfo = db.query("adminInfo", new String[]{"password", "nickname","user_head"}, "phone_number = ?", new String[]{phone_number}, null, null, null);
-                    if(adminInfo != null && adminInfo.getCount() > 0){
-                        while (adminInfo.moveToNext()){
+                if (userType == ProjectProperties.ADMIN) {
+                    Cursor adminInfo = db.query("adminInfo", new String[]{"password", "nickname", "user_head"}, "phone_number = ?", new String[]{phone_number}, null, null, null);
+                    if (adminInfo != null && adminInfo.getCount() > 0) {
+                        while (adminInfo.moveToNext()) {
                             String pw = adminInfo.getString(0);
-                            if(password.equals(pw)){
+                            if (password.equals(pw)) {
                                 isCheckSuccess = true;
                                 SharedPreferences sharedPreferences = context.getSharedPreferences("adminInfo", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor edit = sharedPreferences.edit();
-                                edit.putString("phone_number",phone_number);
-                                edit.putString("nickname",adminInfo.getString(1));
-                                edit.putString("password",password);
-                                edit.putString("userHead",adminInfo.getString(2));
+                                edit.putString("phone_number", phone_number);
+                                edit.putString("nickname", adminInfo.getString(1));
+                                edit.putString("password", password);
+                                edit.putString("userHead", adminInfo.getString(2));
                                 edit.commit();
                                 loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_ADMIN_SUCCESS);
                                 return;
                             }
                         }
-                        if(isCheckSuccess == false){
+                        if (isCheckSuccess == false) {
                             loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_ADMIN_FAILED);
-                            ((Activity)context).runOnUiThread(new Runnable() {
+                            ((Activity) context).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Toast.makeText(context, "密码错误", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
-                    }else{
+                    } else {
                         loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_ADMIN_FAILED);
-                        ((Activity)context).runOnUiThread(new Runnable() {
+                        ((Activity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(context, "未找到该商户", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
-                }else{
-                    Cursor userInfo = db.query("userInfo", new String[]{"password", "nickname","user_head"}, "phone_number = ?", new String[]{phone_number}, null, null, null);
-                    if(userInfo != null && userInfo.getCount() > 0){
-                        while (userInfo.moveToNext()){
+                } else {
+                    Cursor userInfo = db.query("userInfo", new String[]{"password", "nickname", "user_head"}, "phone_number = ?", new String[]{phone_number}, null, null, null);
+                    if (userInfo != null && userInfo.getCount() > 0) {
+                        while (userInfo.moveToNext()) {
                             String pw = userInfo.getString(0);
-                            if(password.equals(pw)){
+                            if (password.equals(pw)) {
                                 isCheckSuccess = true;
                                 SharedPreferences sharedPreferences = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor edit = sharedPreferences.edit();
-                                edit.putString("phone_number",phone_number);
-                                edit.putString("nickname",userInfo.getString(1));
-                                edit.putString("password",password);
-                                edit.putString("userHead",userInfo.getString(2));
+                                edit.putString("phone_number", phone_number);
+                                edit.putString("nickname", userInfo.getString(1));
+                                edit.putString("password", password);
+                                edit.putString("userHead", userInfo.getString(2));
                                 edit.commit();
                                 loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_SUCCESS);
                                 return;
                             }
                         }
-                        if(isCheckSuccess == false){
+                        if (isCheckSuccess == false) {
                             loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_FAILED);
-                            ((Activity)context).runOnUiThread(new Runnable() {
+                            ((Activity) context).runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Toast.makeText(context, "密码错误", Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
-                    }else{
+                    } else {
                         loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_FAILED);
-                        ((Activity)context).runOnUiThread(new Runnable() {
+                        ((Activity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(context, "未找到该用户", Toast.LENGTH_SHORT).show();
@@ -322,16 +323,48 @@ public class NetworkConnectionService extends Service {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if(userType == ProjectProperties.ADMIN){
-
-                }else{
+                if (userType == ProjectProperties.ADMIN) {
                     String login_message = response.body().string();
-                    System.out.println("login"+"------------------------------------"+login_message);
-                    if(login_message.contains("{\"message\":1}")){
+                    System.out.println("login" + "------------------------------------" + login_message);
+                    if (login_message.contains("\"message\":1")) {
 
                         MyOpenHelper myOpenHelper = new MyOpenHelper(context);
                         SQLiteDatabase writableDatabase = myOpenHelper.getWritableDatabase();
-                        Cursor userInfo = writableDatabase.query("userInfo", new String[]{"nickname","user_head"},
+                        Cursor adminInfo = writableDatabase.query("adminInfo", new String[]{"nickname", "user_head"},
+                                "phone_number=?", new String[]{phone_number}, null, null, null);
+                        if (adminInfo != null || adminInfo.getCount() > 0) {
+                            while (adminInfo.moveToNext()) {
+                                nickname = adminInfo.getString(0);
+                                userHead = adminInfo.getString(1);
+                                System.out.println(nickname);
+                            }
+                        }
+                        writableDatabase.close();
+                        SharedPreferences sharedPreferences = context.getSharedPreferences("adminInfo", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = sharedPreferences.edit();
+                        edit.putString("phone_number", phone_number);
+                        edit.putString("nickname", nickname);
+                        edit.putString("password", password);
+                        edit.putString("userHead", userHead);
+                        edit.commit();
+                        loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_ADMIN_SUCCESS);
+                    } else {
+                        loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_ADMIN_FAILED);
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, "手机号或密码错误", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                } else {
+                    String login_message = response.body().string();
+                    System.out.println("login" + "------------------------------------" + login_message);
+                    if (login_message.contains("\"message\":1")) {
+
+                        MyOpenHelper myOpenHelper = new MyOpenHelper(context);
+                        SQLiteDatabase writableDatabase = myOpenHelper.getWritableDatabase();
+                        Cursor userInfo = writableDatabase.query("userInfo", new String[]{"nickname", "user_head"},
                                 "phone_number=?", new String[]{phone_number}, null, null, null);
                         if (userInfo != null || userInfo.getCount() > 0) {
                             while (userInfo.moveToNext()) {
@@ -343,15 +376,15 @@ public class NetworkConnectionService extends Service {
                         writableDatabase.close();
                         SharedPreferences sharedPreferences = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                         SharedPreferences.Editor edit = sharedPreferences.edit();
-                        edit.putString("phone_number",phone_number);
-                        edit.putString("nickname",nickname);
-                        edit.putString("password",password);
-                        edit.putString("userHead",userHead);
+                        edit.putString("phone_number", phone_number);
+                        edit.putString("nickname", nickname);
+                        edit.putString("password", password);
+                        edit.putString("userHead", userHead);
                         edit.commit();
                         loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_SUCCESS);
                     } else {
                         loginHandler.sendEmptyMessage(ProjectProperties.LOGIN_FAILED);
-                        ((Activity)context).runOnUiThread(new Runnable() {
+                        ((Activity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(context, "手机号或密码错误", Toast.LENGTH_SHORT).show();

@@ -4,10 +4,19 @@ import java.io.Serializable;
 
 public class CommoditySizeInfo implements Serializable {
 
+    private int _id;
     private int commodity_id;
     private String size_name;
     private int size_count;
     private String phone_number;
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 
     public int getCommodity_id() {
         return commodity_id;

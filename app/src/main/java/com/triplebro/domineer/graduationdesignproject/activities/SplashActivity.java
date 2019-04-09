@@ -37,6 +37,9 @@ public class SplashActivity extends Activity {
                 table_name.add("userInfo");
                 table_name.add("typeGeneralize");
                 table_name.add("typeConcrete");
+                table_name.add("commodityInfo");
+                table_name.add("commodityImageInfo");
+                table_name.add("commoditySizeInfo");
                 List<String> nonentity_table_name  = splashManager.checkData(table_name);
                 if(nonentity_table_name.size() == 0){
                     try {
