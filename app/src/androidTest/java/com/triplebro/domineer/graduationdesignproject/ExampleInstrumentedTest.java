@@ -31,4 +31,15 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.triplebro.domineer.graduationdesignproject", appContext.getPackageName());
     }
+
+    @Test
+    public void databaseTest(){
+        DatabaseOP databaseOP = new DatabaseOP(InstrumentationRegistry.getTargetContext());
+        List<CommodityInfo> commodityInfoList = databaseOP.getCommodityInfoList();
+        if(commodityInfoList.size()>0){
+            assertNotNull(commodityInfoList);
+        }else{
+            assertNull(commodityInfoList);
+        }
+    }
 }
